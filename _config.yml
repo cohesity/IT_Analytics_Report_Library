@@ -3,8 +3,8 @@ description: >-
   Community-contributed report templates for Veritas/Cohesity IT Analytics
   (formerly APTARE). Browse by product or category, view a sample of each
   report's output, and download the template to import into your portal.
-baseurl: ""
-url: ""
+baseurl: "/report-library-site"
+url: "https://ebergan-cohesity.github.io"
 
 collections:
   reports:
