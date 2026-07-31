@@ -1,0 +1,373 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>b4b8c4a7-fbec-470a-bffe-172e230bf5f9</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>Tier 1 Storage Breakdown by Environment</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Tier 1 Storage Breakdown by Environment</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Tier 1 Storage Breakdown by Environment</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>WITH p1 AS
+(
+select policy_name, host_id, total_gb 
+FROM table (srm_rtd.listChargebackByLUNSummary(100000,
+numberListType(),
+numberListType(),
+numberListType(),
+numberListType(${serverGroups}),
+1))
+),
+t1 as (
+SELECT
+host_id,  
+sum(total_gb) total_tiered_gb,
+sum(DECODE(policy_name,&apos;Tier 1&apos;,total_gb,0)) total_tier_1_gb,
+sum(DECODE(policy_name,&apos;Tier 2&apos;,total_gb,0)) total_tier_2_gb,
+sum(DECODE(policy_name,&apos;Tier 3&apos;,total_gb,0)) total_tier_3_gb,
+sum(DECODE(policy_name,&apos;HDP Tier&apos;,total_gb,0)) total_HDP_Tier_gb
+FROM p1
+GROUP BY host_id
+),
+t3 as (
+SELECT
+hs.host_id,
+hs.host_name,
+s.display_name,
+nvl(rtd.getServerAttributeValue(hs.host_id,&apos;Environment&apos;),&apos;Other&apos;) environment,
+total_tiered_gb,
+total_tier_1_gb,
+total_tier_2_gb,
+total_tier_3_gb,
+total_HDP_Tier_gb,
+total_tiered_gb - total_san_capacity_gb allocated_but_not_used_gb,
+total_san_capacity_gb,
+san_pct_used,
+total_nas_capacity_gb,
+nas_pct_used,
+total_das_capacity_gb,
+das_pct_used
+FROM aps_v_host_storage hs,t1,apt_v_server s
+WHERE hs.host_id in (${hosts})
+AND hs.host_id = t1.host_id (+)
+AND hs.host_id = s.server_id (+)
+)
+SELECT environment,
+sum(total_tier_1_gb/1024) tier_1_tb,
+sum(total_tier_2_gb/1024) tier_2_tb,
+sum(total_tier_3_gb/1024) tier_3_tb,
+sum(total_HDP_Tier_gb/1024) hdp_tb
+FROM t3
+group by environment</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>101250</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;environment&quot;,&quot;label&quot;:&quot;Environment&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;tier_1_tb&quot;,&quot;label&quot;:&quot;Tier 1&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00 TB&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;tier_2_tb&quot;,&quot;label&quot;:&quot;tier_2_tb&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00 TB&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;tier_3_tb&quot;,&quot;label&quot;:&quot;tier_3_tb&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00 TB&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;hdp_tb&quot;,&quot;label&quot;:&quot;hdp_tb&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00 TB&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Tier 1 Storage Breakdown by Environment</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>dynamicPie</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Environment</caption>
+                    <name>environment</name>
+                    <fieldIndex>0</fieldIndex>
+                    <wrap>Y</wrap>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pie</type>
+                    <caption>Tier 1</caption>
+                    <name>tier_1_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00 TB</formatPattern>
+                    <wrap>Y</wrap>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>tier_2_tb</caption>
+                    <name>tier_2_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatPattern>###,###.00 TB</formatPattern>
+                    <wrap>Y</wrap>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>tier_3_tb</caption>
+                    <name>tier_3_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatPattern>###,###.00 TB</formatPattern>
+                    <wrap>Y</wrap>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>hdp_tb</caption>
+                    <name>hdp_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatPattern>###,###.00 TB</formatPattern>
+                    <wrap>Y</wrap>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.6HvpvzKw5dpIyQOXSq9dk03c2XQBiW25VGJGOVszk8k=

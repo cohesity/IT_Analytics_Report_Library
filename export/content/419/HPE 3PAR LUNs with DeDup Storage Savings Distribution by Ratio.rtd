@@ -1,0 +1,508 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>How much storage a I saving due to DeDupe enabled LUNs.  A storage savings distribution for each DeDup ratio achieved. Note: DeDup ratios are rounded up to the nearest whole number.</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>1</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>f7bc3826-e816-4bd2-995d-de185c07108d</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>2</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*09/20/2018</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>HPE 3PAR LUNs with DeDup Storage Savings Distribution by Ratio</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>241</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>ARRAYS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>TB</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>HPE 3PAR LUNs with DeDup Storage Savings Distribution by Ratio</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified 09/20/2018
+WITH 
+VAR AS (
+SELECT
+DECODE(&#039;${freeCombo1}&#039;,
+&#039;GB&#039;,(1),&#039;TB&#039;,(1024),&#039;PB&#039;,(1024*1024)) div_by 
+FROM dual
+),
+t1 AS (
+SELECT 
+h3p_storage_system_id,
+system_name,
+tier1_dsp_name,
+tier2_dsp_name,
+tier3_dsp_name,
+snap_dsp_name,
+user_dsp_name,
+logical_unit_id,
+logical_unit_name,
+(NVL(tier1_user_kb,0)+NVL(tier2_user_kb,0)+NVL(tier3_user_kb,0))/1024/1024 t1t2t3_user_gb,
+--
+ROUND(NVL(dedup_ratio,1),1) dedup_ratio_num,
+ROUND(NVL(dedup_ratio,1),1)||&#039;:1&#039; dedup_ratio,
+CEIL(DECODE(dedup_ratio,NULL,1,0,1,dedup_ratio))||&#039;:1&#039; dedup_ratio_norm,
+--
+ROUND(NVL(compression_ratio,1),1) compression_ratio_num,
+ROUND(NVL(compression_ratio,1),1)||&#039;:1&#039; compression_ratio,
+CEIL(DECODE(compression_ratio,NULL,1,0,1,compression_ratio))||&#039;:1&#039; compression_ratio_norm,
+--
+ROUND(NVL(compaction_ratio,1),1) compaction_ratio_num,
+ROUND(NVL(compaction_ratio,1),1)||&#039;:1&#039; compaction_ratio,
+CEIL(DECODE(compaction_ratio,NULL,1,0,1,compaction_ratio))||&#039;:1&#039; compaction_ratio_norm,
+--
+total_capacity_gb,
+raw_admin_gb,
+raw_copy_gb,
+raw_user_gb,
+raw_blocks_gb,
+consumable_admin_gb,
+consumable_copy_gb,
+consumable_user_gb,
+used_snapshot_admin_space_gb,
+used_snapshot_data_space_gb,
+used_user_space_gb,
+--
+tier1_admin_kb/1024/1024 tier1_admin,
+tier2_admin_kb/1024/1024 tier2_admin,
+tier3_admin_kb/1024/1024 tier3_admin,
+--
+tier1_snapshot_kb/1024/1024 tier1_snapshot,
+tier2_snapshot_kb/1024/1024 tier2_snapshot,
+tier3_snapshot_kb/1024/1024 tier3_snapshot,
+--
+tier1_user_kb/1024/1024 tier1_user,
+tier2_user_kb/1024/1024 tier2_user,
+tier3_user_kb/1024/1024 tier3_user,
+date_created,
+master_node,
+backup_node1,
+backup_node2,
+lun_policy,
+preferred_availability,
+current_availability,
+export_state,
+disk_device_type,
+snap_space_allocation_warning,
+snap_space_allocation_limit,
+user_space_allocation_warning,
+user_space_allocation_limit,
+lun_domain,
+set_size,
+set_data,
+expiration_time,
+retention_time,
+lun_operational_status||&#039; - &#039;||lun_other_operational_status lun_operational_status,
+volume_type,
+lun_access,
+is_underlying_redundancy,
+data_redundancy,
+package_redundancy,
+name_format,
+name_space,
+is_thinly_provisioned,
+device_nbr,
+object_id,
+usr_array_group_id,
+snp_array_group_id,
+vcopy_base_logical_unit_id,
+tier1_array_group_id,
+tier2_array_group_id,
+tier3_array_group_id,
+--
+tier1_new_admin_kb/1024/1024 tier1_new_admin,
+tier2_new_admin_kb/1024/1024 tier2_new_admin,
+tier3_new_admin_kb/1024/1024 tier3_new_admin,
+--
+tier1_new_snapshot_kb/1024/1024 tier1_new_snapshot,
+tier2_new_snapshot_kb/1024/1024 tier2_new_snapshot,
+tier3_new_snapshot_kb/1024/1024 tier3_new_snapshot,
+--
+tier1_new_user_kb/1024/1024 tier1_new_user,
+tier2_new_user_kb/1024/1024 tier2_new_user,
+tier3_new_user_kb/1024/1024 tier3_new_user,
+--
+is_compression_enabled,
+is_dedup_enabled,
+--compaction_ratio_str,
+--compression_ratio_str,
+--dedup_ratio_str,
+last_updated
+FROM
+  aps_v_h3p_logical_unit
+WHERE 
+h3p_storage_system_id IN (${arrays})
+AND is_dedup_enabled = &#039;Yes&#039;
+AND ROUND(NVL(dedup_ratio,1),1) &gt; 1
+),
+t2 AS (
+SELECT
+system_name,
+user_dsp_name,
+logical_unit_id,
+logical_unit_name,
+dedup_ratio_norm,
+used_user_space_gb,
+used_user_space_gb * dedup_ratio_num AS actual_size_needed_gb,
+(used_user_space_gb * dedup_ratio_num) - used_user_space_gb AS actual_savings_gb,
+((used_user_space_gb * dedup_ratio_num) - used_user_space_gb ) * ${freeText1} AS actual_savings_money
+FROM t1
+)
+SELECT
+dedup_ratio_norm,
+COUNT(DISTINCT logical_unit_id) lun_count,
+ROUND(SUM(used_user_space_gb/div_by),2) used_user_space,
+ROUND(SUM(actual_size_needed_gb/div_by),2) actual_size_needed,
+ROUND(SUM(actual_savings_gb/div_by),2) actual_savings,
+SUM(actual_savings_money) actual_savings_money
+FROM t2, var
+GROUP BY
+dedup_ratio_norm</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100168</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;dedup_ratio_norm&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;DeDup Ratio&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;lun_count&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;#LUNs&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;used_user_space&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;used_user_space&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;actual_size_needed&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;actual_size_needed&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;actual_savings&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Storage Savings&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;actual_savings_money&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;DeDup Value&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;&#039;$&#039;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>HPE 3PAR LUNs with DeDup Storage Savings Distribution by Ratio</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>dynamicPie</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>DeDup Ratio</caption>
+                    <name>dedup_ratio_norm</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>#LUNs</caption>
+                    <name>lun_count</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>used_user_space</caption>
+                    <name>used_user_space</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>actual_size_needed</caption>
+                    <name>actual_size_needed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pie</type>
+                    <caption>Storage Savings</caption>
+                    <name>actual_savings</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>DeDup Value</caption>
+                    <name>actual_savings_money</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>&#039;$&#039;###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*All Values in ${freeCombo1} </string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

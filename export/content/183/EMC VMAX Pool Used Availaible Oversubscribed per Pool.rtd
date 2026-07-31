@@ -1,0 +1,337 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Updated: 09/12/2011
+WITH q1 AS (
+SELECT
+array_name,
+pool_name,
+sp.dev_config raid_type,
+round(total_tracks_kb/1024/1024/1024,2) total_tracks_tb,
+round(total_used_tracks_kb/1024/1024/1024,2) used_tracks_tb,
+round((total_tracks_kb-total_used_tracks_kb)/1024/1024/1024,2) avail_tracks_tb,
+CASE
+  WHEN total_tracks_kb = 0 THEN 0
+  ELSE total_used_tracks_kb/total_tracks_kb*100
+END pool_used_pct,
+round((total_tracks_kb * (subscribed_pct/100))/1024/1024/1024,2) subscribed_tb,  
+subscribed_pct,
+CASE 
+  WHEN subscribed_pct &lt;= 100 THEN 0
+  ELSE round(((total_tracks_kb * (subscribed_pct/100))/1024/1024/1024) - (total_tracks_kb/1024/1024/1024),2) 
+END over_subscribed
+FROM aps_v_emc_sym_storage_pool sp
+WHERE array_name LIKE &#039;${queryCombo1}&#039;
+)
+SELECT
+pool_name,
+sum(total_tracks_tb) total_tracks_tb,
+sum(used_tracks_tb) used_tracks_tb,
+sum(avail_tracks_tb) avail_tracks_tb,
+sum(subscribed_tb) subscribed_tb,
+sum(over_subscribed) over_subscribed
+FROM q1 
+GROUP BY pool_name</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>EMC VMAX Pool Used Availaible Oversubscribed per Pool</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>sql</string>
+                    <string>SELECT DISTINCT array_name, array_name FROM aps_v_emc_sym_storage_pool </string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT DISTINCT array_name, array_name FROM aps_v_emc_sym_storage_pool </string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Array:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100337</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedBarChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*All values in (TB), Array = ${queryCombo1}</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>EMC VMAX Pool Used Availaible Oversubscribed per Pool</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>pool_name</caption>
+                    <name>pool_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Pool Size</caption>
+                    <name>total_tracks_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Pool Used</caption>
+                    <name>used_tracks_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#983222</color>
+                    <secondaryColor>#983222</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail>${row[&#039;used_tracks_tb&#039;].data}(TB)</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Pool Available</caption>
+                    <name>avail_tracks_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#003478</color>
+                    <secondaryColor>#003478</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail>${row[&#039;avail_tracks_tb&#039;].data}(TB)</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Subscribed Size</caption>
+                    <name>subscribed_tb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Over Subscribed Size</caption>
+                    <name>over_subscribed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#BFC2C9</color>
+                    <secondaryColor>#BFC2C9</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail>${row[&#039;over_subscribed&#039;].data}(TB)</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;pool_name&quot;,&quot;name&quot;:&quot;pool_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Pool Size&quot;,&quot;name&quot;:&quot;total_tracks_tb&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;used_tracks_tb&#039;].data}(TB)&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#983222&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Pool Used&quot;,&quot;name&quot;:&quot;used_tracks_tb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;avail_tracks_tb&#039;].data}(TB)&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#003478&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Pool Available&quot;,&quot;name&quot;:&quot;avail_tracks_tb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Subscribed Size&quot;,&quot;name&quot;:&quot;subscribed_tb&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;over_subscribed&#039;].data}(TB)&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#BFC2C9&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Over Subscribed Size&quot;,&quot;name&quot;:&quot;over_subscribed&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>EMC VMAX Pool Used Availaible Oversubscribed per Pool</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

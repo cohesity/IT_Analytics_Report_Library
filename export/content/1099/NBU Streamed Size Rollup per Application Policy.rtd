@@ -1,0 +1,447 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>d2f7f85f-3937-4f49-891c-1def376014f7</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>NBU Streamed Size Rollup per Application Policy</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Streamed Size Rollup per Application Policy</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Streamed Size Rollup per Application Policy</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last updated: 03/26/2013
+--This report assumes the first characters in the policy name to be the Application
+--The first characters up to the first underscore _ or the first 4 characters if there is no _
+WITH
+VAR AS (
+SELECT
+ROUND((${endDate} - ${startDate}),2) nbrOfDays,
+${startDate} startDate,
+DECODE(&apos;${freeCombo1}&apos;,
+&apos;KB&apos;,1,&apos;MB&apos;,1024,&apos;GB&apos;,(1024*1024),&apos;TB&apos;,(1024*1024*1024),&apos;PB&apos;,(1024*1024*1024*1024)) div_by
+FROM dual
+),
+t1 AS (
+SELECT
+NVL(SUBSTR(j.policy_name,1,INSTR(j.policy_name,&apos;_&apos;,1)-1),SUBSTR(j.policy_name,1,4)) application,
+j.policy_id,
+j.policy_name,
+COUNT(j.job_id) job_count,
+SUM(j.kilobytes/var.div_by) job_size,
+REPLACE(aptStringConcat(DISTINCT pf.pathname),&apos;,&apos;,&apos;&lt;br/&gt;&apos;) pathname
+FROM apt_v_nbu_job_detail j,apt_v_nbu_policy_file pf, var
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate}
+AND j.job_type &lt;&gt; 105
+AND j.policy_id = pf.policy_id
+GROUP BY
+SUBSTR(j.policy_name,1,INSTR(j.policy_name,&apos;_&apos;,1)-1),
+j.policy_id,
+j.policy_name
+ORDER BY 1,3
+)
+SELECT
+application application_sort,
+application,
+policy_id,
+policy_name,
+job_count,
+job_size,
+pathname
+FROM t1
+UNION
+SELECT
+application application_sort,
+&apos;&lt;B&gt; Total - &apos;||application||&apos;&lt;/b&gt;&apos; application,
+NULL policy_id,
+NULL policy_name,
+SUM(job_count) job_count,
+SUM(job_size) job_size,
+NULL pathname
+FROM t1
+GROUP BY application,&apos;&lt;B&gt; Total - &apos;||application||&apos;&lt;/b&gt;&apos;
+UNION
+SELECT
+&apos;zzzzzz&apos; application_sort,
+&apos;&lt;B&gt; Grand Total&apos; application,
+NULL policy_id,
+NULL policy_name,
+SUM(job_count) job_count,
+SUM(job_size) job_size,
+NULL pathname
+FROM t1
+GROUP BY &apos;zzzzzz&apos;,&apos;&lt;B&gt; Grand Total&apos;
+ORDER BY 1,4</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100947</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;application_sort&quot;,&quot;label&quot;:&quot;application_sort&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;application&quot;,&quot;label&quot;:&quot;Application&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;policy_id&quot;,&quot;label&quot;:&quot;policy_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;policy_name&quot;,&quot;label&quot;:&quot;Policy&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;job_count&quot;,&quot;label&quot;:&quot;#Jobs&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;job_size&quot;,&quot;label&quot;:&quot;Job Size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pathname&quot;,&quot;label&quot;:&quot;Pathname&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Streamed Size Rollup per Application Policy</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>application_sort</caption>
+                    <name>application_sort</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Application</caption>
+                    <name>application</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>policy_id</caption>
+                    <name>policy_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Policy</caption>
+                    <name>policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>#Jobs</caption>
+                    <name>job_count</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Job Size</caption>
+                    <name>job_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Pathname</caption>
+                    <name>pathname</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>All values in ${freeCombo1}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.ZREAx2SLxdXb+yIIlRsYSyktN2fl+nBZ35NcSH+riqc=

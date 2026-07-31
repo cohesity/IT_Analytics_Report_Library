@@ -1,0 +1,1101 @@
+<!DOCTYPE html><head><meta charset="utf-8"><style type="text/css">@page { size: 11in 8.5in; }
+/*Donot modify or change the position of above page tag*/
+/*Styles that are applicable to just reports, and should be included in HTML emailed reports.*/
+html {
+    height: 100%;
+    max-height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 8pt;
+}
+body {
+    height: 100%;
+    max-height:100%;
+    padding:0;
+    margin:0;
+    border:0;
+}
+td {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 8pt;
+}
+a {
+    text-decoration: none;
+    color: #005699;
+}
+a:hover {
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+/******************The header and footer of the report******************/
+
+.header {
+    margin-top: 5px;
+}
+.footer {
+    color: #666666;
+    margin-top: 5px;
+}
+
+/***************REPORT CONTENT***************/
+.contentContainer {
+    max-height: 100%;
+    z-index: 1;
+    font-size: 8pt;
+    padding-left: 8px;
+    margin-top: 5px;
+    margin-bottom: 150px;
+    width: 100%;
+}
+.content {
+    margin-right: 16px;
+}
+.reportBuilderContainer {
+    padding: 10px;
+}
+.reportBuilderContainer hr {
+    height: 0;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+.reportBuilderScrollingContent {
+    overflow-y: scroll;
+    overflow-x: auto;
+    padding-right: 14px;
+}
+.reportBuilderScrollingTable {
+    overflow-y: auto;
+    padding-left: 5px;
+}
+
+table.reportBuilderTable {
+    border: 1px solid #ddd;
+}
+
+.reportBuilderTable {
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+.reportBuilderTable tr {
+    font: 11px arial,helvetica,sans-serif;
+    color: #333333;
+}
+
+.reportBuilderTable td {
+    font: 11px arial,helvetica,sans-serif;
+    vertical-align: top;
+    padding: 6px;
+    white-space: normal;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow {
+    cursor: default;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow td {
+    padding: 8px 6px;
+    vertical-align: middle;
+}
+
+.reportBuilderHeaderRow td {
+    font: 11px arial,helvetica,sans-serif;
+    white-space: nowrap;
+    border-top: none;
+    font-weight: bold !important;
+    vertical-align: top;
+    background: #ECF2F9;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow:first-child td:first-child {
+    border-top: none;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow:first-child td:last-child {
+    bottom: none;
+}
+
+
+
+.reportBuilderTable td {
+    box-sizing: content-box;
+}
+
+.reportBuilderTable tbody tr {
+    background-color: #fff;
+}
+
+.reportBuilderTable tbody td {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.reportBuilderTable .aggregate td {
+    font-weight: bold;
+    color: #478547;
+    white-space: nowrap;
+    background-color: #fafafa;
+}
+
+.reportBuilderTable tfoot .aggregate td {
+    border-top: 1px solid #eaeaea;
+}
+
+.reportBuilderContainer .reportBuilderHeaderRow:last-child td {
+    border-bottom: 1px solid #ddd;
+}
+
+.reportBuilderTable .groupHeader {
+    border-left: 1px solid #dddddd;
+    color: #4080BF;
+    padding-bottom: 0 !important;
+}
+
+.reportBuilderTable .groupHeaderFirstChild {
+    border-left: 1px solid #dddddd;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow td:first-child {
+    border-left: none;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow td:last-child {
+    border-right: none;
+}
+
+.reportBuilderTable tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.reportBuilderHeaderRow span {
+    vertical-align: middle;
+}
+
+.export .reportSection {
+    font: bold 11px/1 arial, helvetica, sans-serif;
+    display: block;
+    padding: 5px;
+    background: #ddd;
+    margin: 10px -8px;
+}
+
+/************ The Header of the Report ************/
+
+/*The header of the report*/
+.reportBuilderHeader {
+    margin-bottom: 5px;
+    width: 100%;
+    padding: 6px 3px 3px 5px;
+}
+.reportBuilderTitle {
+    cursor: default;
+    color: #166094;
+    font: 18px/40px arial, sans-serif;
+    margin-left: 8px;
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.export .reportBuilderTitle {
+    margin: 0;
+    display: inline-block;
+}
+
+.reportBuilderAction {
+    text-align: right;
+}
+
+.reportBuilderPortletHeaderPanel {
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid #bbb;
+    background-color: #eee;
+
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.reportBuilderPortletHeaderPanel > div {
+    height: 100%;
+}
+
+.dashboardPortlet {
+    min-width: 300px;
+    min-height: 200px;
+    border: 1px #808080 solid;
+    padding-bottom: 2px; /* border + padding = drop zone border */
+    border: 1px solid #bbb;
+
+    -moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.reportHeader {
+    font: 11px arial;
+    padding: 0 0 10px 10px;
+}
+
+.reportHeader img {
+    vertical-align: text-top;
+}
+
+/************ The Table Data ************/
+
+.hoverHeader {
+    cursor: pointer;
+}
+.hoverHeader:hover {
+    text-decoration: underline;
+}
+.reportBuilderRowOdd {
+    background-color: #D3DEDF !important;
+}
+.reportBuilderGridCaption {
+    font-weight: bold;
+    white-space: nowrap;
+    vertical-align: top;
+    cursor: default;
+}
+.reportBuilderFooterRow {
+    background-color: transparent !important;
+}
+.reportBuilderFooterRow td {
+    white-space: nowrap;
+}
+
+/************ Error Colours ************/
+
+.reportBuilderFieldError {
+    color: red;
+}
+.redBackground {
+    background-color: #B30505 !important;
+    color: white
+}
+.yellowBackground {
+    background-color: #DBD611 !important;
+}
+.blueBackground {
+    background-color: #003478 !important;
+    color: white
+}
+.redForeground {
+    color: #B30505;
+}
+.redForeground a {
+    color: #B30505;
+}
+
+.whiteBackground {
+    background-color: #FFFFFF ;
+}
+
+.bold {
+    font-weight:bold
+}
+
+.red {
+    color:#B30505;
+}
+
+.yellow {
+    color:#F7D577;
+}
+
+#colourTable td {
+    width: 15px;
+    height: 10px;
+}
+.chartColoursDrag {
+    width: 20px;
+    height: 20px;
+    display: none;
+    border: 1px solid #000000;
+    position: absolute;
+    top: 0;
+}
+
+.noDataAvailable {
+    padding: 10px !important;
+    font-style: italic !important;
+}
+
+/************ Percentage Bars ************/
+
+.percentageBarContainer,
+.percentageBarLevel1,
+.percentageBarLevel2,
+.percentageBarLevel3 {
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+}
+
+.percentageBarContainer,
+.reportBuilderGridTable .percentageBarContainer {
+    border: none;
+    height: 12px;
+    padding: 0;
+    font-size: 8px;
+
+    background: #f5f5f5 !important;
+    background: url(http://my.storageconsole.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1ZjVmNSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmOWY5ZjkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+) !important;
+    background: -ms-linear-gradient(top, #f5f5f5 0%,#f9f9f9 100%) !important; /* IE10+ */
+    background: linear-gradient(to bottom, #f5f5f5 0%,#f9f9f9 100%) !important; /* W3C */
+
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.export .reportBuilderTable .percentageBarContainer,
+.export .reportBuilderGridTable .percentageBarContainer {
+    background: #f9f9f9 !important;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+/*.percentageBarContainer:after {
+    content: "";
+    display: table;
+    clear: both;
+}*/
+
+.percentageBarContainer .percentageBarLevel1,
+.reportBuilderGridTable .percentageBarContainer .percentageBarLevel1 {
+    height: 100%;
+    border: none;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    font-size: 8px;
+
+    background: #56bf58; /* Old browsers */
+    background: url(http://my.storageconsole.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU2YmY1OCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM0Mzk2NDUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -ms-linear-gradient(top, #56bf58 0%,#439645 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #56bf58 0%,#439645 100%); /* W3C */
+}
+
+.export .reportBuilderTable .percentageBarContainer .percentageBarLevel1,
+.export .reportBuilderGridTable .percentageBarContainer .percentageBarLevel1 {
+    background: #56bf58;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.percentageBarContainer .percentageBarLevel2,
+.reportBuilderGridTable .percentageBarContainer .percentageBarLevel2 {
+    height: 100%;
+    border: none;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    font-size: 8px;
+
+    background: #f7d577; /* Old browsers */
+    background: url(http://my.storageconsole.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y3ZDU3NyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkMWE5M2MiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -ms-linear-gradient(top, #f7d577 0%,#d1a93c 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #f7d577 0%,#d1a93c 100%); /* W3C */
+}
+.export .reportBuilderTable .percentageBarContainer .percentageBarLevel2,
+.export .reportBuilderGridTable .percentageBarContainer .percentageBarLevel2 {
+    background: #f7d577;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.percentageBarContainer .percentageBarLevel3,
+.reportBuilderGridTable .percentageBarContainer .percentageBarLevel3 {
+    height: 100%;
+    border: none;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    font-size: 8px;
+
+    background: #d67167; /* Old browsers */
+    background: url(http://my.storageconsole.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q2NzE2NyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM5OTU0NGUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -ms-linear-gradient(top, #d67167 0%,#99544e 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #d67167 0%,#99544e 100%); /* W3C */
+}
+
+.export .reportBuilderTable .percentageBarContainer .percentageBarLevel3,
+.export .reportBuilderGridTable .percentageBarContainer .percentageBarLevel3 {
+    background: #d67167;
+    box-shadow: none;
+    border-radius: 0;
+}
+/************ Status ************/
+
+.status {
+    background: no-repeat center;
+}
+.statusWhite {
+    background-image: url(http://my.storageconsole.com/skins/aptare/statusWhite.gif);
+}
+.statusBlue {
+    background-image: url(http://my.storageconsole.com/skins/aptare/statusBlue.gif);
+}
+.statusYellow {
+    background-image: url(http://my.storageconsole.com/skins/aptare/statusYellow.gif);
+}
+.statusRed {
+    background-image: url(http://my.storageconsole.com/skins/aptare/statusRed.gif);
+}
+
+/************ Specalized Reports ************/
+
+.tapeLibrary {
+    background: url(http://my.storageconsole.com/skins/aptare/tapeLibrary.gif) no-repeat;
+    padding-left: 32px;
+    min-height: 55px;
+}
+.fileSystem {
+    background: url(http://my.storageconsole.com/skins/aptare/fileSystem.gif) no-repeat 0 4px;
+    padding-left: 43px;
+    padding-top: 2px;
+}
+
+
+.piechart_legend td {
+    font: normal 11px/100% arial,sans-serif;
+}
+
+/*************** Topology Charts **************/
+#mynetwork {
+    width: 100%;
+    height: 100%;
+    border: 0px solid lightgray;
+    margin:0;
+}
+
+#wrapper {
+    position: relative;
+    /*width: 700px;
+    height: 126px;*/
+}
+
+#text {
+   display: none;
+}
+
+#border {
+    display:none;
+}
+
+#bar {
+   display: none;
+}
+
+div.outerBorder {
+    display:none;
+}
+
+div.topology {
+   /* height: 200px;*/
+}
+
+.dbviews-title {
+    font: bold 20pt/100% arial;
+    text-align: center;
+    padding: 5px;
+}
+
+.dbviews-title.small {
+    font-size: 18px;
+}
+
+.dbviews-index {
+    font: 11px arial;
+    color: #333333;
+}
+
+.export .dbviews-index {
+    font: 14pt arial;
+    color: #333333;
+    page-break-after: always;
+}
+
+.dbviews-index-aptare-product {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+.export .dbviews-index-aptare-product {
+    font-size: 14pt;
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+.dbviews-index-aptare-product a {
+    text-decoration: underline;
+    font-size: 14px;
+    color: #005699;
+}
+
+.dbviews-index-aptare-product a.arrow {
+    color: #000000;
+    font-size:10px;
+    text-decoration:none;
+}
+
+.dbviews-index-portal-title{
+    font-sizex:14px;
+    text-decorationx:underline;
+    colorx:#005699;
+    margin-left:13px;
+}
+
+.export .dbviews-index-aptare-product a {
+    font-size: 16pt;
+    color: navy;
+}
+
+.dbviews-index-product-column {
+    display:inline-block;
+    vertical-align:top;
+}
+
+.dbviews-index-product-column a {
+    display:block;
+    padding: 2px 0 2px 13px;
+    vertical-align:top;
+    text-decoration: underline;
+}
+
+.export .dbviews-index-product-column a {
+    text-decoration: none;
+}
+
+.export .dbviews-detail {
+
+}
+
+.export .dbviews-detail-toc {
+    padding-top: 10px;
+}
+
+.dbviews-detail-toc-category {
+    font: bold 14px arial;
+    padding: 5px 0;
+}
+
+.dbviews-detail-toc-category a,
+.dbviews-detail-toc-category a:hover {
+    color: #000000 !important;
+    font: 11px arial;
+    text-decoration: none;
+}
+
+.dbviews-detail-toc-category a.category {
+    text-decoration: underline;
+    color: navy !important;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.export .dbviews-detail-toc-category a.category {
+    font-size: 12pt;
+    text-decoration: none;
+}
+
+.export .dbviews-detail-toc-category {
+    font: bold 12pt arial;
+}
+
+.dbviews-detail-toc-views {
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.dbviews-detail-toc-views-column {
+    display: inline-block;
+    vertical-align: top;
+    width: 180px;
+}
+
+.export .dbviews-detail-toc-views-column {
+    width: 30%;
+}
+
+.dbviews-detail-toc-views-column a {
+    display: block;
+    text-decoration: underline;
+    font: 11px arial;
+    padding: 0 10px 5px 0;
+    vertical-align: top;
+}
+
+.export .dbviews-detail-toc-views-column a {
+    font-size: 11pt;
+    text-decoration: none;
+}
+
+.dbviews-detail-tables-category-title {
+    font: bold 14px arial, helvetica, sans-serif;
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 0;
+    text-align: center;
+}
+
+.export .dbviews-detail-tables-category-title {
+    font-size: 16pt;
+}
+
+.dbviews-detail-tables-category {
+    font:bold 14px arial;
+    padding-top: 10px;
+}
+
+.export .dbviews-detail-tables-category {
+    font:bold 12pt arial;
+}
+
+.dbviews-detail-table-view-name {
+    font: bold 12px arial;
+    padding: 10px 0;
+}
+
+.dbviews-detail-table-view-name span {
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.export .dbviews-detail-table-view-name span {
+    text-decoration: none;
+}
+
+.export .dbviews-detail-table-view-title {
+    page-break-inside: avoid;
+}
+
+.export .dbviews-detail-table-view-name {
+    font: bold 12pt arial;
+}
+
+.dbviews-detail-table-view-desc {
+    font:11px arial;
+    padding-bottom: 10px;
+}
+
+.export .dbviews-detail-table-view-desc {
+    font:11pt arial;
+}
+
+.dbviews-detail-table {
+    border:1px solid #dddddd;
+    font:11px arial;
+    border-collapse:collapse;
+    padding-bottom: 10px;
+}
+
+.export .dbviews-detail-table tr {
+    page-break-inside: avoid;
+}
+
+.dbviews-detail-table th {
+    font-weight:bold;
+    background:#eee;
+    padding:5px;
+    border:1px solid #ddd;
+    white-space:nowrap;
+}
+
+.dbviews-detail-table td {
+    padding:5px;
+    border:1px solid #ddd;
+    font:11px arial;
+}
+
+
+.vtable{
+    background-color: transparent;
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+/*    margin-bottom: 20px;*/
+    height: 50px;
+    padding-top: 0px;
+    padding-bottom: 0px
+}
+
+.vrow {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+
+.vcell {
+    padding: 0 5px;
+/*    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;*/
+    display: table-cell;
+    vertical-align: inherit;
+    font-size: 10px !important;
+}
+
+td.vcell:first-child {
+    text-align: right;
+}
+
+.panel {
+/*    margin-bottom: 20px;*/
+    background-color: #fff;
+    /*border: 1px solid transparent;*/
+    border-radius: 4px;
+    -webkit-tox-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.panel-body {
+    padding: 2px;
+}
+
+.panel-title{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.panel-success {
+    border-color: darkblue;
+    margin-bottom:0px;
+}
+
+.panel-heading {
+    padding: 3px 10px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.panel-success>.panel-heading {
+    color:#333;
+    background-color: #ddd;
+   /* border-color: darkblue;*/
+}
+</style>
+</head><body><div class="reportBuilderContainer export" id="portlet" guid=""> 
+ <table cellpadding="0" cellspacing="0" class="reportBuilderHeader"> 
+  <tbody>
+   <tr> 
+    <td valign="top" width="100%"> 
+     <div class="reportBuilderTitle">
+      VM Guest CPU Stats Sparklines
+     </div> <input type="hidden" name="name"> <input type="hidden" name="reportId" value=""> <input type="hidden" name="templateId" value="105038"> <input type="hidden" name="systemName" value=""> <input type="hidden" name="templateInstanceId" value=""> <input type="hidden" name="productType" value="all"> <input type="hidden" name="dataSource" value="rtdTemplate"> <input type="hidden" name="hasTimePeriodScope" value="false"> <input type="hidden" name="timePeriodScopeSelected" value="7d"> <span class="reportBuilderSubtitle"> All VM Guests=All VM Guests <br> Mar 20, 2020 12:00:00 AM - Mar 26, 2020 6:28:44 PM </span> </td> 
+    <td valign="top"> </td> 
+   </tr> 
+  </tbody>
+ </table> 
+ <div class="reportHeader">
+  Top: 10 Group by: Hours
+ </div> 
+ <div class="reportBuilderScrollingTable"> 
+  <script type="json">
+    </script> 
+  <div class="reportBuilderTableInfo"> 
+   <div class="reportBuilderTotalRowTitle">
+    Total Rows: 10 
+   </div> 
+  </div> 
+  <div id="grid-panel" class="grid-panel"> 
+   <table id="the-table147" class="reportBuilderTable" cellpadding="6" cellspacing="0"> 
+    <thead> 
+     <tr class="reportBuilderHeaderRow"> 
+      <td class=" groupHeaderFirstChild"> VM Guest </td> 
+      <td formatter="AreaSparklineFormatter" class=" no-sort"> CPU GHz Usage History </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###.00" class=""> Max CPU<br>Usage GHz </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###.00" class=""> Avg CPU<br>Usage GHz </td> 
+      <td formatter="AreaSparklineFormatter" class=" no-sort"> CPU % Usage History </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###,##0'%'" class=""> Max CPU<br>% Usage </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###,##0'%'" class=""> Avg CPU<br>% Usage </td> 
+      <td formatter="AreaSparklineFormatter" class=" no-sort"> CPU Wait History </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###,##0" class=""> Max CPU<br>Wait ms </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###,##0" class=""> Avg CPU<br>Wait ms </td> 
+      <td formatter="AreaSparklineFormatter" class=" no-sort"> CPU Ready History </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###,##0" class=""> Max CPU<br>Ready ms </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###,##0" class=""> Avg CPU<br>Ready ms </td> 
+     </tr> 
+    </thead> 
+    <tbody>
+     <tr class="odd"> 
+      <td name="1"> APT-EXCHANGE </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="22.89, 23.37, 22.08, 22.23, 23.06, 23.02, 22.61, 21.76, 32.87, 30.09, 28.57, 23.86, 22.66, 21.83, 22.48, 20.8, 22.15, 22.38, 22.25, 22.33, 22.07, 22.24, 22.54, 21.66, 21.96, 33.58, 34.26, 26.58, 22.43, 22.06, 23.74, 23.16, 23.57, 22.38, 22.76, 22.02, 21.83, 19.49, 22.15, 22.84, 22.47, 35.68, 33.73, 25.55, 22.21, 21.17, 22.05, 21.76, 21.4, 21.76, 21.47, 23.06, 22.49, 22.79, 22.12, 22.29, 22.37, 34.62, 35.98, 29.73, 24.65, 20.85, 21.02, 21.31, 21.06, 20.63, 21.19, 20.32, 21.46, 20.44, 21.49, 22.31, 21.91, 36.32, 36.77, 28.26, 26.94, 20.97, 22.24, 21.58, 19.25, 21.71, 22.06, 21.05, 21.89, 22.36, 22.58, 22.59, 22.3, 39.16, 34.56, 27, 21.84, 21.27, 21.4, 18.13, 21.56, 21.78, 21.91, 20.27, 22.3, 21.43, 23.24, 22.01, 22.07, 32.36, 33.9, 22.46, 23.95">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines36.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 39.16 </td> 
+      <td name="1" align="right"> 23.96 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="53.08, 54.08, 51.17, 51.52, 53.25, 53.31, 52.42, 50.27, 76.08, 69.33, 66, 55.25, 52.37, 50.41, 52.06, 48.18, 51.24, 51.84, 51.47, 51.75, 51, 51.5, 52.27, 50.08, 50.91, 77.67, 78.72, 61.41, 51.9, 50.93, 55.02, 53.75, 54.51, 51.92, 52.81, 50.93, 50.63, 45.25, 51.22, 52.83, 51.96, 81.83, 78.02, 59.16, 51.3, 49.17, 51.02, 50.41, 49.55, 50.35, 49.72, 53.25, 52.11, 52.76, 51.23, 51.68, 51.78, 79.75, 82.76, 68.75, 57.04, 48.16, 48.7, 49.41, 48.82, 47.74, 49.1, 47.16, 49.73, 47.41, 49.81, 51.67, 50.74, 83.16, 84.49, 65.41, 62.26, 48.5, 51.53, 50.01, 44.61, 50.17, 51, 48.75, 50.71, 51.83, 52.29, 52.25, 51.67, 87.84, 79.88, 62.41, 50.56, 49.25, 49.67, 41.83, 49.86, 50.5, 50.77, 47, 51.59, 49.66, 53.8, 51.01, 51.16, 74.83, 78.14, 52, 55">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines25.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 88% </td> 
+      <td name="1" align="right"> 55% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="10520, 82044, 9548, 115285, 9740, 93299, 10012, 87870, 0, 0, 0, 9503, 73209, 9635, 102919, 11470, 92379, 10924, 104122, 10609, 96564, 9977, 92778, 10159, 95708, 3926, 45528, 9737, 88809, 10806, 88298, 9979, 94848, 10435, 116066, 11538, 86736, 10914, 99010, 10685, 105620, 4079, 39343, 10514, 73913, 10650, 115763, 10844, 101281, 11591, 118458, 11029, 104707, 10492, 93686, 10546, 108783, 3443, 27794, 9976, 91936, 10992, 81089, 11899, 99682, 12418, 93572, 11094, 108466, 10924, 97161, 10954, 85097, 3165, 30391, 7566, 87234, 12080, 76339, 12637, 137791, 10264, 103966, 10375, 94892, 9877, 103295, 10424, 106876, 3601, 36478, 10231, 95260, 10428, 107918, 10960, 89577, 11707, 86537, 10103, 101623, 10909, 103722, 11148, 96125, 3891, 36332, 9855, 110142">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines15.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 137,791 </td> 
+      <td name="1" align="right"> 48,873 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="1348, 1326, 1416, 1454, 1372, 1249, 1320, 1404, 965, 1020, 1169, 1315, 1312, 1290, 1450, 1416, 1314, 1301, 1315, 1306, 1339, 1348, 1325, 1347, 1352, 940, 1046, 1186, 1265, 1252, 1155, 1200, 1215, 1185, 1245, 1240, 1216, 1297, 1256, 1301, 1343, 842, 911, 1125, 1262, 1252, 1288, 1316, 1278, 1291, 1372, 1335, 1478, 1425, 1331, 1480, 1299, 842, 944, 981, 1225, 1258, 1474, 1480, 1420, 1480, 1422, 1401, 1500, 1374, 1398, 1256, 1356, 729, 978, 1193, 1344, 1335, 1318, 1363, 1387, 1422, 1392, 1402, 1400, 1390, 1262, 1338, 1332, 614, 961, 1178, 1347, 1248, 1295, 1299, 1333, 1275, 1320, 1331, 1346, 1472, 1313, 1307, 1288, 955, 958, 1283, 401">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines24.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 1,500 </td> 
+      <td name="1" align="right"> 1,260 </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> APT-INFOSTUDIO-02 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="5.86, 8.14, 8.34, 9.52, 14.74, 8.38, 8.22, 8.22, 8.23, 8.14, 8.24, 8.21, 8.36, 8.15, 8.16, 8.11, 8.12, 8.15, 8.21, 8.14, 8.18, 8.19, 10.43, 11.67, 9.28, 5.18, 5.73, 6.43, 6.48, 5.97, 5.92, 5.79, 5.76, 5.75, 5.89, 6.05, 5.71, 2.04, 2.99, 1.8, 1.53, 1.54, 1.74, 1.69, 3.81, 1.66, 2.11, 1.71, 1.97, 1.98, 2.22, 3.64, 23.04, 2.34, 15.3, 10.16, 10.72, 11.16, 11.09, 10.75, 10.84, 10.3, 10.55, 10.23, 10.2, 10.2, 10.44, 10.65, 11.3, 11.41, 11.68, 11.19, 10.96, 10.92, 11.01, 11.06, 10.9, 10.53, 12.46, 12.41, 12.41, 12.41, 12.56, 12.79, 13.22, 13.3, 13.34, 13, 12.95, 12.94, 13.07, 13.08, 12.92, 12.6, 12.48, 12.44, 12.37, 12.4, 12.58, 12.66, 13.46, 13.53, 13.54, 13.23, 13.13, 13.14, 13.36, 13.04, 12.81">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines2.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 23.04 </td> 
+      <td name="1" align="right"> 9.26 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="12.5, 17.78, 18.09, 20.87, 32.16, 18.34, 18, 17.98, 18, 17.91, 18.09, 18, 18.44, 18, 18.03, 17.84, 17.73, 18, 17.98, 18, 17.98, 18, 22.86, 25.59, 20.22, 11.17, 12.61, 13.84, 14.08, 12.67, 12.86, 12.59, 12.7, 12.42, 12.72, 12.84, 12.53, 4.59, 6.47, 4.08, 3.45, 3.42, 3.71, 3.58, 8.27, 3.84, 4.52, 3.74, 4.34, 4.17, 4.9, 7.84, 50.2, 5.09, 33.39, 22.08, 23.43, 24.34, 23.99, 23.33, 23.62, 22.41, 23.09, 22.26, 22.41, 22.17, 22.74, 23.25, 24.63, 24.92, 25.45, 24.33, 23.88, 23.59, 23.81, 24.07, 23.63, 22.84, 27.27, 27.17, 27.32, 27.09, 27.45, 27.92, 28.64, 29, 29.02, 28.33, 28.27, 28.17, 28.56, 28.59, 28.28, 27.58, 27.22, 27.09, 27.03, 27.09, 27.45, 27.67, 29.28, 29.34, 29.6, 28.92, 28.64, 28.59, 29.09, 28.41, 28.04">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines35.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 50% </td> 
+      <td name="1" align="right"> 20% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="19113, 282642, 19414, 296195, 19209, 296273, 19162, 296406, 0, 0, 0, 19349, 134555, 19362, 243079, 19060, 270354, 19272, 296264, 18289, 270072, 19187, 269553, 18602, 289332, 19304, 295168, 19372, 254334, 19252, 286451, 19377, 258554, 19256, 259585, 19362, 260352, 19075, 308975, 19375, 319092, 19329, 316902, 19395, 311444, 19338, 314110, 19360, 283446, 19383, 346627, 12968, 157029, 16582, 216773, 18891, 265530, 18182, 274139, 19293, 274933, 18516, 278097, 19385, 204791, 19231, 179422, 18702, 276030, 18672, 268266, 18839, 249722, 18481, 250094, 18167, 275078, 19321, 191461, 19329, 239917, 18872, 262567, 19080, 164575, 18530, 210057, 18881, 258769, 19350, 234188, 18196, 213092, 19127, 238953, 18935, 263835, 19064, 263490, 18297, 235055, 18289, 231363, 19326, 187727, 18009, 186226, 18675, 291304">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines31.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 346,627 </td> 
+      <td name="1" align="right"> 133,951 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="55711, 50949, 49060, 47241, 9302, 51118, 52102, 57922, 55487, 57606, 53211, 54367, 55268, 56647, 52942, 58389, 51783, 52890, 53533, 53303, 53558, 56721, 46270, 35580, 49097, 52740, 59211, 61418, 60066, 65435, 62462, 62394, 57532, 57758, 57128, 57028, 67176, 71262, 55491, 58532, 66090, 61360, 58169, 60467, 67899, 58232, 55248, 63905, 51162, 51942, 52900, 43090, 24370, 68760, 35506, 51320, 47506, 42648, 49627, 50024, 48386, 48865, 50453, 50417, 48911, 48065, 45810, 45660, 50622, 48260, 49398, 51126, 52163, 50892, 49887, 48894, 50274, 49049, 46075, 47577, 40778, 41893, 40592, 39232, 43556, 44540, 44392, 45875, 42026, 44544, 44186, 44914, 43912, 44398, 45046, 44863, 41644, 42403, 41514, 43961, 41671, 42986, 42333, 43173, 44218, 42535, 42753, 42782, 6459">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines3.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 71,262 </td> 
+      <td name="1" align="right"> 49,815 </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> APTIS-SHP-APP01 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="1.73, 1.81, 1.69, 1.73, 1.67, 1.68, 1.68, 1.69, 1.69, 1.69, 22.67, 19.96, 2.01, 1.93, 6.33, 3.79, 1.8, 1.73, 1.85, 1.68, 1.68, 1.68, 1.68, 1.67, 1.69, 1.68, 22.95, 20.02, 1.91, 1.89, 6.62, 3.28, 2.22, 1.73, 1.65, 1.6, 1.67, 1.68, 1.69, 1.67, 1.65, 1.59, 22.5, 16.98, 1.93, 1.9, 6.26, 2.71, 2.16, 1.72, 1.69, 1.68, 1.69, 1.68, 1.7, 1.69, 1.69, 1.73, 22.44, 16.95, 1.93, 1.89, 6.3, 3.3, 2.12, 1.74, 1.82, 1.69, 1.69, 1.75, 1.72, 1.7, 1.74, 1.71, 22.61, 18.41, 1.97, 1.91, 6.43, 3.5, 1.89, 1.73, 1.82, 1.7, 1.71, 1.71, 1.74, 1.7, 1.73, 1.72, 22.67, 17.46, 1.89, 1.89, 6.31, 2.87, 2.01, 1.79, 1.79, 1.73, 1.7, 1.7, 1.72, 1.7, 1.71, 1.71, 22.48, 17.17, 2.04">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines21.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 22.95 </td> 
+      <td name="1" align="right"> 4.49 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="8.26, 8.4, 8.09, 8.21, 8, 8.02, 8, 8.02, 8, 8, 98.33, 88.34, 9.28, 9, 28.92, 17.59, 8.29, 8.26, 8.56, 8.09, 8, 8, 8, 8, 8.02, 8, 99.73, 88.33, 9.01, 8.84, 30.45, 15.25, 10.28, 8.26, 7.61, 7.25, 8.02, 8, 8.02, 8, 7.76, 7.25, 99.19, 75.17, 8.94, 9, 28.76, 12.5, 9.96, 8.17, 7.92, 8.09, 7.98, 8, 7.98, 8, 7.98, 8, 99.28, 74.92, 9.18, 9, 28.83, 15.25, 9.74, 8.26, 8.3, 8.09, 8.03, 8.17, 8.04, 8, 8.11, 8, 99.37, 81.42, 9.29, 9, 29.51, 16.33, 8.84, 8.26, 8.29, 8.09, 7.98, 8, 8.06, 8, 7.98, 8, 99.46, 77.08, 8.98, 9, 28.9, 13.25, 9.31, 8.33, 8.36, 8.09, 8.02, 8, 8.09, 8, 8.03, 8, 99.45, 76.42, 9">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines32.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 100% </td> 
+      <td name="1" align="right"> 20% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="16892, 121154, 16934, 99469, 17036, 99663, 17070, 88958, 0, 0, 0, 16404, 74474, 16540, 96689, 16969, 121278, 16769, 98314, 17028, 99783, 16958, 122110, 16980, 110860, 15799, 106660, 16530, 97075, 16571, 97713, 16200, 114553, 17017, 100314, 17096, 100492, 16977, 110581, 17075, 111286, 15799, 99158, 16711, 75573, 16643, 108048, 16641, 117822, 17034, 100014, 17079, 77837, 17068, 122346, 16943, 110671, 15399, 90219, 16618, 108498, 16536, 64511, 16677, 119317, 16792, 120984, 17013, 122066, 16958, 99861, 16857, 88004, 15855, 110480, 16491, 118518, 16506, 108161, 16752, 98597, 16832, 110073, 17038, 88626, 16949, 110110, 17056, 99716, 16032, 118468, 16655, 86416, 16623, 107804, 16853, 98707, 17020, 99240, 17080, 122176, 16998, 99399, 16977, 110572, 15517, 103647, 16549, 126201">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines22.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 126,201 </td> 
+      <td name="1" align="right"> 58,703 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="2679, 2370, 2488, 2400, 2687, 2601, 2597, 2764, 2592, 2612, 397, 537, 2767, 2957, 2374, 3606, 2696, 2758, 2940, 2820, 2722, 2681, 2675, 2802, 2719, 2718, 599, 472, 2936, 2761, 3227, 2833, 2880, 3134, 2936, 2749, 2810, 3087, 2825, 2742, 2799, 2576, 828, 890, 2827, 2670, 2363, 2819, 2834, 2850, 2635, 2995, 2581, 2541, 2668, 2684, 2481, 2625, 711, 878, 2971, 3006, 2437, 3167, 2822, 2679, 2404, 2754, 2559, 2256, 2741, 2795, 2839, 2629, 524, 684, 2646, 2745, 2706, 2979, 2770, 2847, 2795, 2545, 2696, 2587, 2646, 2819, 2697, 2632, 398, 828, 2513, 2651, 2478, 3178, 2673, 2746, 2706, 2740, 2583, 2631, 2576, 2658, 2677, 2832, 653, 852, 658">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines19.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 3,606 </td> 
+      <td name="1" align="right"> 2,446 </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> APT-CBS-BACH01 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="12.74, 12.4, 12.32, 12.34, 11.32, 11.79, 10.26, 8.76, 8.1, 10.31, 8.09, 8.11, 11.39, 9.78, 7.41, 5.92, 7.81, 6.11, 5.97, 5.93, 5.93, 3.73, 3.73, 3.74, 3.74, 3.74, 3.73, 3.74, 3.74, 3.75, 6.09, 3.58, 3.69, 3.72, 3.72, 3.71, 3.73, 3.72, 3.73, 4.17, 3.73, 3.72, 3.76, 3.71, 4.69, 3.72, 3.73, 3.71, 3.71, 3.72, 3.71, 3.71, 3.74, 3.73, 6.45, 3.77, 5.38, 3.74, 3.74, 4.58, 3.75, 3.75, 3.74, 3.7, 3.71, 3.72, 3.73, 3.71, 4.85, 3.74, 5.12, 3.73, 4.6, 3.8, 3.73, 15.85, 18.06, 18.07, 18.06, 14.63, 14.52, 15.11, 10.73, 7.18, 5.96, 5.91, 5.9, 5.89, 5.9, 3.72, 3.69, 3.69, 3.69, 3.69, 3.68, 3.66, 3.65, 3.66, 3.68, 3.67, 3.68, 2.49, 3.44, 1.5, 1.55, 1.7, 2.39, 1.67, 1.51">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines30.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 18.07 </td> 
+      <td name="1" align="right"> 5.77 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="69.51, 67.52, 67.09, 67.1, 61.58, 64.24, 56, 47.76, 44, 56.08, 44.09, 44.09, 62.13, 53.33, 40.36, 32.17, 42.56, 33.33, 32.52, 32.26, 32.33, 20.25, 20.27, 20.26, 20.23, 20.17, 20.27, 20.17, 20.27, 20.5, 33.16, 19.5, 20.1, 20.17, 20.19, 20, 20.24, 20.17, 20.32, 22.59, 20.23, 20.09, 20.45, 20.09, 25.53, 20.17, 20.19, 20.17, 20.23, 20.09, 20.2, 20, 20.32, 20.17, 35.14, 20.5, 29.32, 20.26, 20.33, 24.67, 20.32, 20.33, 20.23, 20.17, 20.1, 20.17, 20.21, 20.09, 26.25, 20.26, 27.84, 20.09, 24.92, 20.92, 20.42, 86.08, 98.19, 98.42, 98.33, 79.5, 79.03, 82.25, 58.42, 39.25, 32.49, 32.17, 32.1, 32, 32.18, 20.33, 20.05, 20.09, 20.02, 20, 20.13, 20, 19.96, 19.91, 19.98, 20, 20.06, 13.58, 18.65, 8.17, 8.41, 9.16, 13.03, 8.92, 8.26">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines33.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 98% </td> 
+      <td name="1" align="right"> 31% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="13936, 42269, 14074, 46564, 14298, 41389, 16796, 70591, 0, 0, 0, 17352, 43908, 16634, 86628, 16750, 63583, 16276, 89440, 16485, 80313, 17124, 84507, 17187, 105731, 17201, 105691, 16403, 105523, 16726, 73911, 17055, 105723, 16423, 116169, 16949, 105635, 17034, 105636, 17063, 105663, 17387, 84110, 16334, 77126, 16663, 116255, 16668, 116181, 16700, 95220, 16994, 95017, 17295, 115748, 16724, 91007, 16830, 94808, 17218, 84206, 17118, 73903, 16598, 73994, 16691, 73984, 16550, 94769, 17008, 82620, 17284, 95078, 16831, 105525, 2, 2, 3, 4, 9300, 23702, 16823, 61396, 16745, 98665, 15690, 89645, 16094, 89590, 17167, 95452, 17052, 84713, 16888, 105942, 16795, 116639, 17314, 105999, 17001, 106055, 17801, 92701, 18424, 85104, 18109, 89823, 18435, 152884">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines17.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 152,884 </td> 
+      <td name="1" align="right"> 49,496 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="981, 937, 833, 839, 929, 1029, 1033, 1183, 1213, 1140, 1373, 1359, 1197, 1265, 1311, 1936, 1397, 1513, 1239, 1215, 1183, 1099, 1125, 1133, 1131, 1357, 1298, 1456, 1640, 1562, 1408, 1804, 1429, 1331, 1265, 1167, 1116, 1077, 1127, 1161, 1083, 1291, 1184, 1452, 1271, 1640, 1277, 1485, 1403, 1545, 1107, 1102, 1356, 1229, 1268, 1238, 1083, 1155, 1242, 1406, 1546, 1547, 1413, 1967, 1549, 1456, 1156, 1051, 1138, 1207, 1076, 1153, 1404, 1087, 1391, 552, 387, 438, 461, 973, 843, 813, 1098, 1132, 1120, 1172, 1200, 1297, 1222, 1078, 1381, 1656, 1490, 1403, 1428, 1764, 1215, 1299, 1125, 1405, 970, 1150, 1087, 1118, 1043, 995, 1291, 1645, 184">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines7.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 1,967 </td> 
+      <td name="1" align="right"> 1,222 </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> APT-CBS-UAT-APP1 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline=".05, .03, 6.99, 2.97, 12.98, 11.51, 11.07, 14.16, 3, 12.32, 12.07, 17.81, 17.67, 16.65, 14.41, 12.08, 12.73, 12.08, 12.38, 13.61, 10, 9.73, 11.42, 12.05, 5.62, 12.91, 10, 11.66">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines11.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 17.81 </td> 
+      <td name="1" align="right"> 10.71 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline=".33, 0, 58.01, 0, 96.25, 95.66, 95.75, 95.26, 0, 93.75, 93.53, 0, 94.42, 93.72, 94.37, 95.31, 96.14, 98.28, 96.58, 97.04, 83, 84.88, 88.84, 95.19, 0, 93.3, 85.05, 93.5">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines34.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 98% </td> 
+      <td name="1" align="right"> 72% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="0, 20031, 66991, 0, 533, 0, 0, 0, 0, 0, 0, 0, 12, 0, 2, 0, 0, 0, 213, 371, 4665, 10859, 8975, 15309, 18546, 4203, 672, 0">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines4.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 66,991 </td> 
+      <td name="1" align="right"> 5,406 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="121, 4, 200, 3, 72, 67, 52, 42, 2, 55, 42, 10, 41, 66, 41, 52, 57, 57, 80, 179, 159, 118, 74, 69, 27, 177, 231, 91">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines26.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 231 </td> 
+      <td name="1" align="right"> 78 </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> APT-CCTV-DB-78-RB </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="14.89, 15.17, 15.25, 15.4, 15.43, 15.61, 15.43, 15.44, 15.35, 15.34, 15.22, 14.95, 15.02, 15, 15.02, 14.99, 15.03, 15.01, 15.26, 15.29, 15.44, 15.41, 15.54, 15.54, 15.57, 15.49, 15.57, 15.11, 15.09, 15.01, 15.02, 15.1, 14.99, 14.97, 15.21, 15.34, 15.49, 15.55, 15.51, 15.37, 15.49, 15.38, 15.4, 15.18, 15.12, 15.16, 15.17, 15.18, 15.27, 15.15, 15.4, 15.45, 15.54, 15.55, 15.48, 15.51, 15.44, 15.31, 15.36, 15.31, 15.26, 15.24, 15.17, 15.23, 15.17, 15.08, 15.32, 15.38, 15.38, 15.36, 15.43, 15.41, 15.53, 15.48, 15.42, 13.64, 13.56, 13.58, 13.49, 13.34, 13.45, 13.23, 13.7, 13.76, 13.86, 13.9, 13.84, 13.91, 13.83, 13.83, 13.71, 13.45, 13.36, 13.52, 13.6, 13.33, 13.42, 13.34, 13.72, 13.81, 13.92, 13.9, 13.84, 13.87, 13.93, 13.8, 13.77, 13.45, 13.57">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines20.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 15.61 </td> 
+      <td name="1" align="right"> 14.78 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="34.33, 35.16, 35.17, 35.91, 35.74, 36.32, 36, 35.9, 35.26, 35.41, 35.08, 34.75, 34.98, 35, 34.63, 34.84, 35, 35, 35.36, 35.17, 36, 35.83, 36, 35.92, 36, 36, 36.02, 35.09, 34.98, 35, 34.91, 35.08, 34.82, 34.67, 35.18, 35.5, 36, 36, 35.88, 35.66, 35.89, 35.67, 35.59, 35, 35.04, 35, 35.06, 35.08, 35.44, 35.09, 35.64, 35.84, 36.1, 36, 35.9, 36, 35.91, 35.42, 35.56, 35.26, 35.34, 35.08, 35.11, 35.17, 35.3, 34.92, 35.81, 35.59, 35.64, 35.59, 35.9, 35.74, 35.8, 35.91, 35.61, 31.66, 31.51, 31.34, 31.27, 30.93, 31.2, 30.83, 31.63, 31.91, 32.08, 32, 32, 32, 32.02, 32, 31.73, 31, 30.92, 31.08, 31.5, 30.91, 31.13, 31, 31.82, 32, 32, 32, 32, 32, 32.35, 31.91, 31.82, 31.08, 31">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines27.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 36% </td> 
+      <td name="1" align="right"> 34% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="9408, 75222, 8954, 88831, 9236, 72203, 8992, 56021, 0, 0, 0, 9138, 57498, 9316, 90798, 9186, 74268, 9233, 82826, 9266, 65220, 8983, 72805, 8951, 80134, 9134, 80618, 9013, 90213, 8954, 73270, 9139, 90314, 9292, 83130, 9107, 80693, 9022, 80959, 8791, 79845, 9045, 88422, 8943, 81264, 8781, 89087, 8887, 81374, 9121, 81754, 9101, 72418, 8854, 79941, 9045, 80376, 8961, 63640, 9063, 79801, 8928, 72653, 9184, 81966, 8800, 56479, 8845, 71947, 9090, 80668, 9019, 79885, 9040, 80632, 10376, 91597, 10227, 82894, 10270, 92456, 10499, 102343, 10327, 82148, 9981, 80986, 9724, 80905, 10192, 99851, 9961, 101101, 10409, 101501, 10425, 92505, 10121, 100166, 9840, 97835, 9908, 98261, 10109, 98488, 9965, 71892, 10025, 111459">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines29.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 111,459 </td> 
+      <td name="1" align="right"> 44,787 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="5407, 4776, 5220, 4970, 5436, 4990, 5165, 5285, 5108, 5240, 5417, 3828, 4122, 3880, 3809, 3935, 3860, 3635, 3579, 3705, 3610, 3696, 3587, 3810, 3840, 3744, 3854, 3899, 3763, 3948, 4044, 3853, 3390, 3686, 3666, 3790, 3815, 3804, 3724, 3746, 3581, 3590, 3808, 3664, 4075, 3836, 3857, 3677, 3400, 3292, 3458, 3492, 3681, 3317, 3655, 3939, 3634, 3297, 3580, 3219, 3353, 3524, 3685, 3942, 3580, 3485, 3361, 3564, 3598, 3723, 4061, 4177, 3968, 4186, 4127, 4403, 4687, 4646, 4588, 4368, 4299, 4015, 4550, 4225, 4434, 4712, 4340, 4385, 4555, 4446, 4447, 4465, 4172, 4214, 4623, 4366, 4562, 4624, 4643, 4730, 4650, 4904, 4279, 4594, 4311, 4616, 4603, 4756, 1293">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines38.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 5,436 </td> 
+      <td name="1" align="right"> 4,078 </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> APT-DATWHSE-PROD </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="1.37, 1.52, .76, .81, .76, .77, .76, 1.46, 1.32, 1.39, 1.56, 5.83, 3.89, 4.47, 2.1, 2.35, 4.01, 1.36, 1.46, .76, .63, .5, .5, .5, 1.28, 1.09, 1.27, 6.47, 2.85, 4.39, 2.07, 2.1, 3.77, 1.17, 1.11, .49, .68, .5, .5, .5, 1.23, 1.08, 1.09, 6.6, 2.86, 4.26, 2.01, 1.98, 3.79, 1.15, 1.12, .97, .68, .5, .5, .5, 1.19, 1.02, 1.1, 6.44, 10.27, 12.18, 13.94, 10.86, 14.5, 12.75, 14.34, 13.39, 14.75, 15.31, 10.51, 2.84, 2.14, 1.55, 1.39, 5.93, 4.35, 4.29, 2.01, 2.07, 3.61, 1.15, 1.22, 1.07, .67, .5, .52, .51, 1.35, 1.2, 1.33, 6.19, 2.95, 4.32, 1.99, 1.31, 3.73, 1.1, 1.25, .51, .57, .51, .51, .51, 1.22, 1.24, 1.27, 6.62, 2.88">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines18.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 15.31 </td> 
+      <td name="1" align="right"> 3.05 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="3.17, 3.58, 1.5, 1.86, 1.5, 1.81, 1.5, 3.54, 2.92, 3.18, 3.75, 13.59, 9, 10.25, 5.08, 5.42, 9.37, 3, 3.45, 1.68, 1.6, 1, 1.16, 1, 2.91, 2.41, 3.09, 14.92, 6.66, 10.09, 4.97, 4.67, 8.92, 2.91, 2.48, 1, 1.37, 1, 1.18, 1, 3.01, 2.5, 2.64, 15.33, 6.7, 9.75, 4.44, 4.68, 8.97, 2.83, 2.91, 2.16, 1.45, 1, 1.16, 1, 2.74, 2.42, 2.62, 14.93, 23.84, 28.25, 32.32, 25.16, 33.61, 29.5, 33.19, 31.09, 34.19, 35.41, 24.33, 6.67, 4.89, 3.66, 3.14, 13.75, 10.06, 9.92, 4.64, 4.83, 8.38, 2.74, 2.81, 2.33, 1.45, 1, 1.19, 1, 3.18, 2.84, 3.01, 14.41, 6.76, 10.08, 4.73, 3.08, 8.59, 2.5, 2.73, 1, 1.39, 1, 1.15, 1, 2.73, 2.92, 2.99, 15.33, 6.64">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines28.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 35% </td> 
+      <td name="1" align="right"> 7% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="19488, 250707, 19720, 283301, 19718, 284029, 19437, 252897, 0, 0, 0, 19667, 75577, 19595, 252736, 19544, 201404, 19516, 251537, 19840, 233528, 19818, 260224, 19472, 228295, 19664, 278178, 19428, 248036, 19625, 279207, 19648, 251831, 19681, 279670, 19839, 207550, 19816, 260198, 19579, 254819, 19641, 279017, 19568, 226567, 19690, 280720, 19692, 229330, 19648, 228691, 19840, 207556, 19827, 286269, 19552, 254345, 19654, 202959, 19260, 244006, 18940, 131555, 18197, 157905, 18435, 122759, 18722, 199434, 18946, 195955, 19330, 220716, 19509, 250392, 18675, 230966, 19655, 178037, 19715, 229747, 19615, 252581, 19805, 259611, 19818, 260021, 19575, 280019, 19574, 226068, 19533, 226784, 19601, 278838, 19446, 222749, 19638, 202784, 19821, 259671, 19801, 260049, 19563, 228512, 19572, 252719, 19259, 304252">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines16.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 304,252 </td> 
+      <td name="1" align="right"> 124,216 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="1090, 622, 619, 681, 651, 601, 631, 925, 873, 876, 974, 1168, 1116, 1134, 1174, 1170, 1082, 1120, 1021, 798, 870, 780, 773, 755, 1244, 1274, 1255, 1218, 1189, 1164, 1250, 1281, 1283, 1338, 741, 732, 928, 796, 765, 792, 1243, 1261, 1151, 1095, 1098, 1064, 1097, 1138, 1186, 1111, 1153, 870, 943, 824, 727, 878, 1206, 1189, 1235, 1112, 1290, 1266, 1201, 1239, 1218, 1272, 1185, 1272, 1256, 1134, 1422, 1381, 1264, 1298, 1259, 1297, 1175, 1042, 1228, 1195, 1124, 1064, 1137, 1100, 867, 707, 764, 739, 1285, 1323, 1389, 1256, 1241, 1187, 1304, 1313, 1209, 1268, 974, 750, 772, 831, 738, 776, 1173, 1266, 1208, 1178, 157">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines6.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 1,422 </td> 
+      <td name="1" align="right"> 1,058 </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> APT-CCTV-DB-74-RR </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="13.78, 13.02, 10.98, 11.14, 11.12, 11.19, 11.14, 11.15, 11.37, 12, 13.11, 13.26, 13.31, 13.06, 13.03, 13.06, 13.15, 13, 13, 11.12, 10.97, 11.08, 11.2, 11.15, 11.24, 11.44, 13.06, 13.34, 13.35, 13.02, 13, 13.07, 13.29, 13, 12.94, 11.74, 11.18, 11.05, 11.14, 11.06, 11.18, 11.41, 13.28, 13.41, 13.44, 13.87, 13.91, 13.06, 13.08, 12.99, 12.95, 11.64, 11.27, 11.15, 11.23, 11.31, 11.3, 12.1, 13.26, 13.28, 13.31, 13.06, 13.05, 12.97, 13, 12.9, 12.72, 12.1, 11.95, 11.4, 11.26, 11.26, 11.52, 11.39, 12.89, 13.21, 13.29, 12.97, 12.97, 12.94, 12.97, 12.87, 12.89, 11.75, 11.16, 11.1, 11.08, 11.16, 11.15, 11.51, 13.08, 13.1, 13.27, 13.09, 13.05, 13.05, 13.04, 13.03, 12.98, 11.08, 11.25, 11.1, 11.31, 11.21, 11.32, 11.53, 13.17, 13.21, 14.81">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines37.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 14.81 </td> 
+      <td name="1" align="right"> 12.31 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="32, 30.4, 25.25, 25.64, 25.67, 25.91, 25.91, 26.09, 26.17, 27.85, 30.41, 30.91, 31.02, 30.17, 30.35, 30.09, 30.51, 30, 30.25, 25.75, 25.49, 25.74, 25.97, 25.91, 25.9, 26.41, 30.16, 31, 31.02, 30.09, 30.22, 30.17, 30.68, 30, 30.04, 27.16, 25.98, 25.75, 25.79, 25.59, 25.91, 26.51, 30.82, 31, 31.13, 31.91, 32.42, 30.17, 30.46, 30, 30.22, 27.08, 26.08, 25.75, 26.08, 26.17, 26.19, 28.08, 30.73, 30.92, 30.82, 30.17, 30.44, 30, 30.36, 30, 29.57, 27.84, 27.73, 26.41, 26.12, 26.26, 26.68, 26.26, 29.83, 30.5, 30.73, 30.09, 30.1, 30, 30.07, 29.92, 29.74, 27.08, 25.79, 25.84, 25.74, 26, 25.82, 26.67, 30.18, 30.26, 30.63, 30.26, 30.32, 30.17, 30.42, 30, 30.11, 25.74, 26.08, 25.67, 26.19, 26, 26.25, 26.67, 30.45, 30.59, 34">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines14.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 34% </td> 
+      <td name="1" align="right"> 29% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="11307, 103176, 12759, 101434, 13288, 101485, 13095, 113066, 0, 0, 0, 11086, 37335, 11364, 103366, 11682, 109838, 11773, 95131, 13253, 91102, 12724, 89480, 12929, 110877, 12243, 104679, 11119, 83153, 11390, 103001, 12246, 90356, 11091, 83831, 13587, 91665, 12839, 111274, 12928, 121965, 11380, 77176, 10851, 76157, 10811, 90204, 11064, 94435, 11590, 103790, 13141, 112614, 12634, 110382, 12838, 110211, 12080, 113988, 11177, 83132, 11211, 104174, 11074, 103559, 11912, 87175, 11914, 102503, 12610, 121634, 12719, 85129, 11829, 106980, 11435, 83983, 11692, 67462, 11445, 85195, 10994, 92516, 13008, 122249, 12863, 112446, 12647, 124013, 12334, 101946, 11174, 64745, 11487, 85197, 11337, 85054, 11064, 74682, 13256, 114466, 12830, 99814, 12806, 87839, 12610, 107146, 11828, 161922">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines9.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 161,922 </td> 
+      <td name="1" align="right"> 53,564 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="8863, 9459, 9552, 10153, 10097, 10190, 10352, 10483, 10336, 10050, 10252, 9793, 9924, 9571, 9938, 10349, 9464, 9614, 9781, 9759, 9796, 9880, 9876, 9448, 9644, 9968, 9477, 9361, 9111, 9610, 9781, 10496, 9685, 9872, 10052, 9922, 9668, 9893, 9967, 9930, 9680, 10102, 9733, 9336, 9797, 9138, 9678, 9666, 9409, 9655, 9795, 9963, 10613, 10986, 10058, 10673, 10249, 10345, 10051, 9821, 9926, 9995, 9990, 10103, 9106, 8894, 9215, 9407, 9707, 9757, 10069, 9827, 10535, 10292, 9885, 10075, 9982, 10043, 10128, 10025, 9120, 9288, 9724, 9703, 9955, 9984, 9585, 10031, 9618, 9735, 9788, 9610, 9830, 9423, 10018, 9506, 9917, 9829, 9836, 9469, 9866, 10067, 10626, 10376, 10215, 10284, 10039, 9913, 1386">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines12.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 10,986 </td> 
+      <td name="1" align="right"> 9,779 </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> APTIS-GBWCAST-02 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="5.26, 6.77, 9.1, 9.3, 8.8, 9.42, 9.22, 8.41, 7.55, 7.26, 6.82, 6.78, 6.75, 6.32, 6, 5.37, 5.25, 5.23, 5.69, 6.32, 8, 8.15, 8.12, 8.51, 8.18, 8.21, 7.58, 6.95, 7.82, 6.95, 6.35, 5.56, 5.41, 5.33, 5.89, 7.36, 9.36, 9.3, 9.04, 9.12, 8.96, 8.37, 7.79, 6.6, 6.83, 6.54, 6.38, 5.72, 5.56, 5.43, 6, 6.91, 9.14, 8.48, 8.27, 7.93, 7.6, 7.49, 7.61, 8.17, 14.28, 9.33, 7.92, 6.16, 5.91, 5.52, 6.51, 7.53, 9.08, 8.66, 8.51, 8.05, 7.87, 8.21, 7.81, 7.56, 9.74, 12.22, 9.39, 6.13, 5.85, 5.55, 6.3, 7.78, 9.6, 9.53, 9.25, 8.83, 8.15, 7.35, 6.94, 6.79, 6.89, 6.64, 6.43, 5.86, 5.56, 5.47, 5.81, 6.46, 7.76, 7.93, 9.17, 8.06, 7.79, 7.46, 6.95, 6.43, 6.69">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines0.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 14.28 </td> 
+      <td name="1" align="right"> 7.47 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="8, 10.25, 13.51, 13.78, 13.08, 14.08, 13.67, 12.55, 11.25, 11, 10, 10.08, 10.13, 9.33, 8.81, 8, 7.98, 8, 8.45, 9.41, 11.91, 12.09, 11.98, 12.58, 12.28, 12.17, 11.27, 10.42, 11.55, 10.41, 9.51, 8, 8.14, 8, 8.72, 11, 13.91, 13.91, 13.51, 13.5, 13.37, 12.5, 11.69, 9.75, 10.12, 9.91, 9.5, 8.34, 8.33, 8, 8.91, 10.42, 13.46, 12.41, 12.27, 11.83, 11.4, 11.09, 11.4, 12.08, 21.24, 13.92, 11.84, 9.09, 8.58, 8, 9.71, 11.16, 13.47, 12.91, 12.68, 11.92, 11.62, 12.25, 11.63, 11.33, 14.54, 18.17, 13.89, 9.09, 8.68, 8, 9.36, 11.42, 14.19, 14.17, 13.72, 13.26, 12.22, 11, 10.41, 10.08, 10.25, 10, 9.57, 8.92, 8.49, 8, 8.82, 9.59, 11.54, 11.84, 13.63, 12.01, 11.63, 11.09, 10.57, 9.67, 10">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines23.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 21% </td> 
+      <td name="1" align="right"> 11% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="19339, 287984, 18092, 260755, 18381, 240101, 18665, 249735, 0, 0, 0, 19119, 150954, 19236, 343775, 19337, 290962, 19341, 321499, 18935, 263062, 18926, 291499, 18595, 251649, 18794, 259619, 18828, 321051, 19190, 308155, 19316, 353150, 19317, 288936, 18264, 187156, 18369, 240949, 18346, 293843, 18857, 259821, 19142, 329379, 19245, 306745, 19313, 318940, 19306, 318670, 18676, 307095, 18883, 255447, 18994, 289094, 18912, 287345, 16490, 190235, 18768, 202676, 19158, 314239, 19169, 286052, 17827, 290461, 18380, 275727, 18720, 289144, 18618, 287915, 18266, 272044, 18440, 191631, 19170, 346859, 19198, 349823, 17890, 233496, 18100, 238286, 18593, 281450, 19067, 329314, 19073, 269808, 19123, 276834, 19181, 351653, 19201, 318920, 18882, 322930, 18439, 251322, 18766, 318791, 19031, 211205, 19036, 364201">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines39.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 364,201 </td> 
+      <td name="1" align="right"> 146,227 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="20542, 26696, 27865, 25369, 31313, 28235, 24979, 25990, 25827, 24975, 25638, 25387, 26136, 23038, 20198, 23683, 21104, 20249, 22562, 24265, 25505, 26911, 24085, 25844, 22590, 25760, 24363, 20885, 22401, 22619, 20079, 20177, 21263, 19694, 20102, 28747, 28694, 24445, 29723, 27227, 30438, 25221, 21887, 21404, 19758, 21620, 22816, 20941, 20842, 20789, 20511, 22848, 25237, 27657, 26147, 26289, 24901, 24998, 24102, 28107, 45125, 31597, 21982, 24038, 21239, 20584, 25548, 30169, 31901, 36444, 30429, 31244, 28313, 31994, 33136, 27757, 41057, 47071, 23649, 26770, 22702, 21345, 22175, 33386, 40020, 33006, 29412, 35364, 27101, 25883, 27459, 25306, 24737, 25769, 21988, 22010, 20426, 20023, 20517, 26196, 29166, 28738, 32700, 30851, 31144, 25062, 23172, 25158, 5377">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines13.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 47,071 </td> 
+      <td name="1" align="right"> 25,852 </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> APT-CCTV-DB-61-CV </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="13.85, 13.91, 12.5, 12.81, 12.72, 12.49, 12.33, 12.51, 12.7, 12.93, 13.72, 13.71, 13.76, 13.75, 13.85, 13.82, 13.88, 13.87, 13.82, 12.27, 12.54, 12.37, 12.66, 12.43, 12.76, 12.61, 13.67, 13.78, 13.81, 13.74, 13.85, 13.63, 13.79, 13.76, 13.76, 12.46, 12.48, 12.31, 12.44, 12.43, 12.37, 12.39, 13.78, 13.75, 13.77, 13.82, 13.79, 13.82, 13.72, 13.81, 13.76, 12.29, 12.39, 12.57, 12.65, 12.63, 12.54, 12.51, 13.64, 13.83, 13.86, 13.8, 13.78, 13.71, 13.72, 12.77, 13.27, 12.97, 13.09, 12.43, 12.49, 12.38, 12.67, 12.79, 13.37, 12.36, 12.44, 12.28, 12.29, 12.17, 11.19, 11.18, 11.57, 11.04, 11.08, 11.05, 11.21, 11.2, 11.3, 11.53, 12.32, 12.3, 12.36, 12.33, 12.3, 12.34, 12.25, 12.33, 12.3, 11.14, 11.08, 10.93, 11.31, 11.17, 11.1, 11.22, 12.31, 12.31, 12.34">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines5.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 13.91 </td> 
+      <td name="1" align="right"> 12.73 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="32.08, 32.18, 28.83, 29.55, 29.5, 28.89, 28.41, 29.02, 29.51, 29.92, 31.83, 31.76, 32, 31.92, 32.1, 32, 32.11, 32, 32.06, 28.33, 28.99, 28.76, 29.21, 28.75, 29.42, 29.26, 31.63, 32, 32.02, 32, 32.1, 31.51, 32.04, 32, 31.78, 28.93, 28.98, 28.5, 28.85, 28.83, 28.69, 28.59, 32.09, 32, 32, 32, 31.98, 32, 31.82, 32, 31.87, 28.5, 28.91, 29.07, 29.25, 29, 29.03, 29.08, 31.45, 32, 32, 32, 32, 31.84, 31.9, 29.59, 30.71, 30.09, 30.27, 28.68, 28.9, 28.59, 29.41, 29.51, 30.97, 28.75, 29, 28.33, 28.55, 28.17, 25.94, 26, 26.71, 25.59, 26, 25.67, 25.9, 26, 26, 26.67, 28.45, 28.58, 28.55, 28.59, 28.47, 28.5, 28.36, 28.59, 28.5, 25.68, 25.52, 25.17, 26.1, 25.83, 25.57, 26, 28.36, 28.59, 28.6">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines10.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 32% </td> 
+      <td name="1" align="right"> 29% </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="11093, 73849, 11534, 102591, 11839, 112155, 12021, 70719, 0, 0, 0, 10819, 82670, 10850, 82359, 11087, 64656, 11229, 93302, 11614, 92359, 11960, 110363, 11869, 98937, 11358, 98310, 10844, 101314, 10848, 82104, 11107, 83245, 10704, 83008, 11925, 102640, 11859, 111482, 12268, 103916, 11173, 95827, 10838, 92889, 10543, 100504, 10967, 92862, 10849, 83139, 12072, 71369, 10885, 79333, 11897, 110395, 11594, 96661, 10844, 101981, 10775, 64670, 11113, 93564, 11748, 100622, 11460, 96812, 11963, 100575, 11502, 79297, 10991, 103723, 11934, 112756, 11625, 80807, 13257, 101874, 13216, 113185, 13398, 114392, 13089, 116404, 13094, 122950, 12442, 105235, 12198, 112538, 12038, 101678, 11981, 113208, 11995, 81555, 13051, 113332, 13285, 101166, 13301, 91602, 12304, 121158, 11889, 120709">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines1.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 122,950 </td> 
+      <td name="1" align="right"> 52,852 </td> 
+      <td name="1" style="white-space: normal"> 
+       <div data-sparkline="10433, 9871, 9758, 9999, 9696, 10125, 10371, 14912, 10284, 10056, 9702, 8508, 8098, 8377, 8432, 9937, 8048, 8465, 7913, 8066, 7861, 8172, 8015, 8118, 8259, 8464, 7981, 7872, 9002, 8269, 8412, 9483, 8114, 7966, 7922, 8071, 8126, 7967, 8046, 7997, 7882, 8399, 8161, 7918, 7721, 7854, 8331, 8593, 8255, 8002, 7859, 8502, 8813, 8222, 8530, 8593, 8371, 8575, 8562, 8586, 8293, 8235, 8297, 8623, 8522, 8699, 7864, 8251, 8310, 8520, 8657, 8473, 8371, 8602, 8227, 8673, 9033, 8599, 9468, 9925, 9007, 9161, 8544, 9208, 9423, 8800, 9100, 8988, 9184, 8805, 9481, 9277, 9889, 8891, 9094, 9448, 8961, 9099, 8699, 8839, 9419, 9478, 8862, 8640, 9113, 9434, 9005, 8649, 1304">
+        <img src="./images/VM_Guest_CPU_Stats_Sparklines8.gif" usemap="##todo" ismap="true" border="0">
+       </div> </td> 
+      <td name="1" align="right"> 14,912 </td> 
+      <td name="1" align="right"> 8,700 </td> 
+     </tr> 
+    </tbody>
+   </table> 
+  </div> CPU ready is te amount of time that the virtual machine was ready but could not be scheduled to run on a physical CPU 
+  <br> 
+  <div class="footer">
+    Copyright (Â©) 2020 Veritas Technologies LLC. All rights reserved. 
+  </div> 
+ </div> 
+ <input type="hidden" name="reportParameters" value="%3Ccom.aptare.sc.domain.report.ReportParameters+serialization%3D%22custom%22%3E%0A++%3Cunserializable-parents%2F%3E%0A++%3Cmap%3E%0A++++%3Cdefault%3E%0A++++++%3CloadFactor%3E0.75%3C%2FloadFactor%3E%0A++++++%3Cthreshold%3E24%3C%2Fthreshold%3E%0A++++%3C%2Fdefault%3E%0A++++%3Cint%3E32%3C%2Fint%3E%0A++++%3Cint%3E19%3C%2Fint%3E%0A++++%3Cstring%3EreportVersion%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EisCloudTemplate%3C%2Fstring%3E%0A++++%3Cstring%3Efalse%3C%2Fstring%3E%0A++++%3Cstring%3EfreeCombo1%3C%2Fstring%3E%0A++++%3Cstring%3EHours%3C%2Fstring%3E%0A++++%3Cstring%3EdateRange.finishHour%3C%2Fstring%3E%0A++++%3Cstring%3E0%3C%2Fstring%3E%0A++++%3Cstring%3EreportGuid%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EdateRange%3C%2Fstring%3E%0A++++%3Ccom.aptare.sc.domain.report.DateRange%3E%0A++++++%3CstartHour%3E0%3C%2FstartHour%3E%0A++++++%3CfinishHour%3E0%3C%2FfinishHour%3E%0A++++++%3CtimePeriod%3E1007%3C%2FtimePeriod%3E%0A++++++%3CuseFinishTime%3Etrue%3C%2FuseFinishTime%3E%0A++++%3C%2Fcom.aptare.sc.domain.report.DateRange%3E%0A++++%3Cstring%3EdateRange.startHour%3C%2Fstring%3E%0A++++%3Cstring%3E0%3C%2Fstring%3E%0A++++%3Cstring%3EnavigationHistory%3C%2Fstring%3E%0A++++%3Cstring%3E105038%3C%2Fstring%3E%0A++++%3Cstring%3EscopeJson%3C%2Fstring%3E%0A++++%3Cstring%3E%5B%7B%26quot%3Bid%26quot%3B%3A%26quot%3B0%26quot%3B%2C%26quot%3Bvalue%26quot%3B%3A%26quot%3BAll+VM+Guests%3DAll+VM+Guests%26quot%3B%2C%26quot%3Btype%26quot%3B%3A%26quot%3BALL_VM_GUESTS%26quot%3B%7D%5D%3C%2Fstring%3E%0A++++%3Cstring%3EtemplateId%3C%2Fstring%3E%0A++++%3Cstring%3E105038%3C%2Fstring%3E%0A++++%3Cstring%3EscopeOnlyComponent%3C%2Fstring%3E%0A++++%3Cboolean%3Efalse%3C%2Fboolean%3E%0A++++%3Cstring%3EreportInstanceId%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EsystemName%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EpathToMetaFile%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EscopeDomainId%3C%2Fstring%3E%0A++++%3Cstring%3E100753%3C%2Fstring%3E%0A++++%3Cstring%3EfreeCombo2%3C%2Fstring%3E%0A++++%3Cstring%3E10%3C%2Fstring%3E%0A++++%3Cstring%3EcascadeToSubGroups%3C%2Fstring%3E%0A++++%3Cboolean%3Efalse%3C%2Fboolean%3E%0A++++%3Cstring%3EreportScope%3C%2Fstring%3E%0A++++%3Clist%3E%0A++++++%3Ccom.aptare.sc.domain.scope.SelectedNode%3E%0A++++++++%3CnodeType%3EALL_VM_GUESTS%3C%2FnodeType%3E%0A++++++++%3Cname%3EAll+VM+Guests%3C%2Fname%3E%0A++++++++%3Cid%3E0%3C%2Fid%3E%0A++++++++%3CnodeTypeName%3EAll+VM+Guests%3C%2FnodeTypeName%3E%0A++++++%3C%2Fcom.aptare.sc.domain.scope.SelectedNode%3E%0A++++%3C%2Flist%3E%0A++++%3Cstring%3EexportFormat%3C%2Fstring%3E%0A++++%3Ccom.aptare.sc.domain.report.enumerations.ExportFormat%3Ehtml%3C%2Fcom.aptare.sc.domain.report.enumerations.ExportFormat%3E%0A++%3C%2Fmap%3E%0A++%3Ccom.aptare.sc.domain.report.ReportParameters%3E%0A++++%3Cdefault%3E%0A++++++%3CreturnNulls%3Etrue%3C%2FreturnNulls%3E%0A++++%3C%2Fdefault%3E%0A++%3C%2Fcom.aptare.sc.domain.report.ReportParameters%3E%0A%3C%2Fcom.aptare.sc.domain.report.ReportParameters%3E"> 
+ <input type="hidden" name="evaluatedDateRange" value="%3Ccom.aptare.sc.domain.report.DateRange%3E%0A++%3CstartDate%3E2020-03-20+00%3A00%3A00.0+UTC%3C%2FstartDate%3E%0A++%3CfinishDate%3E2020-03-26+00%3A00%3A00.0+UTC%3C%2FfinishDate%3E%0A++%3CstartHour%3E0%3C%2FstartHour%3E%0A++%3CfinishHour%3E18%3C%2FfinishHour%3E%0A++%3CstartMinute%3E0%3C%2FstartMinute%3E%0A++%3CfinishMinute%3E28%3C%2FfinishMinute%3E%0A++%3CstartSecond%3E0%3C%2FstartSecond%3E%0A++%3CfinishSecond%3E44%3C%2FfinishSecond%3E%0A++%3CtimePeriod%3E1007%3C%2FtimePeriod%3E%0A++%3CuseFinishTime%3Etrue%3C%2FuseFinishTime%3E%0A%3C%2Fcom.aptare.sc.domain.report.DateRange%3E"> 
+</div></body></html>

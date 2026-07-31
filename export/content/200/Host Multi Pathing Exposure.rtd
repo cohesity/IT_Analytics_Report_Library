@@ -1,0 +1,294 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>
+--Author: rich.rose@aptare.com
+--Last Modified: 05/10/2012
+WITH q1 as (
+SELECT distinct hs.HOST_ID,
+  hs.SOFTWARE_NAME,
+  hs.SOFTWARE_VERSION
+FROM aps_v_host_software hs
+WHERE host_id IN (${hosts})
+AND UPPER(software_type) like &#039;%MULTI%&#039;
+),
+q2 as (
+SELECT host_id,
+aptStringConcat(software_name||&#039; - &#039; ||software_version) mps
+FROM q1 
+GROUP by host_id,software_name
+),
+
+q3 as (
+SELECT host_id,COUNT(distinct host_port_wwn) nbr_of_paths
+FROM aps_v_storage_path
+WHERE host_id IN (${hosts})
+AND host_id is not NULL
+GROUP by host_id
+)
+SELECT 
+CASE WHEN nbr_of_paths &gt; 1 AND mps IS NOT NULL THEN &#039;green&#039;
+ELSE &#039;red&#039;
+END status,
+q3.host_id,s.hostname,nbr_of_paths,mps
+FROM q2,q3,apt_v_server s
+WHERE q3.host_id=q2.host_id(+)
+and q3.host_id=s.server_id</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Host Multi-Pathing Exposure</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Host Multi-Pathing Exposure</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Status</caption>
+                    <name>status</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>center</align>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>host_id</caption>
+                    <name>host_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Host</caption>
+                    <name>hostname</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=hostUtilizationDetail&amp;serverId=${row[&#039;host_id&#039;]}&amp;reportScope=</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption># Paths</caption>
+                    <name>nbr_of_paths</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Multi Pathing Software</caption>
+                    <name>mps</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;label&quot;:&quot;Status&quot;,&quot;name&quot;:&quot;status&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;host_id&quot;,&quot;name&quot;:&quot;host_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=hostUtilizationDetail&amp;serverId=${row[&#039;host_id&#039;]}&amp;reportScope=&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Host&quot;,&quot;name&quot;:&quot;hostname&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;# Paths&quot;,&quot;name&quot;:&quot;nbr_of_paths&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Multi Pathing Software&quot;,&quot;name&quot;:&quot;mps&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Host Multi-Pathing Exposure</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

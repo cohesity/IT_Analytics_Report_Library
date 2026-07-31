@@ -1,0 +1,581 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>eeb86601-d2dd-4099-b84b-70e6e487a6fa</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>03/31/2015</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Client Job Stats Heat Map</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>MB,GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>10%,20%,30%,40%,50%,60%,70%,80%,90%,100%,200%,300%</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>Variance Threshold:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>Day,Week,Month,Quarter,Year</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Group by:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT &apos; All&apos; key, &apos; All&apos; value FROM apt_v_dual UNION SELECT DISTINCT job_type_name key, job_type_name value FROM apt_v_nbu_job_detail WHERE start_date &gt; sysdate -7</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Job Type:</string>
+                  </entry>
+                  <entry>
+                    <string>sql</string>
+                    <string>SELECT &apos; All&apos; key, &apos; All&apos; value FROM apt_v_dual UNION SELECT DISTINCT job_type_name key, job_type_name value FROM apt_v_nbu_job_detail WHERE start_date &gt; sysdate -7</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Client Job Stats Heat Map</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 03/31/2015
+WITH 
+VAR AS (
+SELECT
+DECODE(&apos;${freeCombo2}&apos;,
+&apos;KB&apos;,1,&apos;MB&apos;,1024,&apos;GB&apos;,(1024*1024),&apos;TB&apos;,(1024*1024*1024),&apos;PB&apos;,(1024*1024*1024*1024)) div_by,
+DECODE(&apos;${freeCombo3}&apos;,
+&apos;10%&apos;,10,&apos;20%&apos;,20,&apos;30%&apos;,30,&apos;40%&apos;,40,&apos;50%&apos;,50,&apos;60%&apos;,60,&apos;70%&apos;,70,&apos;80%&apos;,80,&apos;90%&apos;,90,&apos;100%&apos;,100,&apos;200%&apos;,200,&apos;300%&apos;,300) threshold
+FROM apt_v_dual
+),
+t1 AS (
+SELECT
+TRUNC(j.start_date,DECODE(&apos;${freeCombo1}&apos;,&apos;Day&apos;,&apos;DD&apos;,&apos;Week&apos;,&apos;WW&apos;,&apos;Month&apos;,&apos;MM&apos;,&apos;Quarter&apos;,&apos;Q&apos;,&apos;Year&apos;,&apos;YY&apos;)) the_date,
+j.client_id,
+j.client_host_name,
+SUM(j.kilobytes/div_by) the_size
+FROM
+apt_v_nbu_job_detail j, var
+WHERE j.start_date BETWEEN ${startDate} AND ${endDate}
+AND j.client_id IN (${hosts})
+AND j.job_type_name LIKE DECODE(&apos;${queryCombo1}&apos;,&apos; All&apos;,&apos;%&apos;,&apos;${queryCombo1}&apos;)
+GROUP BY
+TRUNC(j.start_date,DECODE(&apos;${freeCombo1}&apos;,&apos;Day&apos;,&apos;DD&apos;,&apos;Week&apos;,&apos;WW&apos;,&apos;Month&apos;,&apos;MM&apos;,&apos;Quarter&apos;,&apos;Q&apos;,&apos;Year&apos;,&apos;YY&apos;)),
+j.client_id,
+j.client_host_name
+ORDER BY 1,2
+),
+t2 AS (--Rank them
+SELECT
+the_date,
+client_id,
+client_host_name,
+the_size,
+AVG(the_size) OVER (PARTITION BY client_id, client_host_name) avg_size,
+RATIO_TO_REPORT(the_size) OVER (PARTITION BY client_id, client_host_name) rr_size,
+DENSE_RANK() OVER (PARTITION BY client_id, client_host_name ORDER BY the_size DESC) dr_size
+FROM t1
+ORDER BY 1,2
+),
+t3 AS (--Assign colors to the rankings
+SELECT
+the_date,
+client_id,
+client_host_name,
+ROUND(the_size,2) the_size,
+ROUND(rr_size*100,2) rr_size,
+ROUND(dr_size,2) dr_size,
+ROUND(avg_size,2) avg_size,
+ABS(ROUND(((avg_size-the_size)/DECODE(avg_size,0,null,avg_size))*100,2)) avg_pct_of_size,
+CASE 
+WHEN the_size &gt;= avg_size  THEN &apos;Greater Than&apos;
+WHEN the_size &lt;= avg_size  THEN &apos;Less Than&apos;
+END the_comparison,
+CASE
+WHEN ABS(ROUND(((avg_size-the_size)/DECODE(avg_size,0,null,avg_size))*100,2)) &gt;= threshold
+THEN &apos;&lt;b&gt;*&lt;/b&gt;&apos; 
+ELSE &apos; &apos; END alert,
+CASE
+WHEN dr_size = 1 THEN &apos;#610B0B&apos;
+WHEN dr_size = 2 THEN &apos;#8A0808&apos;
+WHEN dr_size = 3 THEN &apos;#B40404&apos;
+--WHEN dr_size = 4 THEN &apos;#DF0101&apos;
+--WHEN dr_size = 5 THEN &apos;#FE2E2E&apos;
+--WHEN dr_size = 6 THEN &apos;#F78181&apos;
+--WHEN dr_size = 7 THEN &apos;#F6CECE&apos;
+--WHEN dr_size = 8 THEN &apos;#FBEFEF&apos;
+ELSE &apos;#FBEFEF&apos;
+END cell_color,
+CASE
+WHEN dr_size = 1 THEN &apos;#FBEFEF&apos;
+WHEN dr_size = 2 THEN &apos;#F6CECE&apos;
+WHEN dr_size = 3 THEN &apos;#F78181&apos;
+--WHEN dr_size = 4 THEN &apos;#FE2E2E&apos;
+--WHEN dr_size = 5 THEN &apos;#DF0101&apos;
+--WHEN dr_size = 6 THEN &apos;#B40404&apos;
+--WHEN dr_size = 7 THEN &apos;#8A0808&apos;
+--WHEN dr_size = 8 THEN &apos;#610B0B&apos;
+ELSE &apos;#610B0B&apos;
+END font_color
+FROM t2, var
+ORDER BY 1,2
+)
+SELECT
+the_date,
+client_id,
+client_host_name,
+the_size,
+rr_size,
+dr_size,
+avg_size,
+avg_pct_of_size,
+the_comparison,
+&apos;&lt;table width=&quot;100%&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;&lt;td style=background-color:&apos;||cell_color||&apos; align=right&gt;&apos;||&apos;&lt;font color=&apos;||font_color||&apos;&gt;&apos;||alert||the_size||&apos;&lt;/font&gt;&lt;/td&gt;&lt;/table&gt;&apos; heatmap
+FROM t3
+ORDER BY 1,2</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100879</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_date&quot;,&quot;label&quot;:&quot;the_date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;client_id&quot;,&quot;label&quot;:&quot;client_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;client_host_name&quot;,&quot;label&quot;:&quot;Client&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;the_size&quot;,&quot;label&quot;:&quot;the_size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;rr_size&quot;,&quot;label&quot;:&quot;rr_size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;dr_size&quot;,&quot;label&quot;:&quot;dr_size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;avg_size&quot;,&quot;label&quot;:&quot;avg_size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;avg_pct_of_size&quot;,&quot;label&quot;:&quot;avg_pct_of_size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;the_comparison&quot;,&quot;label&quot;:&quot;the_comparison&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;heatmap&quot;,&quot;label&quot;:&quot;Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;${row[&apos;avg_pct_of_size&apos;].data}% ${row[&apos;the_comparison&apos;].data}  Average: ${row[&apos;avg_size&apos;].data}, Rank: ${row[&apos;dr_size&apos;].data}, ${row[&apos;rr_size&apos;].data}%  of other jobs combined&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Client Job Stats Heat Map</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>the_date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>client_id</caption>
+                    <name>client_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <caption>Client</caption>
+                    <name>client_host_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <aggregationResult>0</aggregationResult>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption>Client</caption>
+                    <name>client_host_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>the_size</caption>
+                    <name>the_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>rr_size</caption>
+                    <name>rr_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>dr_size</caption>
+                    <name>dr_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>avg_size</caption>
+                    <name>avg_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>avg_pct_of_size</caption>
+                    <name>avg_pct_of_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>the_comparison</caption>
+                    <name>the_comparison</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>Value</caption>
+                    <name>heatmap</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&apos;avg_pct_of_size&apos;].data}% ${row[&apos;the_comparison&apos;].data}  Average: ${row[&apos;avg_size&apos;].data}, Rank: ${row[&apos;dr_size&apos;].data}, ${row[&apos;rr_size&apos;].data}%  of other jobs combined</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Reporting on ${queryCombo1} jobs, Grouped by ${freeCombo1} Values in: ${freeCombo2}, * Indicates +/- ${freeCombo3} greater than/less than average, Colors indicate top &lt;font color=&quot;#610B0B&quot;&gt;1&lt;/font&gt;,&lt;font color=&quot;#8A0808&quot;&gt;2&lt;/font&gt;,&lt;font color=&quot;#B40404&quot;&gt; or 3&lt;/font&gt; in size</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.tviJ1OEv5MvDZvwKJtn5hUVu5+0of661T3GZVLYOYs0=

@@ -1,0 +1,736 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 07/09/2012
+--Drilldown: systemName = NBUPolicyList.D This will not run standalone!
+--This will display all NBU policy Information for the_master_server and the_policy_type
+SELECT
+s.hostname master_server,
+policy_id,policy_name, 
+is_active, 
+policy_type_name, 
+(SELECT REPLACE(aptStringConcat(DISTINCT pf.pathname),&#039;,&#039;,&#039;&lt;br /&gt;&#039;) paths
+FROM apt_v_nbu_policy_file pf WHERE pf.policy_id = np.policy_id GROUP BY pf.policy_id) directives,
+storage_unit, 
+max_jobs_per_policy, 
+max_fragment_size, 
+job_priority, 
+keyword, 
+exists_in_catalog, 
+effective_date, 
+block_incremental, 
+backup_copy, 
+file_restore_raw, 
+perform_snapshot_backup, 
+snapshot_method, 
+snapshot_method_argument, 
+perform_offhost_backup, 
+use_data_mover, 
+data_mover_type, 
+use_alternate_client, 
+alternate_client_name, 
+use_virtual_machine, 
+enable_instant_recovery, 
+collect_bmr_info, 
+data_classification, 
+is_storage_life_policy, 
+checkpoint, 
+checkpoint_interval, 
+granular_restore_info, 
+generation, 
+nbu_server_group, 
+lifecycle_policy_name, 
+follow_nfs_mount_points, 
+cross_mount_points, 
+client_compress, 
+client_encrypt, 
+multiple_streams
+FROM apt_v_nbu_policy np, apt_v_server s
+WHERE policy_type = &#039;${the_policy_type}&#039;
+AND np.server_id = ${the_server_id}
+AND np.is_active = DECODE(&#039;${the_state}&#039;,&#039;All&#039;,np.is_active,&#039;Active&#039;,&#039;Y&#039;,&#039;Inactive&#039;,&#039;N&#039;)
+AND np.server_id = s.server_id
+ORDER BY 2</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Policy File List.D</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Policy File List.D</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Master Server</caption>
+                    <name>master_server</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>policy_id</caption>
+                    <name>policy_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Policy</caption>
+                    <name>policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=backupPolicy&amp;policyId=${row[&#039;policy_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Active?</caption>
+                    <name>is_active</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Type</caption>
+                    <name>policy_type_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Directives</caption>
+                    <name>directives</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Storage Unit</caption>
+                    <name>storage_unit</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Max Jobs</caption>
+                    <name>max_jobs_per_policy</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Max Frag</caption>
+                    <name>max_fragment_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Job &lt;br /&gt;Priority</caption>
+                    <name>job_priority</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Keyword</caption>
+                    <name>keyword</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>In Catalog?</caption>
+                    <name>exists_in_catalog</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Effective Date</caption>
+                    <name>effective_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Block Incr?</caption>
+                    <name>block_incremental</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Backup &lt;br /&gt;Copy</caption>
+                    <name>backup_copy</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>File Restore &lt;br /&gt;Raw?</caption>
+                    <name>file_restore_raw</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Snapshot?</caption>
+                    <name>perform_snapshot_backup</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Snapshot &lt;br /&gt;Method</caption>
+                    <name>snapshot_method</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Snapshot &lt;br /&gt;Method Arg</caption>
+                    <name>snapshot_method_argument</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Offhost &lt;br /&gt;Backup?</caption>
+                    <name>perform_offhost_backup</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Data Mover?</caption>
+                    <name>use_data_mover</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Data Mover &lt;br/&gt;Type</caption>
+                    <name>data_mover_type</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Use Alternate&lt;br /&gt;Client?</caption>
+                    <name>use_alternate_client</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Alternate Client</caption>
+                    <name>alternate_client_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Use VM?</caption>
+                    <name>use_virtual_machine</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Instant &lt;br /&gt;Recovery?</caption>
+                    <name>enable_instant_recovery</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Collec &lt;br /&gt;BMR?</caption>
+                    <name>collect_bmr_info</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Data &lt;br /&gt;Classification</caption>
+                    <name>data_classification</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Lifecycle?</caption>
+                    <name>is_storage_life_policy</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Checkpoint?</caption>
+                    <name>checkpoint</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Checkpoint &lt;br /&gt;Interval</caption>
+                    <name>checkpoint_interval</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Granular &lt;br /&gt;Restore?</caption>
+                    <name>granular_restore_info</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Generation</caption>
+                    <name>generation</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Server &lt;br &gt;Group</caption>
+                    <name>nbu_server_group</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Lifecycle Policy</caption>
+                    <name>lifecycle_policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Follow &lt;br /&gt;NFS?</caption>
+                    <name>follow_nfs_mount_points</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Cross &lt;br /&gt;Mount?</caption>
+                    <name>cross_mount_points</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Cient&lt;br /&gt;Compress?</caption>
+                    <name>client_compress</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client&lt;br /&gt;Encrypt?</caption>
+                    <name>client_encrypt</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Multi&lt;br /&gt;Stream?</caption>
+                    <name>multiple_streams</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Master Server&quot;,&quot;name&quot;:&quot;master_server&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;policy_id&quot;,&quot;name&quot;:&quot;policy_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=backupPolicy&amp;policyId=${row[&#039;policy_id&#039;]}&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Policy&quot;,&quot;name&quot;:&quot;policy_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Active?&quot;,&quot;name&quot;:&quot;is_active&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Type&quot;,&quot;name&quot;:&quot;policy_type_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Directives&quot;,&quot;name&quot;:&quot;directives&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Storage Unit&quot;,&quot;name&quot;:&quot;storage_unit&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Max Jobs&quot;,&quot;name&quot;:&quot;max_jobs_per_policy&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Max Frag&quot;,&quot;name&quot;:&quot;max_fragment_size&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Job &lt;br /&gt;Priority&quot;,&quot;name&quot;:&quot;job_priority&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Keyword&quot;,&quot;name&quot;:&quot;keyword&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;In Catalog?&quot;,&quot;name&quot;:&quot;exists_in_catalog&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Effective Date&quot;,&quot;name&quot;:&quot;effective_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Block Incr?&quot;,&quot;name&quot;:&quot;block_incremental&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Backup &lt;br /&gt;Copy&quot;,&quot;name&quot;:&quot;backup_copy&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;File Restore &lt;br /&gt;Raw?&quot;,&quot;name&quot;:&quot;file_restore_raw&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Snapshot?&quot;,&quot;name&quot;:&quot;perform_snapshot_backup&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Snapshot &lt;br /&gt;Method&quot;,&quot;name&quot;:&quot;snapshot_method&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Snapshot &lt;br /&gt;Method Arg&quot;,&quot;name&quot;:&quot;snapshot_method_argument&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Offhost &lt;br /&gt;Backup?&quot;,&quot;name&quot;:&quot;perform_offhost_backup&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Data Mover?&quot;,&quot;name&quot;:&quot;use_data_mover&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Data Mover &lt;br/&gt;Type&quot;,&quot;name&quot;:&quot;data_mover_type&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Use Alternate&lt;br /&gt;Client?&quot;,&quot;name&quot;:&quot;use_alternate_client&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Alternate Client&quot;,&quot;name&quot;:&quot;alternate_client_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Use VM?&quot;,&quot;name&quot;:&quot;use_virtual_machine&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Instant &lt;br /&gt;Recovery?&quot;,&quot;name&quot;:&quot;enable_instant_recovery&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Collec &lt;br /&gt;BMR?&quot;,&quot;name&quot;:&quot;collect_bmr_info&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Data &lt;br /&gt;Classification&quot;,&quot;name&quot;:&quot;data_classification&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Lifecycle?&quot;,&quot;name&quot;:&quot;is_storage_life_policy&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Checkpoint?&quot;,&quot;name&quot;:&quot;checkpoint&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Checkpoint &lt;br /&gt;Interval&quot;,&quot;name&quot;:&quot;checkpoint_interval&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Granular &lt;br /&gt;Restore?&quot;,&quot;name&quot;:&quot;granular_restore_info&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Generation&quot;,&quot;name&quot;:&quot;generation&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Server &lt;br &gt;Group&quot;,&quot;name&quot;:&quot;nbu_server_group&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Lifecycle Policy&quot;,&quot;name&quot;:&quot;lifecycle_policy_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Follow &lt;br /&gt;NFS?&quot;,&quot;name&quot;:&quot;follow_nfs_mount_points&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Cross &lt;br /&gt;Mount?&quot;,&quot;name&quot;:&quot;cross_mount_points&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Cient&lt;br /&gt;Compress?&quot;,&quot;name&quot;:&quot;client_compress&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Client&lt;br /&gt;Encrypt?&quot;,&quot;name&quot;:&quot;client_encrypt&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Multi&lt;br /&gt;Stream?&quot;,&quot;name&quot;:&quot;multiple_streams&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Policy State: ${the_state} Policy Type: ${the_policy_type}</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Policy File List.D</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <string>NBUPolicyFileList.D</string>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

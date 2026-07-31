@@ -1,0 +1,702 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>5</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>dba90a1a-6f70-48fe-aaa6-580e9d7c6565</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>7</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*08/16/2018 Keys off of client_id so select individual clients or Host Groups </string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Lifecycle Policy Client Configurations CL</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>Active,Inactive,All</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Policy State:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>Active</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Lifecycle Policy Client Configurations CL</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Updated: 08/16/2018
+WITH
+p1 AS (--Get the master list of policies
+SELECT  --Policies with SLP
+p.server_id,
+s.display_name master_server_name,
+pc.client_id,
+pc.client_name,
+p.policy_id,
+p.policy_name,
+p.policy_type_name,
+p.is_active,
+p.lifecycle_policy_id,
+p.lifecycle_policy_name
+FROM
+apt_v_nbu_policy p, apt_v_nbu_policy_client pc, apt_v_server s
+WHERE
+p.policy_id IN (SELECT DISTINCT pc.policy_id FROM apt_v_nbu_policy_client pc WHERE pc.client_id IN (${hosts}))
+AND p.server_id = s.server_id
+AND p.is_active = DECODE(&#039;${freeCombo1}&#039;,&#039;Active&#039;,&#039;Y&#039;,&#039;Inactive&#039;,&#039;N&#039;,&#039;All&#039;,p.is_active)
+AND p.lifecycle_policy_id IS NOT NULL  
+AND p.policy_id = pc.policy_id
+AND pc.is_active = DECODE(&#039;${freeCombo1}&#039;,&#039;Active&#039;,&#039;Y&#039;,&#039;Inactive&#039;,&#039;N&#039;,&#039;All&#039;,pc.is_active)
+UNION
+SELECT --Policies without SLP
+p.server_id,
+s.display_name master_server_name,
+pc.client_id,
+pc.client_name,
+p.policy_id,
+p.policy_name,
+p.policy_type_name,
+p.is_active,
+NULL lifecycle_policy_id,
+&#039;No Lifecycle Policy&#039; lifecycle_policy_name
+FROM
+apt_v_nbu_policy p, apt_v_nbu_policy_client pc, apt_v_server s
+WHERE
+p.policy_id IN (SELECT DISTINCT pc.policy_id FROM apt_v_nbu_policy_client pc WHERE pc.client_id IN (${hosts}))
+AND p.server_id = s.server_id  
+AND p.is_active = DECODE(&#039;${freeCombo1}&#039;,&#039;Active&#039;,&#039;Y&#039;,&#039;Inactive&#039;,&#039;N&#039;,&#039;All&#039;,p.is_active)
+AND p.exists_in_catalog = DECODE(&#039;${freeCombo1}&#039;,&#039;Active&#039;,&#039;Y&#039;,&#039;Inactive&#039;,&#039;N&#039;,&#039;All&#039;,p.exists_in_catalog)
+AND p.lifecycle_policy_id IS NULL  
+AND p.policy_id = pc.policy_id
+AND pc.is_active = DECODE(&#039;${freeCombo1}&#039;,&#039;Active&#039;,&#039;Y&#039;,&#039;Inactive&#039;,&#039;N&#039;,&#039;All&#039;,pc.is_active)
+AND pc.exists_in_catalog = DECODE(&#039;${freeCombo1}&#039;,&#039;Active&#039;,&#039;Y&#039;,&#039;Inactive&#039;,&#039;N&#039;,&#039;All&#039;,pc.exists_in_catalog)
+),
+pf1 AS (
+SELECT
+p.policy_id,
+rtd.collectString(CAST(COLLECT(TO_CHAR(
+SUBSTR(pf.pathname,1,60)
+) ORDER BY pf.pathname) AS StringListType),&#039;&lt;br&gt;&#039;) directives
+FROM
+apt_v_nbu_policy p, apt_v_nbu_policy_file pf
+WHERE
+p.policy_id IN (SELECT DISTINCT pc.policy_id FROM apt_v_nbu_policy_client pc WHERE pc.client_id IN (${hosts}))
+AND p.policy_id = pf.policy_id
+AND p.is_active = &#039;Y&#039;
+AND p.exists_in_catalog = &#039;Y&#039;
+AND pf.include_exclude_flag = &#039;I&#039;
+GROUP BY 
+p.policy_id
+),
+s1 AS (--get the Schedule configs grouped by policy
+SELECT
+p.policy_id,
+MAX(s.retention_days) max_retention_days,
+rtd.collectString(CAST(COLLECT(TO_CHAR(
+  s.schedule_name  
+  ||&#039; - &#039;||
+  DECODE(s.selection_type,1,&#039;&#039;,2,&#039;Calendar - &#039;)
+  ||
+  CASE 
+  WHEN s.frequency &lt; 3600 THEN s.frequency||&#039; Secs&#039;
+  WHEN s.frequency = 3600 THEN &#039;Every Hour&#039;
+  WHEN s.frequency BETWEEN 3601 AND 86400 THEN &#039;Every &#039;||ROUND(s.frequency/60/60,2)||&#039; Hours&#039;
+  WHEN s.frequency = 86400 THEN &#039;Every day&#039;
+  WHEN s.frequency BETWEEN 86401 AND 31536000 THEN &#039;Every &#039;||ROUND(s.frequency/60/60/24,2)||&#039; Days&#039;
+  WHEN s.frequency &gt; 31536000 THEN &#039;Every &#039;||ROUND(s.frequency/60/60/24/365,2)||&#039; Years&#039;
+  ELSE TO_CHAR(s.frequency)
+  END 
+  ||&#039; - Retain: &#039;||
+  DECODE(s.retention_days,
+    9999,&#039;Forever&#039;,
+    -1,&#039;No&#039;,
+    null,&#039; &#039;,
+   DECODE(lp.lifecycle_policy_name,NULL,s.retention_days||&#039; Days&#039;,&#039;SLP*&#039;))
+  ||NVL2(s.volume_pool_name,&#039; - Vol pool: &#039;||SUBSTR(s.volume_pool_name,1,25),&#039;&#039;)
+  ||NVL2(su.storage_unit_label,&#039; - Stg Unit:&#039;||SUBSTR(su.storage_unit_label,1,25),&#039;&#039;)
+  ||NVL2(lp.lifecycle_policy_name,&#039; - Res:&#039;||SUBSTR(lp.lifecycle_policy_name,1,25),&#039;&#039;)
+) ORDER BY s.schedule_name) AS StringListType),&#039;&lt;br&gt;&#039;) sched_config
+FROM 
+apt_v_nbu_policy p, apt_v_nbu_schedule s, apt_v_nbu_storage_unit su, apt_v_nbu_lifecycle_policy lp
+WHERE 
+p.policy_id IN (SELECT DISTINCT pc.policy_id FROM apt_v_nbu_policy_client pc WHERE pc.client_id IN (${hosts}))
+AND p.is_active = &#039;Y&#039;
+AND p.exists_in_catalog = &#039;Y&#039;
+AND p.policy_id = s.policy_id
+AND s.exists_in_catalog = &#039;Y&#039;
+AND s.storage_unit_id = su.storage_unit_id (+)
+AND s.lifecycle_policy_id = lp.lifecycle_policy_id (+)
+GROUP BY p.policy_id
+),
+c1 AS (--get the Lifecycle Policy Destinations
+SELECT
+&#039;Policy&#039; lp_source,
+p.policy_id,
+p.lifecycle_policy_id,
+lp.lifecycle_policy_name,
+MAX(lpd.destination_index_nbr) nbr_of_destinations,
+rtd.collectString(CAST(COLLECT(TO_CHAR(
+  &#039;Copy: &#039;
+  ||
+  lpd.destination_index_nbr
+  ||&#039; - &#039;||
+  DECODE(lpd.used_for,
+    0,&#039;Backup&#039;,
+    1,&#039;Duplication&#039;,
+    2,&#039;Snapshot&#039;,
+    3,&#039;Remote Server Duplication&#039;,
+    4,&#039;Import&#039;,
+    5,&#039;Backup Snapshot&#039;,
+    6,&#039;Index Snapshot&#039;,
+    7,&#039;Replication&#039;) 
+  ||&#039; - Retain: &#039;||
+  DECODE(lpd.retention_days,
+    9999,&#039;Never Expires&#039;,
+    -1,&#039;Expires Immediately&#039;,
+    null,&#039; &#039;,
+   lpd.retention_days||&#039; Days&#039;)
+  ||&#039; - Store to: &#039;||
+  su.storage_unit_label
+  ||&#039; &#039;||
+  vp.volume_pool_name
+) ORDER BY lpd.destination_index_nbr) AS StringListType),&#039;&lt;br&gt;&#039;) slp_config
+FROM
+apt_v_nbu_policy p, apt_v_nbu_lifecycpolicy_dest lpd, apt_v_nbu_lifecycle_policy lp, 
+apt_v_nbu_storage_unit su, apt_v_nbu_volume_pool vp
+WHERE
+p.policy_id IN (SELECT DISTINCT pc.policy_id FROM apt_v_nbu_policy_client pc WHERE pc.client_id IN (${hosts}))
+AND p.exists_in_catalog =&#039;Y&#039;
+AND p.is_active = &#039;Y&#039;
+AND p.lifecycle_policy_id = lp.lifecycle_policy_id
+AND lp.lifecycle_policy_id = lpd.lifecycle_policy_id
+AND lpd.storage_unit_id = su.storage_unit_id (+)
+AND lpd.volume_pool_id = vp.volume_pool_id (+)
+GROUP BY
+p.policy_id,
+p.lifecycle_policy_id,
+lp.lifecycle_policy_name
+UNION
+SELECT
+&#039;Schedule&#039; lp_source,
+p.policy_id,
+s.lifecycle_policy_id,
+lp.lifecycle_policy_name,
+MAX(lpd.destination_index_nbr) nbr_of_destinations,
+rtd.collectString(CAST(COLLECT(TO_CHAR(
+  s.schedule_name||&#039; - &#039;||
+  &#039;Copy: &#039;
+  ||
+  lpd.destination_index_nbr
+  ||&#039; - &#039;||
+  DECODE(lpd.used_for,
+    0,&#039;Backup&#039;,
+    1,&#039;Duplication&#039;,
+    2,&#039;Snapshot&#039;,
+    3,&#039;Remote Server Duplication&#039;,
+    4,&#039;Import&#039;,
+    5,&#039;Backup Snapshot&#039;,
+    6,&#039;Index Snapshot&#039;,
+    7,&#039;Replication&#039;) 
+  ||&#039; - Retain: &#039;||
+  DECODE(lpd.retention_days,
+    9999,&#039;Never Expires&#039;,
+    -1,&#039;Expires Immediately&#039;,
+    null,&#039; &#039;,
+   lpd.retention_days||&#039; Days&#039;)
+  ||&#039; - Store to: &#039;||
+  su.storage_unit_label
+  ||&#039; &#039;||
+  vp.volume_pool_name
+) ORDER BY lpd.destination_index_nbr) AS StringListType),&#039;&lt;br&gt;&#039;) slp_config
+FROM
+apt_v_nbu_policy p, apt_v_nbu_lifecycpolicy_dest lpd, apt_v_nbu_lifecycle_policy lp, 
+apt_v_nbu_storage_unit su, apt_v_nbu_volume_pool vp, apt_v_nbu_schedule s
+WHERE
+p.policy_id IN (SELECT DISTINCT pc.policy_id FROM apt_v_nbu_policy_client pc WHERE pc.client_id IN (${hosts}))
+AND p.exists_in_catalog =&#039;Y&#039;
+AND p.is_active = &#039;Y&#039;
+AND p.policy_id = s.policy_id
+AND s.lifecycle_policy_id = lp.lifecycle_policy_id
+AND p.lifecycle_policy_id IS NULL
+AND lp.lifecycle_policy_id = lpd.lifecycle_policy_id
+AND lpd.storage_unit_id = su.storage_unit_id (+)
+AND lpd.volume_pool_id = vp.volume_pool_id (+)
+GROUP BY
+p.policy_id,
+s.lifecycle_policy_id,
+lp.lifecycle_policy_name
+)
+SELECT
+p1.server_id,
+p1.master_server_name,
+p1.client_id,
+p1.client_name,
+p1.policy_id,
+p1.policy_name,
+p1.policy_type_name,
+p1.is_active,
+pf1.directives,
+s1.sched_config,
+c1.lp_source,
+c1.lifecycle_policy_id,
+NVL(c1.lifecycle_policy_name,&#039;No Lifecycle Policy&#039;) lifecycle_policy_name,
+c1.nbr_of_destinations,
+c1.slp_config
+FROM
+p1, pf1, s1, c1
+WHERE
+p1.policy_id = pf1.policy_id (+)
+AND p1.policy_id = s1.policy_id (+)
+AND p1.policy_id = c1.policy_id (+)</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>101461</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>108855</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;server_id&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;server_id&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;master_server_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Master Server&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=displayServerDetail&amp;serverId=${row[&#039;server_id&#039;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;client_id&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;client_id&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;client_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Client&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;policy_id&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;policy_id&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;policy_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Policy&quot;,&quot;formatter&quot;:&quot;EllipsisFormatter&quot;,&quot;formatPattern&quot;:&quot;30&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=backupPolicy&amp;policyId=${row[&#039;policy_id&#039;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;policy_type_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Type&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;is_active&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Active&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;directives&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Directives&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;sched_config&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Schedule Configuration&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;lp_source&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Lifecycle Source&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;lifecycle_policy_id&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;lifecycle_policy_id&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;lifecycle_policy_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Lifecycle Policy&quot;,&quot;formatter&quot;:&quot;EllipsisFormatter&quot;,&quot;formatPattern&quot;:&quot;60&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=nbuSLPDetails&amp;slpIds=${row[&#039;lifecycle_policy_id&#039;].data}&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbr_of_destinations&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;#Copies&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;slp_config&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Effective Residence&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Lifecycle Policy Client Configurations CL</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>server_id</caption>
+                    <name>server_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Master Server</caption>
+                    <name>master_server_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=displayServerDetail&amp;serverId=${row[&#039;server_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>client_id</caption>
+                    <name>client_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client</caption>
+                    <name>client_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>policy_id</caption>
+                    <name>policy_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Policy</caption>
+                    <name>policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>EllipsisFormatter</formatter>
+                    <formatPattern>30</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=backupPolicy&amp;policyId=${row[&#039;policy_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Type</caption>
+                    <name>policy_type_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Active</caption>
+                    <name>is_active</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Directives</caption>
+                    <name>directives</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Schedule Configuration</caption>
+                    <name>sched_config</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Lifecycle Source</caption>
+                    <name>lp_source</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>lifecycle_policy_id</caption>
+                    <name>lifecycle_policy_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Lifecycle Policy</caption>
+                    <name>lifecycle_policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>EllipsisFormatter</formatter>
+                    <formatPattern>60</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=nbuSLPDetails&amp;slpIds=${row[&#039;lifecycle_policy_id&#039;].data}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>#Copies</caption>
+                    <name>nbr_of_destinations</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Effective Residence</caption>
+                    <name>slp_config</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

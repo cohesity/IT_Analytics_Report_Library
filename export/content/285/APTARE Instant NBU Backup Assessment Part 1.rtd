@@ -1,0 +1,584 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>descriptiveName</string>
+            <string>APTARE Instant NBU Backup Assessment Part 1</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last updated: 08/27/2015
+--Provides Several Key Performance Indicators for a NBU Environment
+--Part 1 of 2
+--This was divided up into 2 parts so it would fit better on a dashboard
+WITH 
+VAR AS (
+SELECT
+ROUND((${endDate} - ${startDate}),2) nbrOfDays,
+${startDate} startDate,
+DECODE(&#039;${freeCombo1}&#039;,
+&#039;KB&#039;,1,&#039;MB&#039;,1024,&#039;GB&#039;,(1024*1024),&#039;TB&#039;,(1024*1024*1024),&#039;PB&#039;,(1024*1024*1024*1024)) div_by 
+FROM dual
+),
+t0 AS (--Calculates Individual Job Statistics
+SELECT
+COUNT(DISTINCT j.server_id) server_count,
+COUNT(DISTINCT j.media_server_id ) media_server_count,
+COUNT(DISTINCT j.client_id) client_count,
+COUNT(j.job_id) job_count,
+SUM(DECODE(j.summary_status,0,1,0)) successful_job_count,
+SUM(DECODE(j.summary_status,1,1,0)) partial_job_count,
+SUM(DECODE(j.summary_status,2,1,0)) failed_job_count,
+SUM((started_readwrite - start_date)*24*60*60) q_time,
+SUM(CASE WHEN (started_readwrite - start_date)*24*60 &lt; 5 THEN 1 ELSE 0 END) qjobl5_count,
+SUM(CASE WHEN (started_readwrite - start_date)*24*60 BETWEEN 5 AND 15 THEN 1 ELSE 0 END) qjob515_count,
+SUM(CASE WHEN (started_readwrite - start_date)*24*60 &gt;= 15 THEN 1 ELSE 0 END) qjob15_count,
+AVG(j.duration_secs) avg_duration1,
+MAX(j.duration_secs) max_duration1,
+SUM(CASE WHEN j.duration_secs/60/60 &gt;= 1 THEN 1 ELSE 0 END) job_g1_count,
+SUM(CASE WHEN j.duration_secs/60/60 BETWEEN 1 AND 12 THEN 1 ELSE 0 END) job_112_count,
+SUM(CASE WHEN j.duration_secs/60/60 BETWEEN 12 AND 24 THEN 1 ELSE 0 END) job_1224_count,
+SUM(CASE WHEN j.duration_secs/60/60 &gt;= 24 THEN 1 ELSE 0 END) job_g24_count,
+ROUND(SUM(j.kilobytes/var.div_by),2) job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (101) THEN j.kilobytes/var.div_by ELSE 0 END),2) full_job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (102) THEN j.kilobytes/var.div_by ELSE 0 END),2) incr_job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (112) THEN j.kilobytes/var.div_by ELSE 0 END),2) appl_job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (107) THEN j.kilobytes/var.div_by ELSE 0 END),2) dup_job_volume,
+ROUND(SUM(CASE WHEN j.job_type NOT IN (101,102,112,107) THEN j.kilobytes/var.div_by ELSE 0 END),2) other_job_volume,
+ROUND(SUM(CASE WHEN j.policy_type_name IN (&#039;VMware&#039;,&#039;NDMP&#039;,&#039;Oracle&#039;,&#039;MS-SQL Server&#039;,&#039;MS-Exchange Server&#039;,&#039;FlashBackup&#039;) THEN j.kilobytes/var.div_by ELSE 0 END),2) db_job_volume,
+ROUND(SUM(DECODE(j.policy_type_name,&#039;VMware&#039;,j.kilobytes/var.div_by,0)),2) vmware_job_volume,
+ROUND(SUM(DECODE(j.policy_type_name,&#039;NDMP&#039;,j.kilobytes/var.div_by,0)),2) ndmp_job_volume,
+ROUND(SUM(DECODE(j.policy_type_name,&#039;Oracle&#039;,j.kilobytes/var.div_by,0)),2) oracle_job_volume,
+ROUND(SUM(DECODE(j.policy_type_name,&#039;MS-SQL Server&#039;,j.kilobytes/var.div_by,0)),2) mssql_job_volume,
+ROUND(SUM(DECODE(j.policy_type_name,&#039;MS-Exchange Server&#039;,j.kilobytes/var.div_by,0)),2) msexch_job_volume,
+ROUND(SUM(DECODE(j.policy_type_name,&#039;FlashBackup&#039;,j.kilobytes/var.div_by,0)),2) flashbackup_job_volume,
+COUNT(DISTINCT j.client_id||j.policy_id) cp_combos,
+COUNT(DISTINCT j.client_id||j.policy_id||j.schedule_id) cps_combos,
+AVG(j.duration_secs/60 )avg_duration,
+SUM(j.nbr_of_files/1000000) tot_nbr_of_files
+FROM apt_v_nbu_job_detail j, var
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate}
+AND j.job_type &lt;&gt; 105
+),
+t3 AS (--Calculates Future Expiring data
+SELECT
+ROUND(SUM(CASE WHEN j.expiration_date &gt; j.start_date THEN j.kilobytes/var.div_by END),3) tot_data_expiring1,
+ROUND(SUM(CASE WHEN j.expiration_date BETWEEN j.start_date AND j.start_date+30 THEN j.kilobytes/var.div_by END),3) data_expiring_l30d,
+ROUND(SUM(CASE WHEN j.expiration_date BETWEEN j.start_date+30 AND j.start_date+365.25 THEN j.kilobytes/var.div_by END),3) data_expiring_30d_1y,
+ROUND(SUM(CASE WHEN j.expiration_date BETWEEN j.start_date+356.25 AND j.start_date+1826 THEN j.kilobytes/var.div_by END),3) data_expiring_1y_5y,
+ROUND(SUM(CASE WHEN j.expiration_date &gt; j.start_date+1826 THEN j.kilobytes/var.div_by END),2) data_expiring_o5y
+FROM apt_v_nbu_job j, var
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate}
+AND j.expiration_date &gt; j.start_date
+AND j.job_type &lt;&gt; 105
+),
+t4 AS (--Calculates Failed Clients 
+SELECT
+COUNT(client_id) failed_clients1,
+COUNT(DISTINCT client_id) distinct_failed_clients1
+FROM (SELECT
+j.client_id,
+TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;) the_date,
+MIN(j.summary_status) failed_client0
+FROM apt_v_nbu_job j
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate}
+AND j.job_type &lt;&gt; 105
+GROUP BY j.client_id, TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;)
+HAVING MIN(j.summary_status) = 2)
+),--Calculate The Front End ${freeCombo1} (Sum of the largest full for each client done in a day)
+fg1 AS (--First roll up all client, policy, schedule combinations per day
+SELECT
+j.server_id,j.client_id,j.policy_id,j.schedule_id,
+TRUNC(j.start_date,&#039;DD&#039;) the_day,
+SUM(j.kilobytes/var.div_by) fulls_for_day
+FROM apt_v_nbu_job j,var
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate}
+AND j.job_type IN (101,112)
+GROUP BY j.server_id,j.client_id,j.policy_id,j.schedule_id,
+TRUNC(j.start_date,&#039;DD&#039;)
+),
+fg2 AS (--Add up all the fulls for that day in case there were more than one
+SELECT
+server_id,client_id,
+the_day,
+SUM(fulls_for_day) the_fulls
+FROM fg1
+GROUP BY server_id,client_id,the_day
+),
+fg3 AS (--Pick the largest one for each client
+SELECT 
+server_id,client_id,
+MAX(the_fulls) largest_full
+FROM fg2
+GROUP BY server_id,client_id
+),
+t5 AS (--Sum up all the clients largest fulls to get Front End Size
+SELECT 
+ROUND(SUM(largest_full),2) sum_of_fulls1
+FROM fg3
+)
+SELECT
+&#039;Number of Master Servers&#039; kpi_metric,
+TO_CHAR(server_count) kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;Number of Media Servers&#039; kpi_metric,
+TO_CHAR(media_server_count) kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;Number of Clients&#039; kpi_metric,
+TO_CHAR(client_count) kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;Number of Client Policy Combinations&#039; kpi_metric,
+TO_CHAR(cp_combos) kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;Number of Client Policy Schedule Combinations&#039; kpi_metric,
+TO_CHAR(cps_combos) kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;Average Number of Failed Clients per Day&#039; kpi_metric,
+TO_CHAR(ROUND((failed_clients1/nbrOfDays),2)) kpi_value1,
+TO_CHAR(ROUND((failed_clients1/nbrOfDays)/DECODE(client_count,0,null,client_count)*100,2))||&#039;%&#039; kpi_value2
+FROM t0,t4,var
+UNION ALL
+SELECT
+&#039;Front End ${freeCombo1}: Amount of Client Data to Protect&#039; kpi_metric,
+TO_CHAR(sum_of_fulls1,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t5
+UNION ALL
+SELECT
+&#039;&lt;b&gt;Total Amount of Streamed Data From All Backups&lt;/b&gt;&#039; kpi_metric,
+TO_CHAR(job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Full Backups&#039; kpi_metric,
+TO_CHAR(full_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(ROUND((full_job_volume/DECODE(job_volume,0,null,job_volume)*100),2),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Incremental Backups&#039; kpi_metric,
+TO_CHAR(incr_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(ROUND((incr_job_volume/DECODE(job_volume,0,null,job_volume)*100),2),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Application Backups&#039; kpi_metric,
+TO_CHAR(appl_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(ROUND((appl_job_volume/DECODE(job_volume,0,null,job_volume)*100),2),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Duplication Jobs&#039; kpi_metric,
+TO_CHAR(dup_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(ROUND((dup_job_volume/DECODE(job_volume,0,null,job_volume)*100),2),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From All Other Jobs&#039; kpi_metric,
+TO_CHAR(other_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(ROUND((other_job_volume/DECODE(job_volume,0,null,job_volume)*100),2),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;&lt;b&gt;Amount of Streamed Data From Special Policy Types&lt;/b&gt;&#039; kpi_metric,
+TO_CHAR(db_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Policy Type: VMware&#039; kpi_metric,
+TO_CHAR(vmware_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND((vmware_job_volume/DECODE(db_job_volume,0,null,db_job_volume)*100),2),0),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Policy Type: NDMP&#039; kpi_metric,
+TO_CHAR(ndmp_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND((ndmp_job_volume/DECODE(db_job_volume,0,null,db_job_volume)*100),2),0),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Policy Type: Oracle&#039; kpi_metric,
+TO_CHAR(oracle_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND((oracle_job_volume/DECODE(db_job_volume,0,null,db_job_volume)*100),2),0),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Policy Type: MS-SQL&#039; kpi_metric,
+TO_CHAR(mssql_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND((mssql_job_volume/DECODE(db_job_volume,0,null,db_job_volume)*100),2),0),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Policy Type: MS-Exchange&#039; kpi_metric,
+TO_CHAR(msexch_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND((msexch_job_volume/DECODE(db_job_volume,0,null,db_job_volume)*100),2),0),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- From Policy Type: FlashBackup&#039; kpi_metric,
+TO_CHAR(flashbackup_job_volume,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND((flashbackup_job_volume/DECODE(db_job_volume,0,null,db_job_volume)*100),2),0),&#039;999.00&#039;)||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;&lt;b&gt;Total Amount of Retained Data Created: Expiring in the Future&lt;/b&gt;&#039; kpi_metric,
+TO_CHAR(tot_data_expiring1,&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t3
+UNION ALL
+SELECT
+&#039;-- Expiring in Less Than 30 Days&#039; kpi_metric,
+TO_CHAR(NVL(data_expiring_l30d,0),&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND(data_expiring_l30d/DECODE(tot_data_expiring1,0,null,tot_data_expiring1)*100,2),0))||&#039;%&#039; kpi_value2
+FROM t3
+UNION ALL
+SELECT
+&#039;-- Expiring Between 30 Days and 1 Year&#039; kpi_metric,
+TO_CHAR(NVL(data_expiring_30d_1y,0),&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND(data_expiring_30d_1y/DECODE(tot_data_expiring1,0,null,tot_data_expiring1)*100,2),0))||&#039;%&#039; kpi_value2
+FROM t3
+UNION ALL
+SELECT
+&#039;-- Expiring Between 1 and 5 Years&#039; kpi_metric,
+TO_CHAR(NVL(data_expiring_1y_5y,0),&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND(data_expiring_1y_5y/DECODE(tot_data_expiring1,0,null,tot_data_expiring1)*100,2),0))||&#039;%&#039; kpi_value2
+FROM t3
+UNION ALL
+SELECT
+&#039;-- Expiring Over 5 Years&#039; kpi_metric,
+TO_CHAR(NVL(data_expiring_o5y,0),&#039;999,999,999.00&#039;)||&#039; ${freeCombo1}&#039; kpi_value1,
+TO_CHAR(NVL(ROUND(data_expiring_o5y/DECODE(tot_data_expiring1,0,null,tot_data_expiring1)*100,2),0))||&#039;%&#039; kpi_value2
+FROM t3
+UNION ALL
+SELECT
+&#039;&lt;b&gt;Total Number of Backup Jobs&lt;/b&gt;&#039; kpi_metric,
+TO_CHAR(job_count) kpi_value1,
+ &#039; &#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- Successful Backup Jobs&#039; kpi_metric,
+TO_CHAR(successful_job_count) kpi_value1,
+TO_CHAR(ROUND(successful_job_count/DECODE(job_count,0,null,job_count)*100,2))||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- Jobs with Skipped Files (Partially Successful)&#039; kpi_metric,
+TO_CHAR(partial_job_count) kpi_value1,
+TO_CHAR(ROUND(partial_job_count/DECODE(job_count,0,null,job_count)*100,2))||&#039;%&#039; kpi_value2
+FROM t0
+UNION ALL
+SELECT
+&#039;-- Failed Backup Jobs&#039; kpi_metric,
+TO_CHAR(failed_job_count) kpi_value1,
+TO_CHAR(ROUND(failed_job_count/DECODE(job_count,0,null,job_count)*100,2))||&#039;%&#039; kpi_value2
+FROM t0</string>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>KB,MB,GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>beba59e6-474d-47af-8444-6924bb3d85ab</string>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>APTARE Instant NBU Backup Assessment Part 1</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*All values in (${freeCombo1})</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>APTARE Instant NBU Backup Assessment Part 1</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Key Performance Indicator</caption>
+                    <name>kpi_metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Value</caption>
+                    <name>kpi_value1</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Percent</caption>
+                    <name>kpi_value2</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;kpi_metric&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Key Performance Indicator&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;kpi_value1&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Value&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;kpi_value2&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Percent&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>APTARE Instant NBU Backup Assessment Part 1</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

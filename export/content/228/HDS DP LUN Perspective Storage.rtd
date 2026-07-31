@@ -1,0 +1,378 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--This takes a pipe separated list of array names and pool numbers as wildcards NOTE: Use * for all 
+--EXAMPLE Array(s): USP_12|USP_13 Pool: 1|2|3|4
+--or Array(s): USP_12 Pool(s):*
+--or Array(s):* Pool(s):*
+WITH 
+l1 as (--Get all the distinct LUNS
+SELECT DISTINCT
+hlu.array_name,
+hlu.logical_unit_id,
+hlu.logical_unit_name,
+lu.status,
+lu.total_capacity_gb,
+hlu.consumed_capacity_gb
+FROM aps_v_hds_logical_unit hlu, aps_v_logical_unit lu
+WHERE lu.logical_unit_id = hlu.logical_unit_id 
+AND hlu.dp_type = 0
+AND REGEXP_LIKE(hlu.array_name,&#039;${freeText1}&#039;, &#039;i&#039;)
+AND REGEXP_LIKE(hlu.dp_pool_id,&#039;${freeText2}&#039;, &#039;i&#039;)
+),
+h1 as (
+SELECT 
+hlu.array_name,
+hlu.logical_unit_id,
+hlu.logical_unit_name,
+sp.total_capacity_gb,
+hlu.consumed_capacity_gb,
+count(DISTINCT sp.host_storage_domain) nbr_of_hosts,
+aptStringConcat(DISTINCT sp.host_storage_domain) hosts
+FROM aps_v_storage_path sp, aps_v_hds_logical_unit hlu
+WHERE sp.logical_unit_id = hlu.logical_unit_id (+)
+AND REGEXP_LIKE(hlu.array_name,&#039;${freeText1}&#039;, &#039;i&#039;)
+AND REGEXP_LIKE(hlu.dp_pool_id,&#039;${freeText2}&#039;, &#039;i&#039;)
+AND hlu.dp_type = 0
+GROUP BY
+hlu.array_name,
+hlu.logical_unit_id,
+hlu.logical_unit_name,
+sp.total_capacity_gb,
+hlu.consumed_capacity_gb
+)
+SELECT
+l1.array_name,
+l1.logical_unit_name,
+l1.status,
+l1.total_capacity_gb,
+l1.consumed_capacity_gb,
+(l1.consumed_capacity_gb/(l1.total_capacity_gb+.0001))*100 pct_consumed,
+(l1.consumed_capacity_gb/(l1.total_capacity_gb+.0001)) pct_consumed_bar,
+h1.nbr_of_hosts,
+CASE WHEN h1.nbr_of_hosts &gt; 1
+THEN SUBSTR(h1.hosts, 1 ,INSTR(h1.hosts, &#039;,&#039;, 1, 1)-1) 
+ELSE h1.hosts
+END hosts,
+hosts all_hosts
+FROM l1,h1
+WHERE 
+l1.logical_unit_id = h1.logical_unit_id(+)
+ORDER BY 1,2</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>HDS DP LUN Perspective Storage</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeText</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeText2</string>
+                    <string>Pool(s):</string>
+                  </entry>
+                  <entry>
+                    <string>freeText1</string>
+                    <string>Array(s):</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Array name contains: ${freeText1} Pool ID: ${freeText2}</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>HDS DP LUN Perspective Storage</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Array</caption>
+                    <name>array_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>LUN</caption>
+                    <name>logical_unit_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Status</caption>
+                    <name>status</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Capacity(GB)</caption>
+                    <name>total_capacity_gb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Consumed(GB)</caption>
+                    <name>consumed_capacity_gb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>%Consumed</caption>
+                    <name>pct_consumed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###.00&#039;%&#039;</formatPattern>
+                    <aggregation>average</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption></caption>
+                    <name>pct_consumed_bar</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>PercentageBarFormatter</formatter>
+                    <formatPattern>80:90</formatPattern>
+                    <additionalDetail>${row[&#039;pct_consumed_bar&#039;].data}</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption># HSD(s)</caption>
+                    <name>nbr_of_hosts</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>A Host SD</caption>
+                    <name>hosts</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>All Hosts SD(s)</caption>
+                    <name>all_hosts</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Array&quot;,&quot;name&quot;:&quot;array_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;LUN&quot;,&quot;name&quot;:&quot;logical_unit_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Status&quot;,&quot;name&quot;:&quot;status&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Capacity(GB)&quot;,&quot;name&quot;:&quot;total_capacity_gb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Consumed(GB)&quot;,&quot;name&quot;:&quot;consumed_capacity_gb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;average&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###.00&#039;%&#039;&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;%Consumed&quot;,&quot;name&quot;:&quot;pct_consumed&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;pct_consumed_bar&#039;].data}&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;80:90&quot;,&quot;formatter&quot;:&quot;PercentageBarFormatter&quot;,&quot;label&quot;:&quot;&quot;,&quot;name&quot;:&quot;pct_consumed_bar&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;# HSD(s)&quot;,&quot;name&quot;:&quot;nbr_of_hosts&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;A Host SD&quot;,&quot;name&quot;:&quot;hosts&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;All Hosts SD(s)&quot;,&quot;name&quot;:&quot;all_hosts&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>HDS DP LUN Perspective Storage</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

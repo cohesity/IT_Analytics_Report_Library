@@ -1,0 +1,1164 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>Multi-vendor multi-metric pool capacity and forecast</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>1</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>d926bf6d-df51-55e5-a8b5-6c19f0ef33a1</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>8</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*06/26/2018 EMC VMAX, VPLEX and HDS Thin Pool List</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Multi-Vendor Thin Pool Usage Forecast</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>21</long>
+        <long>221</long>
+        <long>222</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>defaultTimePeriod</string>
+                    <string>1365</string>
+                  </entry>
+                  <entry>
+                    <string>showTime</string>
+                    <string>true</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>ARRAYS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Pool Used Threshold:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>50,60,70,80,90,100,150,200</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>Over Subscribed Threshold:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>50,60,70,80,90,100,150,200</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>TB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue3</string>
+                    <string>70</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue2</string>
+                    <string>70</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Multi-Vendor Thin Pool Usage Forecast</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Updated: 06/21/2018
+WITH 
+var AS (
+SELECT
+DECODE(&apos;${freeCombo1}&apos;,&apos;KB&apos;,1,&apos;MB&apos;,1024,&apos;GB&apos;,(1024*1024),&apos;TB&apos;,(1024*1024*1024),&apos;PB&apos;,(1024*1024*1024*1024)) div_by 
+FROM apt_v_dual
+),
+--For each Array Vendor that has pools, put here
+--
+p1 AS (--Get the static current values from the thin pools
+SELECT --EMC VMAX Thin Pools
+sa.array_family,
+sp.storage_array_id,
+sp.array_name,
+sp.emc_sym_storage_pool_id pool_id,
+sp.pool_name,
+sp.dev_config raid_type,
+ROUND(sp.total_tracks_kb/div_by,2) pool_size,
+ROUND(sp.total_used_tracks_kb/div_by,2) pool_used,
+ROUND((sp.total_tracks_kb-sp.total_used_tracks_kb)/div_by,2) pool_avail,
+ROUND(((sp.total_tracks_kb/div_by) * (sp.subscribed_pct/100)),2) subscribed,  
+sp.subscribed_pct
+FROM aps_v_emc_sym_storage_pool sp, aps_v_storage_array sa, var
+WHERE sp.storage_array_id IN (${arrays})
+AND sp.storage_array_id = sa.storage_array_id
+AND sp.array_name IS NOT NULL
+UNION ALL
+SELECT --EMC Clariion VNX Thin Pools
+sa.array_family,
+sp.storage_array_id,
+sp.array_name,
+sp.emc_cla_storage_pool_id pool_id,
+sp.pool_name,
+sp.raid_type,
+ROUND(((sp.consumed_capacity_gb+sp.available_capacity_gb)*1024*1024)/div_by,2) pool_size,
+ROUND((sp.consumed_capacity_gb*1024*1024),2)/div_by pool_used,
+ROUND((sp.available_capacity_gb*1024*1024),2)/div_by pool_avail,
+ROUND((sp.total_subscribed_capacity_gb*1024*1024)/div_by,2) subscribed,  
+ROUND(sp.total_subscribed_capacity_gb/(sp.consumed_capacity_gb+sp.available_capacity_gb)*100,2) subscribed_pct
+FROM  aps_v_emc_cla_storage_pool sp, aps_v_storage_array sa, var
+WHERE sp.storage_array_id IN (${arrays})
+AND sp.storage_array_id = sa.storage_array_id
+AND sp.array_name IS NOT NULL
+UNION ALL
+SELECT --HDS Journal Pools
+sa.array_family,
+hjp.storage_array_id,
+sa.array_name,
+hjp.journal_pool_id pool_id, 
+DECODE(hjp.pool_name,NULL,TO_CHAR(hjp.pool_id),hjp.pool_id||&apos; - &apos;||hjp.pool_name) pool_name,
+hjp.raid_level||&apos; - &apos;||hjp.COMBINATION raid_type,
+ROUND(hjp.capacity_kb/div_by,2) pool_size,
+ROUND((hjp.capacity_kb-hjp.free_capacity_kb)/div_by,2) pool_used,
+ROUND(hjp.free_capacity_kb/div_by,2) pool_avail,
+ROUND(hjp.capacity_of_vvols_kb/div_by,2) subscribed,
+ROUND(hjp.capacity_of_vvols_kb/hjp.capacity_kb*100,2) subscribed_pct
+FROM var, aps_v_hds_journal_pool hjp, aps_v_storage_array sa
+WHERE hjp.storage_array_id IN (${arrays})
+AND hjp.storage_array_id = sa.storage_array_id
+),
+--
+--
+--For each Array Vendor pool log, put here
+--
+f0 AS (-- Forecasting begins here. First, det 1 entry per day
+SELECT --EMC VMAX
+TRUNC(log_date) log_date,
+storage_array_id,
+emc_sym_storage_pool_id the_pool_id,
+MAX(available_capacity_kb/div_by) avail_cap
+FROM
+aps_v_emc_sym_storage_pool_log, var
+WHERE log_date BETWEEN ${startDate} AND ${endDate}
+AND storage_array_id IN (${arrays})
+GROUP BY
+TRUNC(log_date),
+storage_array_id,
+emc_sym_storage_pool_id
+UNION ALL
+SELECT --EMC Clariion VNX Thin Pools
+TRUNC(log_date) log_date,
+storage_array_id,
+emc_cla_storage_pool_id the_pool_id,
+MAX((available_capacity_gb*1024*1024)/div_by) avail_cap
+FROM  aps_v_emc_cla_storage_pool_log, var
+WHERE log_date BETWEEN ${startDate} AND ${endDate}
+AND storage_array_id IN (${arrays})
+GROUP BY
+TRUNC(log_date),
+storage_array_id,
+emc_cla_storage_pool_id
+UNION ALL
+SELECT --HDS
+TRUNC(log_date) log_date,
+storage_array_id,
+journal_pool_id the_pool_id,
+MAX(available_kb/div_by) avail_cap
+FROM aps_v_hds_journal_pool_log, var
+WHERE log_date BETWEEN ${startDate} AND ${endDate}
+AND storage_array_id IN (${arrays})
+GROUP BY 
+TRUNC(log_date),
+storage_array_id,
+journal_pool_id
+),
+f1 AS (--This step provides the row number needed to make the REGR_SLOPE() function to work properly
+SELECT
+log_date,
+ROW_NUMBER() OVER (PARTITION BY storage_array_id, the_pool_id ORDER BY storage_array_id, the_pool_id) row_number,
+storage_array_id,
+the_pool_id,
+avail_cap
+FROM f0
+ORDER BY storage_array_id,
+the_pool_id, log_date
+),
+f2 AS (--This is the actual code block for calculating trends
+SELECT DISTINCT
+storage_array_id, the_pool_id,
+COUNT(*) OVER (PARTITION BY storage_array_id, the_pool_id) nbr_of_days,
+SUM(avail_cap) OVER (PARTITION BY storage_array_id, the_pool_id) sum_of_avail_cap,
+FIRST_VALUE(log_date) OVER (PARTITION BY storage_array_id, the_pool_id ORDER BY log_date ASC) first_date, 
+FIRST_VALUE(log_date) OVER (PARTITION BY storage_array_id, the_pool_id ORDER BY log_date DESC) last_date,
+ROUND(FIRST_VALUE(avail_cap) OVER (PARTITION BY storage_array_id, the_pool_id ORDER BY log_date ASC),2) first_value, 
+ROUND(FIRST_VALUE(avail_cap) OVER (PARTITION BY storage_array_id, the_pool_id ORDER BY log_date DESC),2) last_value,
+ROUND(REGR_SLOPE(avail_cap, row_number) OVER (PARTITION BY storage_array_id, the_pool_id),2) avail_cap_lin,
+ROUND((FIRST_VALUE(avail_cap) OVER (PARTITION BY storage_array_id, the_pool_id ORDER BY log_date DESC) - 
+FIRST_VALUE(avail_cap) OVER (PARTITION BY storage_array_id, the_pool_id ORDER BY log_date ASC)) /
+NULLIF(COUNT(*) OVER (PARTITION BY storage_array_id, the_pool_id),0),2) avail_cap_pop
+FROM f1
+ORDER BY storage_array_id, the_pool_id
+),
+f3 AS (--Format the results of the forecast 
+SELECT
+f2.the_pool_id,
+f2.first_date,
+f2.first_value,
+f2.last_date, 
+f2.last_value,
+f2.nbr_of_days,
+f2.avail_cap_lin,
+f2.sum_of_avail_cap,
+CASE 
+  WHEN f2.avail_cap_lin &lt; 0 
+    THEN (f2.last_value/NULLIF(ABS(f2.avail_cap_lin),0)) 
+  WHEN f2.avail_cap_lin &gt; 0 
+    THEN NULL
+  ELSE 9999
+END days_left_lin,
+CASE 
+WHEN f2.avail_cap_lin &lt; 0
+THEN
+  CASE --only show a run out date if less than 3 years from now
+    WHEN  (f2.last_value/NULLIF(ABS(f2.avail_cap_lin),0)) &gt; 1095
+    THEN &apos;Will Last Over 3 Years&apos;
+    WHEN  (f2.last_value/NULLIF(ABS(f2.avail_cap_lin),0)) &lt; 1095
+    THEN &apos;Will Run Out on &apos;|| ((f2.last_value/NULLIF(ABS(f2.avail_cap_lin),0)) + sysdate) 
+  END
+WHEN f2.avail_cap_lin = 0 
+THEN &apos;Capacity not Changing&apos;
+WHEN f2.avail_cap_lin &gt; 0 
+THEN &apos;Capacity is Increasing&apos;
+END lin_run_out_date,
+--
+f2.avail_cap_pop,
+CASE 
+  WHEN f2.avail_cap_pop&lt; 0 --Capacity is Decreasing 
+    THEN (f2.last_value/NULLIF(ABS(f2.avail_cap_pop),0)) 
+  WHEN f2.avail_cap_pop &gt; 0 
+    THEN NULL 
+  ELSE 9999
+END days_left_pop,
+CASE 
+WHEN f2.avail_cap_pop &lt; 0
+THEN
+  CASE --only show a run out date if less than 3 years from now
+    WHEN  (f2.last_value/NULLIF(ABS(f2.avail_cap_pop),0)) &gt; 1095
+    THEN &apos;Will Last Over 3 Years&apos;
+    WHEN  (f2.last_value/NULLIF(ABS(f2.avail_cap_pop),0)) &lt; 1095
+    THEN &apos;Will Run Out on &apos;|| ((f2.last_value/NULLIF(ABS(f2.avail_cap_pop),0)) + sysdate) 
+  END
+WHEN f2.avail_cap_pop = 0 
+THEN &apos;Capacity not Changing&apos;
+WHEN f2.avail_cap_pop &gt; 0 
+THEN &apos;Capacity is Increasing&apos;
+END pop_run_out_date
+FROM f2, var
+),
+--Forecasting ends here
+s1 AS (-- Generate sparklines
+SELECT
+f1.the_pool_id,
+rtd.collectString(CAST(COLLECT(TO_CHAR(ROUND(avail_cap,2)) ORDER BY log_date) AS StringListType),&apos;, &apos;) avail_spk
+FROM f1
+GROUP BY f1.the_pool_id
+)
+SELECT
+p1.array_family,
+p1.storage_array_id,
+p1.array_name,
+p1.pool_id, 
+p1.pool_name,
+p1.raid_type,
+p1.pool_size,
+p1.pool_avail,
+s1.avail_spk,
+CASE 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN &apos;red&apos; 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+  THEN &apos;yellow&apos; 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN &apos;yellow&apos; 
+  ELSE &apos;green&apos; 
+END at_risk_dot,
+CASE 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN 3 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+  THEN 2 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN 1 
+  ELSE 0 
+END risk_level,
+CASE 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN &apos;Pool is at risk because it is almost full, over subscribed and available capacity is decreasing&apos;  
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+  THEN &apos;Pool is at risk because it is almost full and oversubscribed&apos;  
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN &apos;Pool is at risk because it is almost full and available capacity is decreasing&apos;  
+  ELSE &apos;Not at risk&apos; 
+END risk_assessment,
+CASE 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN &apos;Y&apos; 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (p1.subscribed_pct-100) &gt;= ${freeCombo3} 
+  THEN &apos;Y&apos; 
+  WHEN (p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100) &gt;= ${freeCombo2} 
+   AND (f3.avail_cap_lin + f3.avail_cap_pop) &lt; 0 
+  THEN &apos;Y&apos; 
+  ELSE &apos;N&apos; 
+END is_at_risk,
+p1.pool_used,
+CASE
+  WHEN p1.pool_size = 0 THEN 0
+  ELSE ROUND(p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size),2)
+END pool_used_pct,
+CASE
+  WHEN p1.pool_size = 0 THEN 0
+  ELSE ROUND(p1.pool_used/DECODE(p1.pool_size,0,null,p1.pool_size)*100,2)
+END pct_pool_used,
+p1.subscribed,
+p1.subscribed_pct,
+CASE 
+  WHEN p1.subscribed_pct &lt;= 100 THEN 0
+  ELSE ABS((100-p1.subscribed_pct)/100) 
+END over_subscribed_pct,
+CASE 
+  WHEN p1.subscribed_pct &lt;= 100 THEN 0
+  ELSE ABS((100-p1.subscribed_pct)) 
+END pct_over_subscribed,
+f3.first_date,
+f3.first_value, 
+f3.last_date,
+f3.last_value,
+f3.nbr_of_days,
+f3.sum_of_avail_cap/NULLIF(f3.nbr_of_days,0) avg_avail,
+(f3.last_value - f3.first_value) avail_delta, 
+(f3.last_value - f3.first_value)/NULLIF(f3.first_value,0)*100 avail_delta_pct,
+f3.avail_cap_lin,
+f3.avail_cap_pop,
+f3.avail_cap_lin/NULLIF((f3.sum_of_avail_cap/f3.nbr_of_days),0)*100 avail_cap_lin_pct,
+f3.avail_cap_pop/NULLIF((f3.sum_of_avail_cap/f3.nbr_of_days),0)*100 avail_cap_pop_pct,
+CASE 
+WHEN (f3.last_value - f3.first_value) &lt; 0 THEN &apos;Decreased&apos;
+WHEN (f3.last_value - f3.first_value) = 0 THEN &apos;Did Not Change&apos;
+WHEN (f3.last_value - f3.first_value) &gt; 0 THEN &apos;Increased&apos;
+END usage_name,
+f3.days_left_lin,
+f3.lin_run_out_date,
+f3.days_left_pop,
+f3.pop_run_out_date
+FROM p1, f3, s1
+WHERE p1.pool_id = f3.the_pool_id (+)
+AND p1.pool_id = s1.the_pool_id (+)
+ORDER BY 11 DESC --Risk Level</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100861</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;array_family&quot;,&quot;label&quot;:&quot;Array Family&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;storage_array_id&quot;,&quot;label&quot;:&quot;storage_array_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;array_name&quot;,&quot;label&quot;:&quot;Array&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=arrayCapacity&amp;arrayIds=${row[&apos;storage_array_id&apos;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;pool_id&quot;,&quot;label&quot;:&quot;pool_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pool_name&quot;,&quot;label&quot;:&quot;Pool&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;raid_type&quot;,&quot;label&quot;:&quot;RAID Type&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pool_size&quot;,&quot;label&quot;:&quot;Pool Size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pool_avail&quot;,&quot;label&quot;:&quot;Pool Available&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;templateName=ArrayPoolLinearAndPOPForecast&amp;the_pool_id=${row[&apos;pool_id&apos;].data}&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avail_spk&quot;,&quot;label&quot;:&quot;Available History&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;AreaSparklineFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;at_risk_dot&quot;,&quot;label&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;Pool is at risk because it is over subscribed, almost full and the available capacity is decreasing&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;risk_level&quot;,&quot;label&quot;:&quot;Risk Level&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;risk_assessment&quot;,&quot;label&quot;:&quot;risk_assessment&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;is_at_risk&quot;,&quot;label&quot;:&quot;At Risk?&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;char&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pool_used&quot;,&quot;label&quot;:&quot;Pool Used&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pool_used_pct&quot;,&quot;label&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;PercentageBarFormatter&quot;,&quot;formatPattern&quot;:&quot;80:90&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pct_pool_used&quot;,&quot;label&quot;:&quot;Pool Used%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;subscribed&quot;,&quot;label&quot;:&quot;Subscribed Size&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;subscribed_pct&quot;,&quot;label&quot;:&quot;Subscribed%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;over_subscribed_pct&quot;,&quot;label&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;PercentageBarFormatter&quot;,&quot;formatPattern&quot;:&quot;80:90&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pct_over_subscribed&quot;,&quot;label&quot;:&quot;Over Scubscribed&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;first_date&quot;,&quot;label&quot;:&quot;First Date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;MMM d, yyyy h:mm:ss a&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;first_value&quot;,&quot;label&quot;:&quot;First Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;last_date&quot;,&quot;label&quot;:&quot;Last Date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;MMM d, yyyy h:mm:ss a&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;last_value&quot;,&quot;label&quot;:&quot;Last Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbr_of_days&quot;,&quot;label&quot;:&quot;#Days Samples&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avg_avail&quot;,&quot;label&quot;:&quot;Avg Available&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avail_delta&quot;,&quot;label&quot;:&quot;Delta&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avail_delta_pct&quot;,&quot;label&quot;:&quot;Avail Delta%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avail_cap_lin&quot;,&quot;label&quot;:&quot;Daily Usage Linear&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avail_cap_pop&quot;,&quot;label&quot;:&quot;Daily Usage POP&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avail_cap_lin_pct&quot;,&quot;label&quot;:&quot;Change% Linear&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avail_cap_pop_pct&quot;,&quot;label&quot;:&quot;Change% POP&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;usage_name&quot;,&quot;label&quot;:&quot;Available Capacity&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;days_left_lin&quot;,&quot;label&quot;:&quot;#Days Left Linear&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;lin_run_out_date&quot;,&quot;label&quot;:&quot;Linear Analysis&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;days_left_pop&quot;,&quot;label&quot;:&quot;#Days Left POP&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pop_run_out_date&quot;,&quot;label&quot;:&quot;POP Analysis&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Multi-Vendor Thin Pool Usage Forecast</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Array Family</caption>
+                    <name>array_family</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>storage_array_id</caption>
+                    <name>storage_array_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Array</caption>
+                    <name>array_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=arrayCapacity&amp;arrayIds=${row[&apos;storage_array_id&apos;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>pool_id</caption>
+                    <name>pool_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Pool</caption>
+                    <name>pool_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>RAID Type</caption>
+                    <name>raid_type</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Pool Size</caption>
+                    <name>pool_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Pool Available</caption>
+                    <name>pool_avail</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>templateName=ArrayPoolLinearAndPOPForecast&amp;the_pool_id=${row[&apos;pool_id&apos;].data}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Available History</caption>
+                    <name>avail_spk</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>AreaSparklineFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption></caption>
+                    <name>at_risk_dot</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail>Pool is at risk because it is over subscribed, almost full and the available capacity is decreasing</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Risk Level</caption>
+                    <name>risk_level</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>risk_assessment</caption>
+                    <name>risk_assessment</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>At Risk?</caption>
+                    <name>is_at_risk</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Pool Used</caption>
+                    <name>pool_used</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption></caption>
+                    <name>pool_used_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>PercentageBarFormatter</formatter>
+                    <formatPattern>80:90</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Pool Used%</caption>
+                    <name>pct_pool_used</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Subscribed Size</caption>
+                    <name>subscribed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Subscribed%</caption>
+                    <name>subscribed_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption></caption>
+                    <name>over_subscribed_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>PercentageBarFormatter</formatter>
+                    <formatPattern>80:90</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Over Scubscribed</caption>
+                    <name>pct_over_subscribed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>First Date</caption>
+                    <name>first_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM d, yyyy h:mm:ss a</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>First Value</caption>
+                    <name>first_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Last Date</caption>
+                    <name>last_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM d, yyyy h:mm:ss a</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Last Value</caption>
+                    <name>last_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>#Days Samples</caption>
+                    <name>nbr_of_days</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Avg Available</caption>
+                    <name>avg_avail</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Delta</caption>
+                    <name>avail_delta</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Avail Delta%</caption>
+                    <name>avail_delta_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Daily Usage Linear</caption>
+                    <name>avail_cap_lin</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Daily Usage POP</caption>
+                    <name>avail_cap_pop</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Change% Linear</caption>
+                    <name>avail_cap_lin_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Change% POP</caption>
+                    <name>avail_cap_pop_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Available Capacity</caption>
+                    <name>usage_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>#Days Left Linear</caption>
+                    <name>days_left_lin</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Linear Analysis</caption>
+                    <name>lin_run_out_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>#Days Left POP</caption>
+                    <name>days_left_pop</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>POP Analysis</caption>
+                    <name>pop_run_out_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*All values in (${freeCombo1}), Pool Threshold ${freeCombo2} Over Sub Threshold ${freeCombo3}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.amSbz1AMm6UvbNa0BcbrptF6ql8Rp7RNcANzNlfGuV4=

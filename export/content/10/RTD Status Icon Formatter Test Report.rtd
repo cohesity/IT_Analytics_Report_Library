@@ -1,0 +1,367 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>7cc3adfe-8ebb-4721-b7a2-90f0d3ccc161</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>08/15/2018</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>RTD Status Icon Formatter Test Report</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>RTD Status Icon Formatter Test Report </string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>SELECT 1 sort_order, &#039;red&#039; char_formatted,&#039;red&#039; status_dot_formatted,&#039;../skins/aptare/statusRed.gif&#039; img_path, &#039;&lt;img src=../skins/aptare/statusRed.gif&gt;&#039; status_html FROM dual
+UNION
+SELECT 2 sort_order, &#039;yellow&#039; char_formatted,&#039;yellow&#039; status_dot_formatted, &#039;../skins/aptare/statusYellow.gif&#039; img_path, &#039;&lt;img src=../skins/aptare/statusYellow.gif&gt;&#039; status_html FROM dual
+UNION
+SELECT 3 sort_order, &#039;green&#039; char_formatted,&#039;green&#039; status_dot_formatted, &#039;../skins/aptare/statusGreen.gif&#039; img_path, &#039;&lt;img src=../skins/aptare/statusGreen.gif&gt;&#039; status_html FROM dual
+UNION
+SELECT 4 sort_order, &#039;blue&#039; char_formatted,&#039;blue&#039; status_dot_formatted, &#039;../skins/aptare/statusBlue.gif&#039; img_path, &#039;&lt;img src=../skins/aptare/statusBlue.gif&gt;&#039; status_html FROM dual
+UNION
+SELECT 5 sort_order, &#039;white&#039; char_formatted,&#039;white&#039; status_dot_formatted, &#039;../skins/aptare/statusWhite.gif&#039; img_path, &#039;&lt;img src=../skins/aptare/statusWhite.gif&gt;&#039; status_html FROM dual
+UNION
+SELECT 6 sort_order, &#039;error&#039; char_formatted,&#039;error&#039; status_dot_formatted, &#039;../images/status/error.png&#039;  img_path, &#039;&lt;img src=../images/status/error.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 7 sort_order, &#039;warning&#039; char_formatted,&#039;warning&#039; status_dot_formatted, &#039;../images/status/warning.png&#039;  img_path, &#039;&lt;img src=../images/status/warning.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 8 sort_order, &#039;success&#039; char_formatted,&#039;success&#039; status_dot_formatted, &#039;../images/status/success.png&#039;  img_path, &#039;&lt;img src=../images/status/success.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 9 sort_order, &#039;unknown&#039; char_formatted,&#039;unknown&#039; status_dot_formatted, &#039;../images/status/unknown.png&#039;  img_path, &#039;&lt;img src=../images/status/unknown.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 10 sort_order, &#039;trend_up&#039; char_formatted,&#039;trend_up&#039; status_dot_formatted, &#039;../images/trend_up.png&#039;  img_path, &#039;&lt;img src=../images/trend_up.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 11 sort_order, &#039;trend_flat&#039; char_formatted,&#039;trend_flat&#039; status_dot_formatted, &#039;../images/trend_flat.png&#039;  img_path, &#039;&lt;img src=../images/trend_flat.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 12 sort_order, &#039;trend_down&#039; char_formatted,&#039;trend_down&#039; status_dot_formatted, &#039;../images/trend_down.png&#039;  img_path, &#039;&lt;img src=../images/trend_down.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 13 sort_order, &#039;status0&#039; char_formatted,&#039;status0&#039; status_dot_formatted, &#039;../images/ostatus00.png&#039;  img_path, &#039;&lt;img src=../images/ostatus00.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 14 sort_order, &#039;status1&#039; char_formatted,&#039;status1&#039; status_dot_formatted, &#039;../images/ostatus01.png&#039;  img_path, &#039;&lt;img src=../images/ostatus01.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 15 sort_order, &#039;status2&#039; char_formatted,&#039;status2&#039; status_dot_formatted, &#039;../images/ostatus02.png&#039;  img_path, &#039;&lt;img src=../images/ostatus02.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 16 sort_order, &#039;status3&#039; char_formatted,&#039;status3&#039; status_dot_formatted, &#039;../images/ostatus03.png&#039;  img_path, &#039;&lt;img src=../images/ostatus03.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 17 sort_order, &#039;status4&#039; char_formatted,&#039;status4&#039; status_dot_formatted, &#039;../images/ostatus04.png&#039;  img_path, &#039;&lt;img src=../images/ostatus04.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 18 sort_order, &#039;status5&#039; char_formatted,&#039;status5&#039; status_dot_formatted, &#039;../images/ostatus05.png&#039;  img_path, &#039;&lt;img src=../images/ostatus05.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 19 sort_order, &#039;status6&#039; char_formatted,&#039;status6&#039; status_dot_formatted, &#039;../images/ostatus06.png&#039;  img_path, &#039;&lt;img src=../images/ostatus06.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 20 sort_order, &#039;status7&#039; char_formatted,&#039;status7&#039; status_dot_formatted, &#039;../images/ostatus07.png&#039;  img_path, &#039;&lt;img src=../images/ostatus07.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 21 sort_order, &#039;status8&#039; char_formatted,&#039;status8&#039; status_dot_formatted, &#039;../images/ostatus08.png&#039;  img_path, &#039;&lt;img src=../images/ostatus08.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 22 sort_order, &#039;status9&#039; char_formatted,&#039;status9&#039; status_dot_formatted, &#039;../images/ostatus09.png&#039;  img_path, &#039;&lt;img src=../images/ostatus09.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 23 sort_order, &#039;status10&#039; char_formatted,&#039;status10&#039; status_dot_formatted, &#039;../images/ostatus10.png&#039;  img_path, &#039;&lt;img src=../images/ostatus10.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 24 sort_order, &#039;status11&#039; char_formatted,&#039;status11&#039; status_dot_formatted, &#039;../images/ostatus11.png&#039;  img_path, &#039;&lt;img src=../images/ostatus11.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 25 sort_order, &#039;status12&#039; char_formatted,&#039;status12&#039; status_dot_formatted, &#039;../images/ostatus12.png&#039;  img_path, &#039;&lt;img src=../images/ostatus12.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 26 sort_order, &#039;status13&#039; char_formatted,&#039;status13&#039; status_dot_formatted, &#039;../images/ostatus13.png&#039;  img_path, &#039;&lt;img src=../images/ostatus13.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 27 sort_order, &#039;status14&#039; char_formatted,&#039;status14&#039; status_dot_formatted, &#039;../images/ostatus14.png&#039;  img_path, &#039;&lt;img src=../images/ostatus14.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 28 sort_order, &#039;status15&#039; char_formatted,&#039;status15&#039; status_dot_formatted, &#039;../images/ostatus15.png&#039;  img_path, &#039;&lt;img src=../images/ostatus15.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 29 sort_order, &#039;slow&#039; char_formatted,&#039;slow&#039; status_dot_formatted, &#039;../images/status/slow.png&#039;  img_path, &#039;&lt;img src=../images/status/slow.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 30 sort_order, &#039;medium&#039; char_formatted,&#039;medium&#039; status_dot_formatted, &#039;../images/status/medium.png&#039;  img_path, &#039;&lt;img src=../images/status/medium.png&gt;&#039;  status_html FROM dual
+UNION
+SELECT 31 sort_order, &#039;fast&#039; char_formatted,&#039;fast&#039; status_dot_formatted, &#039;../images/status/fast.png&#039;  img_path, &#039;&lt;img src=../images/status/fast.png&gt;&#039;  status_html FROM dual
+</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>110857</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;label&quot;:&quot;&quot;,&quot;name&quot;:&quot;sort_order&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;selected&quot;:false,&quot;type&quot;:0,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;No Formatter&quot;,&quot;name&quot;:&quot;char_formatted&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;selected&quot;:true,&quot;type&quot;:0,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;label&quot;:&quot;Status Icon Formatted&quot;,&quot;name&quot;:&quot;status_dot_formatted&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;selected&quot;:true,&quot;type&quot;:0,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Image Path&quot;,&quot;name&quot;:&quot;img_path&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;selected&quot;:true,&quot;type&quot;:0,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Img HTML Tag&quot;,&quot;name&quot;:&quot;status_html&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;selected&quot;:true,&quot;type&quot;:0,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>RTD Status Icon Formatter Test Report </string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption></caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>No Formatter</caption>
+                    <name>char_formatted</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Status Icon Formatted</caption>
+                    <name>status_dot_formatted</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Image Path</caption>
+                    <name>img_path</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Img HTML Tag</caption>
+                    <name>status_html</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

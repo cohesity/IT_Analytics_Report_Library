@@ -1,0 +1,739 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>f64d327b-3ecd-4194-b9d6-dafc17520cfe</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>NBU Error Code Summary by Attribute</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Error Code Summary by Attribute</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT attribute_name, attribute_name from apt_v_attribute WHERE attribute_type = &apos;S&apos; ORDER BY 1</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Attribute:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Error Code Summary by Attribute</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Updated: 05/31/2012 
+WITH t1 AS (
+SELECT 
+${queryCombo1} attribute,
+COUNT(DISTINCT nj.server_id) master_servers,
+COUNT(DISTINCT nj.client_id) clients,
+COUNT(nj.job_id) total_jobs,
+SUM(DECODE(nj.summary_status,0,1,null)) success,
+SUM(DECODE(nj.summary_status,1,1,null)) parital,
+SUM(DECODE(nj.summary_status,2,1,null)) failed,
+SUM(DECODE(nj.vendor_status,2,1,6,1,11,1,12,1,13,1,14,1,21,1,22,1,23,1,24,1,25,1,41,1,42,1,47,1,54,1,57,1,58,1,59,1,63,1,71,1,155,1,156,1,160,1,197,1,230,1,237,1,239,1,247,1,null)) clt_error,    
+SUM(DECODE(nj.vendor_status,10,1,20,1,26,1,40,1,43,1,48,1,49,1,50,1,51,1,52,1,53,1,67,1,69,1,80,1,81,1,82,1,83,1,84,1,85,1,86,1,87,1,89,1,90,1,91,1,96,1,98,1,99,1,103,1,111,1,112,1,114,1,129,1,130,1,144,1,154,1,157,1,159,1,174,1,195,1,196,1,200,1,202,1,205,1,211,1,213,1,218,1,219,1,227,1,232,1,233,1,236,1,241,1,245,1,252,1,275,1,303,1,304,1,800,1,803,1,805,1,806,1,811,1,2000,1,2001,1,2002,1,2003,1,2004,1,2005,1,2006,1,2007,1,2008,1,2009,1,2010,1,2011,1,2012,1,2013,1,2014,1,2015,1,2016,1,2017,1,2018,1,2019,1,2020,1,2021,1,2022,1,2023,1,2024,1,2025,1,2026,1,2027,1,2028,1,2029,1,2030,1,2031,1,2032,1,2033,1,2034,1,2035,1,2036,1,2037,1,2038,1,2039,1,2040,1,2041,1,2042,1,2043,1,2044,1,2045,1,2046,1,2047,1,2048,1,2049,1,2050,1,2051,1,2052,1,2053,1,2054,1,2055,1,2056,1,2057,1,2058,1,2059,1,2060,1,2061,1,2062,1,2063,1,2064,1,2065,1,2066,1,2067,1,2068,1,2069,1,2070,1,2071,1,2072,1,2073,1,2074,1,2075,1,2076,1,2077,1,2078,1,2079,1,2080,1,2081,1,2082,1,2083,1,2084,1,2085,1,2086,1,2087,1,2088,1,2089,1,2090,1,2091,1,2092,1,2093,1,2094,1,2095,1,2096,1,2097,1,2098,1,2099,1,2100,1,2101,1,2102,1,2103,1,2104,1,null)) nbu_error,   
+(SUM(DECODE(nj.summary_status,1,1,null))/COUNT(nj.job_id)) * 100 partial_pct,
+(SUM(DECODE(nj.summary_status,0,1,null))/COUNT(nj.job_id)) * 100 success_pct,   
+--Client Related Errors
+SUM(DECODE(nj.vendor_status,2,1,null))  clt_2, SUM(DECODE(nj.vendor_status,6,1,null))  clt_6, SUM(DECODE(nj.vendor_status,11,1,null)) clt_11,
+SUM(DECODE(nj.vendor_status,12,1,null)) clt_12, SUM(DECODE(nj.vendor_status,13,1,null)) clt_13, SUM(DECODE(nj.vendor_status,14,1,null)) clt_14,
+SUM(DECODE(nj.vendor_status,21,1,null)) clt_21, SUM(DECODE(nj.vendor_status,22,1,null)) clt_22, SUM(DECODE(nj.vendor_status,23,1,null)) clt_23,
+SUM(DECODE(nj.vendor_status,24,1,null)) clt_24, SUM(DECODE(nj.vendor_status,25,1,null)) clt_25, SUM(DECODE(nj.vendor_status,26,1,null)) clt_26,
+SUM(DECODE(nj.vendor_status,40,1,null)) clt_40, SUM(DECODE(nj.vendor_status,41,1,null)) clt_41, SUM(DECODE(nj.vendor_status,42,1,null)) clt_42,
+SUM(DECODE(nj.vendor_status,47,1,null)) clt_47, SUM(DECODE(nj.vendor_status,54,1,null)) clt_54, SUM(DECODE(nj.vendor_status,57,1,null)) clt_57,
+SUM(DECODE(nj.vendor_status,58,1,null)) clt_58, SUM(DECODE(nj.vendor_status,59,1,null)) clt_59, SUM(DECODE(nj.vendor_status,63,1,null)) clt_63,
+SUM(DECODE(nj.vendor_status,71,1,null)) clt_71, SUM(DECODE(nj.vendor_status,155,1,null)) clt_155, SUM(DECODE(nj.vendor_status,156,1,null)) clt_156,
+SUM(DECODE(nj.vendor_status,160,1,null)) clt_160, SUM(DECODE(nj.vendor_status,197,1,null)) clt_197, SUM(DECODE(nj.vendor_status,230,1,null)) clt_230,
+SUM(DECODE(nj.vendor_status,237,1,null)) clt_237, SUM(DECODE(nj.vendor_status,239,1,null)) clt_239, SUM(DECODE(nj.vendor_status,247,1,null)) clt_247,
+--NetBackup Infrastructure Errors
+SUM(DECODE(nj.vendor_status,10,1,null))  nbu_10, SUM(DECODE(nj.vendor_status,20,1,null))  nbu_20, SUM(DECODE(nj.vendor_status,26,1,null))  nbu_26,
+SUM(DECODE(nj.vendor_status,40,1,null))  nbu_40, SUM(DECODE(nj.vendor_status,43,1,null))  nbu_43, SUM(DECODE(nj.vendor_status,48,1,null))  nbu_48,
+SUM(DECODE(nj.vendor_status,49,1,null))  nbu_49, SUM(DECODE(nj.vendor_status,50,1,null))  nbu_50, SUM(DECODE(nj.vendor_status,51,1,null))  nbu_51,
+SUM(DECODE(nj.vendor_status,52,1,null))  nbu_52, SUM(DECODE(nj.vendor_status,53,1,null))  nbu_53, SUM(DECODE(nj.vendor_status,67,1,null))  nbu_67,
+SUM(DECODE(nj.vendor_status,69,1,null))  nbu_69, SUM(DECODE(nj.vendor_status,80,1,null))  nbu_80, SUM(DECODE(nj.vendor_status,81,1,null))  nbu_81,
+SUM(DECODE(nj.vendor_status,82,1,null))  nbu_82, SUM(DECODE(nj.vendor_status,83,1,null))  nbu_83, SUM(DECODE(nj.vendor_status,84,1,null))  nbu_84,
+SUM(DECODE(nj.vendor_status,85,1,null))  nbu_85, SUM(DECODE(nj.vendor_status,86,1,null))  nbu_86, SUM(DECODE(nj.vendor_status,87,1,null))  nbu_87,
+SUM(DECODE(nj.vendor_status,88,1,null))  nbu_88, SUM(DECODE(nj.vendor_status,89,1,null))  nbu_89, SUM(DECODE(nj.vendor_status,90,1,null))  nbu_90,
+SUM(DECODE(nj.vendor_status,91,1,null))  nbu_91, SUM(DECODE(nj.vendor_status,96,1,null))  nbu_96, SUM(DECODE(nj.vendor_status,98,1,null))  nbu_98,
+SUM(DECODE(nj.vendor_status,99,1,null))  nbu_99, SUM(DECODE(nj.vendor_status,103,1,null))  nbu_103, SUM(DECODE(nj.vendor_status,111,1,null))  nbu_111,
+SUM(DECODE(nj.vendor_status,112,1,null))  nbu_112, SUM(DECODE(nj.vendor_status,114,1,null))  nbu_114, SUM(DECODE(nj.vendor_status,129,1,null))  nbu_129,
+SUM(DECODE(nj.vendor_status,130,1,null))  nbu_130, SUM(DECODE(nj.vendor_status,144,1,null))  nbu_144, SUM(DECODE(nj.vendor_status,154,1,null))  nbu_154,
+SUM(DECODE(nj.vendor_status,157,1,null))  nbu_157, SUM(DECODE(nj.vendor_status,159,1,null))  nbu_159, SUM(DECODE(nj.vendor_status,174,1,null))  nbu_174,
+SUM(DECODE(nj.vendor_status,195,1,null))  nbu_195, SUM(DECODE(nj.vendor_status,196,1,null))  nbu_196, SUM(DECODE(nj.vendor_status,200,1,null))  nbu_200,
+SUM(DECODE(nj.vendor_status,202,1,null))  nbu_202, SUM(DECODE(nj.vendor_status,205,1,null))  nbu_205, SUM(DECODE(nj.vendor_status,211,1,null))  nbu_211,
+SUM(DECODE(nj.vendor_status,213,1,null))  nbu_213, SUM(DECODE(nj.vendor_status,218,1,null))  nbu_218, SUM(DECODE(nj.vendor_status,219,1,null))  nbu_219,
+SUM(DECODE(nj.vendor_status,227,1,null))  nbu_227, SUM(DECODE(nj.vendor_status,232,1,null))  nbu_232, SUM(DECODE(nj.vendor_status,233,1,null))  nbu_233,
+SUM(DECODE(nj.vendor_status,236,1,null))  nbu_236, SUM(DECODE(nj.vendor_status,241,1,null))  nbu_241, SUM(DECODE(nj.vendor_status,245,1,null))  nbu_245,
+SUM(DECODE(nj.vendor_status,252,1,null))  nbu_252, SUM(DECODE(nj.vendor_status,275,1,null))  nbu_275, SUM(DECODE(nj.vendor_status,303,1,null))  nbu_303,
+SUM(DECODE(nj.vendor_status,304,1,null))  nbu_304, SUM(DECODE(nj.vendor_status,800,1,null))  nbu_800, SUM(DECODE(nj.vendor_status,803,1,null))  nbu_803,
+SUM(DECODE(nj.vendor_status,805,1,null))  nbu_805, SUM(DECODE(nj.vendor_status,806,1,null))  nbu_806, SUM(DECODE(nj.vendor_status,811,1,null))  nbu_811,
+SUM(DECODE(nj.vendor_status,2000,1,null))  nbu_2000, SUM(DECODE(nj.vendor_status,2001,1,null))  nbu_2001, SUM(DECODE(nj.vendor_status,2002,1,null))  nbu_2002,
+SUM(DECODE(nj.vendor_status,2003,1,null))  nbu_2003, SUM(DECODE(nj.vendor_status,2004,1,null))  nbu_2004, SUM(DECODE(nj.vendor_status,2005,1,null))  nbu_2005,
+SUM(DECODE(nj.vendor_status,2006,1,null))  nbu_2006, SUM(DECODE(nj.vendor_status,2007,1,null))  nbu_2007, SUM(DECODE(nj.vendor_status,2008,1,null))  nbu_2008,
+SUM(DECODE(nj.vendor_status,2009,1,null))  nbu_2009, SUM(DECODE(nj.vendor_status,2010,1,null))  nbu_2010, SUM(DECODE(nj.vendor_status,2011,1,null))  nbu_2011,
+SUM(DECODE(nj.vendor_status,2012,1,null))  nbu_2012, SUM(DECODE(nj.vendor_status,2013,1,null))  nbu_2013, SUM(DECODE(nj.vendor_status,2014,1,null))  nbu_2014,
+SUM(DECODE(nj.vendor_status,2015,1,null))  nbu_2015, SUM(DECODE(nj.vendor_status,2016,1,null))  nbu_2016, SUM(DECODE(nj.vendor_status,2017,1,null))  nbu_2017,
+SUM(DECODE(nj.vendor_status,2018,1,null))  nbu_2018, SUM(DECODE(nj.vendor_status,2019,1,null))  nbu_2019, SUM(DECODE(nj.vendor_status,2020,1,null))  nbu_2020,
+SUM(DECODE(nj.vendor_status,2021,1,null))  nbu_2021, SUM(DECODE(nj.vendor_status,2022,1,null))  nbu_2022, SUM(DECODE(nj.vendor_status,2023,1,null))  nbu_2023,
+SUM(DECODE(nj.vendor_status,2024,1,null))  nbu_2024, SUM(DECODE(nj.vendor_status,2025,1,null))  nbu_2025, SUM(DECODE(nj.vendor_status,2026,1,null))  nbu_2026,
+SUM(DECODE(nj.vendor_status,2027,1,null))  nbu_2027, SUM(DECODE(nj.vendor_status,2028,1,null))  nbu_2028, SUM(DECODE(nj.vendor_status,2029,1,null))  nbu_2029,
+SUM(DECODE(nj.vendor_status,2030,1,null))  nbu_2030, SUM(DECODE(nj.vendor_status,2031,1,null))  nbu_2031, SUM(DECODE(nj.vendor_status,2032,1,null))  nbu_2032,
+SUM(DECODE(nj.vendor_status,2033,1,null))  nbu_2033, SUM(DECODE(nj.vendor_status,2034,1,null))  nbu_2034, SUM(DECODE(nj.vendor_status,2035,1,null))  nbu_2035,
+SUM(DECODE(nj.vendor_status,2036,1,null))  nbu_2036, SUM(DECODE(nj.vendor_status,2037,1,null))  nbu_2037, SUM(DECODE(nj.vendor_status,2038,1,null))  nbu_2038,
+SUM(DECODE(nj.vendor_status,2039,1,null))  nbu_2039, SUM(DECODE(nj.vendor_status,2040,1,null))  nbu_2040, SUM(DECODE(nj.vendor_status,2041,1,null))  nbu_2041,
+SUM(DECODE(nj.vendor_status,2042,1,null))  nbu_2042, SUM(DECODE(nj.vendor_status,2043,1,null))  nbu_2043, SUM(DECODE(nj.vendor_status,2044,1,null))  nbu_2044,
+SUM(DECODE(nj.vendor_status,2045,1,null))  nbu_2045, SUM(DECODE(nj.vendor_status,2046,1,null))  nbu_2046, SUM(DECODE(nj.vendor_status,2047,1,null))  nbu_2047,
+SUM(DECODE(nj.vendor_status,2048,1,null))  nbu_2048, SUM(DECODE(nj.vendor_status,2049,1,null))  nbu_2049, SUM(DECODE(nj.vendor_status,2050,1,null))  nbu_2050,
+SUM(DECODE(nj.vendor_status,2051,1,null))  nbu_2051, SUM(DECODE(nj.vendor_status,2052,1,null))  nbu_2052, SUM(DECODE(nj.vendor_status,2053,1,null))  nbu_2053,
+SUM(DECODE(nj.vendor_status,2054,1,null))  nbu_2054, SUM(DECODE(nj.vendor_status,2055,1,null))  nbu_2055, SUM(DECODE(nj.vendor_status,2056,1,null))  nbu_2056,
+SUM(DECODE(nj.vendor_status,2057,1,null))  nbu_2057, SUM(DECODE(nj.vendor_status,2058,1,null))  nbu_2058, SUM(DECODE(nj.vendor_status,2059,1,null))  nbu_2059,
+SUM(DECODE(nj.vendor_status,2060,1,null))  nbu_2060, SUM(DECODE(nj.vendor_status,2061,1,null))  nbu_2061, SUM(DECODE(nj.vendor_status,2062,1,null))  nbu_2062,
+SUM(DECODE(nj.vendor_status,2063,1,null))  nbu_2063, SUM(DECODE(nj.vendor_status,2064,1,null))  nbu_2064, SUM(DECODE(nj.vendor_status,2065,1,null))  nbu_2065,
+SUM(DECODE(nj.vendor_status,2066,1,null))  nbu_2066, SUM(DECODE(nj.vendor_status,2067,1,null))  nbu_2067, SUM(DECODE(nj.vendor_status,2068,1,null))  nbu_2068,
+SUM(DECODE(nj.vendor_status,2069,1,null))  nbu_2069, SUM(DECODE(nj.vendor_status,2070,1,null))  nbu_2070, SUM(DECODE(nj.vendor_status,2071,1,null))  nbu_2071,
+SUM(DECODE(nj.vendor_status,2072,1,null))  nbu_2072, SUM(DECODE(nj.vendor_status,2073,1,null))  nbu_2073, SUM(DECODE(nj.vendor_status,2074,1,null))  nbu_2074,
+SUM(DECODE(nj.vendor_status,2075,1,null))  nbu_2075, SUM(DECODE(nj.vendor_status,2076,1,null))  nbu_2076, SUM(DECODE(nj.vendor_status,2077,1,null))  nbu_2077,
+SUM(DECODE(nj.vendor_status,2078,1,null))  nbu_2078, SUM(DECODE(nj.vendor_status,2079,1,null))  nbu_2079, SUM(DECODE(nj.vendor_status,2080,1,null))  nbu_2080,
+SUM(DECODE(nj.vendor_status,2081,1,null))  nbu_2081, SUM(DECODE(nj.vendor_status,2082,1,null))  nbu_2082, SUM(DECODE(nj.vendor_status,2083,1,null))  nbu_2083,
+SUM(DECODE(nj.vendor_status,2084,1,null))  nbu_2084, SUM(DECODE(nj.vendor_status,2085,1,null))  nbu_2085, SUM(DECODE(nj.vendor_status,2086,1,null))  nbu_2086,
+SUM(DECODE(nj.vendor_status,2087,1,null))  nbu_2087, SUM(DECODE(nj.vendor_status,2088,1,null))  nbu_2088, SUM(DECODE(nj.vendor_status,2089,1,null))  nbu_2089,
+SUM(DECODE(nj.vendor_status,2090,1,null))  nbu_2090, SUM(DECODE(nj.vendor_status,2091,1,null))  nbu_2091, SUM(DECODE(nj.vendor_status,2092,1,null))  nbu_2092,
+SUM(DECODE(nj.vendor_status,2093,1,null))  nbu_2093, SUM(DECODE(nj.vendor_status,2094,1,null))  nbu_2094, SUM(DECODE(nj.vendor_status,2095,1,null))  nbu_2095,
+SUM(DECODE(nj.vendor_status,2096,1,null))  nbu_2096, SUM(DECODE(nj.vendor_status,2097,1,null))  nbu_2097, SUM(DECODE(nj.vendor_status,2098,1,null))  nbu_2098,
+SUM(DECODE(nj.vendor_status,2099,1,null))  nbu_2099, SUM(DECODE(nj.vendor_status,2100,1,null))  nbu_2100, SUM(DECODE(nj.vendor_status,2101,1,null))  nbu_2101,
+SUM(DECODE(nj.vendor_status,2102,1,null))  nbu_2102, SUM(DECODE(nj.vendor_status,2103,1,null))  nbu_2103, SUM(DECODE(nj.vendor_status,2104,1,null))  nbu_2104
+FROM
+apt_v_nbu_job nj, apt_v_server_attribute sa
+WHERE nj.start_date BETWEEN ${startDate} AND ${endDate}
+AND nj.server_id IN (${hosts})
+AND nj.vendor_status IS NOT NULL
+AND nj.client_id = sa.host_id
+AND nj.client_host_name &lt;&gt; &apos;NONE&apos;
+GROUP BY 
+${queryCombo1}
+)
+SELECT
+NVL(attribute,&apos;Unassigned&apos;) attribute,
+master_servers,
+clients,
+total_jobs,
+success,
+parital,
+failed,
+clt_error,    
+nbu_error,
+CASE 
+  WHEN failed = 0 THEN 0
+  ELSE (clt_error/failed) * 100 
+END clt_error_pct,
+CASE 
+  WHEN failed = 0 THEN 0
+  ELSE (nbu_error/failed) * 100 
+END nbu_error_pct,   
+partial_pct,
+success_pct,   
+nvl2(clt_2,&apos;2(&apos;||clt_2||&apos;) &apos;,null) || nvl2(clt_6,&apos;6(&apos;||clt_6||&apos;) &apos;,null) || nvl2(clt_11,&apos;11(&apos;||clt_11||&apos;) &apos;,null) ||
+nvl2(clt_12,&apos;12(&apos;||clt_12||&apos;) &apos;,null) || nvl2(clt_13,&apos;13(&apos;||clt_13||&apos;) &apos;,null) || nvl2(clt_14,&apos;14(&apos;||clt_14||&apos;) &apos;,null) ||
+nvl2(clt_21,&apos;21(&apos;||clt_21||&apos;) &apos;,null) || nvl2(clt_22,&apos;22(&apos;||clt_22||&apos;) &apos;,null) || nvl2(clt_23,&apos;23(&apos;||clt_23||&apos;) &apos;,null) ||
+nvl2(clt_24,&apos;24(&apos;||clt_24||&apos;) &apos;,null) || nvl2(clt_25,&apos;25(&apos;||clt_25||&apos;) &apos;,null) || nvl2(clt_26,&apos;26(&apos;||clt_26||&apos;) &apos;,null) ||
+nvl2(clt_40,&apos;40(&apos;||clt_40||&apos;) &apos;,null) || nvl2(clt_41,&apos;41(&apos;||clt_41||&apos;) &apos;,null) || nvl2(clt_42,&apos;42(&apos;||clt_42||&apos;) &apos;,null) ||
+nvl2(clt_47,&apos;47(&apos;||clt_47||&apos;) &apos;,null) || nvl2(clt_54,&apos;54(&apos;||clt_54||&apos;) &apos;,null) || nvl2(clt_57,&apos;57(&apos;||clt_57||&apos;) &apos;,null) ||
+nvl2(clt_58,&apos;58(&apos;||clt_58||&apos;) &apos;,null) || nvl2(clt_59,&apos;59(&apos;||clt_59||&apos;) &apos;,null) || nvl2(clt_63,&apos;63(&apos;||clt_63||&apos;) &apos;,null) ||
+nvl2(clt_71,&apos;71(&apos;||clt_71||&apos;) &apos;,null) || nvl2(clt_155,&apos;155(&apos;||clt_155||&apos;) &apos;,null) || nvl2(clt_156,&apos;156(&apos;||clt_156||&apos;) &apos;,null) ||
+nvl2(clt_160,&apos;160(&apos;||clt_160||&apos;) &apos;,null) || nvl2(clt_197,&apos;197(&apos;||clt_197||&apos;) &apos;,null) || nvl2(clt_230,&apos;230(&apos;||clt_230||&apos;) &apos;,null) ||
+nvl2(clt_237,&apos;237(&apos;||clt_237||&apos;) &apos;,null) || nvl2(clt_239,&apos;239(&apos;||clt_239||&apos;) &apos;,null) || nvl2(clt_247,&apos;247(&apos;||clt_247||&apos;) &apos;,null) 
+client_related_errors,
+--
+nvl2(nbu_10,&apos;10(&apos;||nbu_10||&apos;) &apos;,null) || nvl2(nbu_20,&apos;20(&apos;||nbu_20||&apos;) &apos;,null) || nvl2(nbu_26,&apos;26(&apos;||nbu_26||&apos;) &apos;,null) ||
+nvl2(nbu_40,&apos;40(&apos;||nbu_40||&apos;) &apos;,null) || nvl2(nbu_43,&apos;43(&apos;||nbu_43||&apos;) &apos;,null) || nvl2(nbu_48,&apos;48(&apos;||nbu_48||&apos;) &apos;,null) ||
+nvl2(nbu_49,&apos;49(&apos;||nbu_49||&apos;) &apos;,null) || nvl2(nbu_50,&apos;50(&apos;||nbu_50||&apos;) &apos;,null) || nvl2(nbu_51,&apos;51(&apos;||nbu_51||&apos;) &apos;,null) ||
+nvl2(nbu_52,&apos;52(&apos;||nbu_52||&apos;) &apos;,null) || nvl2(nbu_53,&apos;53(&apos;||nbu_53||&apos;) &apos;,null) || nvl2(nbu_67,&apos;67(&apos;||nbu_67||&apos;) &apos;,null) ||
+nvl2(nbu_69,&apos;69(&apos;||nbu_69||&apos;) &apos;,null) || nvl2(nbu_80,&apos;80(&apos;||nbu_80||&apos;) &apos;,null) || nvl2(nbu_81,&apos;81(&apos;||nbu_81||&apos;) &apos;,null) ||
+nvl2(nbu_82,&apos;82(&apos;||nbu_82||&apos;) &apos;,null) || nvl2(nbu_83,&apos;83(&apos;||nbu_83||&apos;) &apos;,null) || nvl2(nbu_84,&apos;84(&apos;||nbu_84||&apos;) &apos;,null) ||
+nvl2(nbu_85,&apos;85(&apos;||nbu_85||&apos;) &apos;,null) || nvl2(nbu_86,&apos;86(&apos;||nbu_86||&apos;) &apos;,null) || nvl2(nbu_87,&apos;87(&apos;||nbu_87||&apos;) &apos;,null) ||
+nvl2(nbu_88,&apos;88(&apos;||nbu_88||&apos;) &apos;,null) || nvl2(nbu_89,&apos;89(&apos;||nbu_89||&apos;) &apos;,null) || nvl2(nbu_90,&apos;90(&apos;||nbu_90||&apos;) &apos;,null) ||
+nvl2(nbu_91,&apos;91(&apos;||nbu_91||&apos;) &apos;,null) || nvl2(nbu_96,&apos;96(&apos;||nbu_96||&apos;) &apos;,null) || nvl2(nbu_98,&apos;98(&apos;||nbu_98||&apos;) &apos;,null) ||
+nvl2(nbu_99,&apos;99(&apos;||nbu_99||&apos;) &apos;,null) 
+nbu_related_errors_10_99, 
+--
+nvl2(nbu_103,&apos;103(&apos;||nbu_103||&apos;) &apos;,null) || nvl2(nbu_111,&apos;111(&apos;||nbu_111||&apos;) &apos;,null) || nvl2(nbu_112,&apos;112(&apos;||nbu_112||&apos;) &apos;,null) || 
+nvl2(nbu_114,&apos;114(&apos;||nbu_114||&apos;) &apos;,null) || nvl2(nbu_129,&apos;129(&apos;||nbu_129||&apos;) &apos;,null) || nvl2(nbu_130,&apos;130(&apos;||nbu_130||&apos;) &apos;,null) || 
+nvl2(nbu_144,&apos;144(&apos;||nbu_144||&apos;) &apos;,null) || nvl2(nbu_154,&apos;154(&apos;||nbu_154||&apos;) &apos;,null) || nvl2(nbu_157,&apos;157(&apos;||nbu_157||&apos;) &apos;,null) || 
+nvl2(nbu_159,&apos;159(&apos;||nbu_159||&apos;) &apos;,null) || nvl2(nbu_174,&apos;174(&apos;||nbu_174||&apos;) &apos;,null) || nvl2(nbu_195,&apos;195(&apos;||nbu_195||&apos;) &apos;,null) || 
+nvl2(nbu_196,&apos;196(&apos;||nbu_196||&apos;) &apos;,null) || nvl2(nbu_200,&apos;200(&apos;||nbu_200||&apos;) &apos;,null) || nvl2(nbu_202,&apos;202(&apos;||nbu_202||&apos;) &apos;,null) || 
+nvl2(nbu_205,&apos;205(&apos;||nbu_205||&apos;) &apos;,null) || nvl2(nbu_211,&apos;211(&apos;||nbu_211||&apos;) &apos;,null) || nvl2(nbu_213,&apos;213(&apos;||nbu_213||&apos;) &apos;,null) || 
+nvl2(nbu_218,&apos;218(&apos;||nbu_218||&apos;) &apos;,null) || nvl2(nbu_219,&apos;219(&apos;||nbu_219||&apos;) &apos;,null) || nvl2(nbu_227,&apos;227(&apos;||nbu_227||&apos;) &apos;,null) || 
+nvl2(nbu_232,&apos;232(&apos;||nbu_232||&apos;) &apos;,null) || nvl2(nbu_233,&apos;233(&apos;||nbu_233||&apos;) &apos;,null) || nvl2(nbu_236,&apos;236(&apos;||nbu_236||&apos;) &apos;,null) || 
+nvl2(nbu_241,&apos;241(&apos;||nbu_241||&apos;) &apos;,null) || nvl2(nbu_245,&apos;245(&apos;||nbu_245||&apos;) &apos;,null) || nvl2(nbu_252,&apos;252(&apos;||nbu_252||&apos;) &apos;,null) || 
+nvl2(nbu_275,&apos;275(&apos;||nbu_275||&apos;) &apos;,null) || nvl2(nbu_303,&apos;303(&apos;||nbu_303||&apos;) &apos;,null) || nvl2(nbu_304,&apos;304(&apos;||nbu_304||&apos;) &apos;,null) || 
+nvl2(nbu_800,&apos;800(&apos;||nbu_800||&apos;) &apos;,null) || nvl2(nbu_803,&apos;803(&apos;||nbu_803||&apos;) &apos;,null) || nvl2(nbu_805,&apos;805(&apos;||nbu_805||&apos;) &apos;,null) || 
+nvl2(nbu_806,&apos;806(&apos;||nbu_806||&apos;) &apos;,null) || nvl2(nbu_811,&apos;811(&apos;||nbu_811||&apos;) &apos;,null) 
+nbu_related_100_999, 
+--
+nvl2(nbu_2000,&apos;2000(&apos;||nbu_2000||&apos;) &apos;,null) || nvl2(nbu_2001,&apos;2001(&apos;||nbu_2001||&apos;) &apos;,null) || nvl2(nbu_2002,&apos;2002(&apos;||nbu_2002||&apos;) &apos;,null) ||
+nvl2(nbu_2003,&apos;2003(&apos;||nbu_2003||&apos;) &apos;,null) || nvl2(nbu_2004,&apos;2004(&apos;||nbu_2004||&apos;) &apos;,null) || nvl2(nbu_2005,&apos;2005(&apos;||nbu_2005||&apos;) &apos;,null) ||
+nvl2(nbu_2006,&apos;2006(&apos;||nbu_2006||&apos;) &apos;,null) || nvl2(nbu_2007,&apos;2007(&apos;||nbu_2007||&apos;) &apos;,null) || nvl2(nbu_2008,&apos;2008(&apos;||nbu_2008||&apos;) &apos;,null) ||
+nvl2(nbu_2009,&apos;2009(&apos;||nbu_2009||&apos;) &apos;,null) || nvl2(nbu_2010,&apos;2010(&apos;||nbu_2010||&apos;) &apos;,null) || nvl2(nbu_2011,&apos;2011(&apos;||nbu_2011||&apos;) &apos;,null) ||
+nvl2(nbu_2012,&apos;2012(&apos;||nbu_2012||&apos;) &apos;,null) || nvl2(nbu_2013,&apos;2013(&apos;||nbu_2013||&apos;) &apos;,null) || nvl2(nbu_2014,&apos;2014(&apos;||nbu_2014||&apos;) &apos;,null) ||
+nvl2(nbu_2015,&apos;2015(&apos;||nbu_2015||&apos;) &apos;,null) || nvl2(nbu_2016,&apos;2016(&apos;||nbu_2016||&apos;) &apos;,null) || nvl2(nbu_2017,&apos;2017(&apos;||nbu_2017||&apos;) &apos;,null) ||
+nvl2(nbu_2018,&apos;2018(&apos;||nbu_2018||&apos;) &apos;,null) || nvl2(nbu_2019,&apos;2019(&apos;||nbu_2019||&apos;) &apos;,null) || nvl2(nbu_2020,&apos;2020(&apos;||nbu_2020||&apos;) &apos;,null) ||
+nvl2(nbu_2021,&apos;2021(&apos;||nbu_2021||&apos;) &apos;,null) || nvl2(nbu_2022,&apos;2022(&apos;||nbu_2022||&apos;) &apos;,null) || nvl2(nbu_2023,&apos;2023(&apos;||nbu_2023||&apos;) &apos;,null) ||
+nvl2(nbu_2024,&apos;2024(&apos;||nbu_2024||&apos;) &apos;,null) || nvl2(nbu_2025,&apos;2025(&apos;||nbu_2025||&apos;) &apos;,null) || nvl2(nbu_2026,&apos;2026(&apos;||nbu_2026||&apos;) &apos;,null) ||
+nvl2(nbu_2027,&apos;2027(&apos;||nbu_2027||&apos;) &apos;,null) || nvl2(nbu_2028,&apos;2028(&apos;||nbu_2028||&apos;) &apos;,null) || nvl2(nbu_2029,&apos;2029(&apos;||nbu_2029||&apos;) &apos;,null) ||
+nvl2(nbu_2030,&apos;2030(&apos;||nbu_2030||&apos;) &apos;,null) || nvl2(nbu_2031,&apos;2031(&apos;||nbu_2031||&apos;) &apos;,null) || nvl2(nbu_2032,&apos;2032(&apos;||nbu_2032||&apos;) &apos;,null) ||
+nvl2(nbu_2033,&apos;2033(&apos;||nbu_2033||&apos;) &apos;,null) || nvl2(nbu_2034,&apos;2034(&apos;||nbu_2034||&apos;) &apos;,null) || nvl2(nbu_2035,&apos;2035(&apos;||nbu_2035||&apos;) &apos;,null) ||
+nvl2(nbu_2036,&apos;2036(&apos;||nbu_2036||&apos;) &apos;,null) || nvl2(nbu_2037,&apos;2037(&apos;||nbu_2037||&apos;) &apos;,null) || nvl2(nbu_2038,&apos;2038(&apos;||nbu_2038||&apos;) &apos;,null) ||
+nvl2(nbu_2039,&apos;2039(&apos;||nbu_2039||&apos;) &apos;,null) || nvl2(nbu_2040,&apos;2040(&apos;||nbu_2040||&apos;) &apos;,null) || nvl2(nbu_2041,&apos;2041(&apos;||nbu_2041||&apos;) &apos;,null) ||
+nvl2(nbu_2042,&apos;2042(&apos;||nbu_2042||&apos;) &apos;,null) || nvl2(nbu_2043,&apos;2043(&apos;||nbu_2043||&apos;) &apos;,null) || nvl2(nbu_2044,&apos;2044(&apos;||nbu_2044||&apos;) &apos;,null) ||
+nvl2(nbu_2045,&apos;2045(&apos;||nbu_2045||&apos;) &apos;,null) || nvl2(nbu_2046,&apos;2046(&apos;||nbu_2046||&apos;) &apos;,null) || nvl2(nbu_2047,&apos;2047(&apos;||nbu_2047||&apos;) &apos;,null) ||
+nvl2(nbu_2048,&apos;2048(&apos;||nbu_2048||&apos;) &apos;,null) || nvl2(nbu_2049,&apos;2049(&apos;||nbu_2049||&apos;) &apos;,null) || nvl2(nbu_2050,&apos;2050(&apos;||nbu_2050||&apos;) &apos;,null) 
+nbu_related_2000_2050,
+--
+nvl2(nbu_2051,&apos;2051(&apos;||nbu_2051||&apos;) &apos;,null) || nvl2(nbu_2052,&apos;2052(&apos;||nbu_2052||&apos;) &apos;,null) || nvl2(nbu_2053,&apos;2053(&apos;||nbu_2053||&apos;) &apos;,null) ||
+nvl2(nbu_2054,&apos;2054(&apos;||nbu_2054||&apos;) &apos;,null) || nvl2(nbu_2055,&apos;2055(&apos;||nbu_2055||&apos;) &apos;,null) || nvl2(nbu_2056,&apos;2056(&apos;||nbu_2056||&apos;) &apos;,null) ||
+nvl2(nbu_2057,&apos;2057(&apos;||nbu_2057||&apos;) &apos;,null) || nvl2(nbu_2058,&apos;2058(&apos;||nbu_2058||&apos;) &apos;,null) || nvl2(nbu_2059,&apos;2059(&apos;||nbu_2059||&apos;) &apos;,null) ||
+nvl2(nbu_2060,&apos;2060(&apos;||nbu_2060||&apos;) &apos;,null) || nvl2(nbu_2061,&apos;2061(&apos;||nbu_2061||&apos;) &apos;,null) || nvl2(nbu_2062,&apos;2062(&apos;||nbu_2062||&apos;) &apos;,null) ||
+nvl2(nbu_2063,&apos;2063(&apos;||nbu_2063||&apos;) &apos;,null) || nvl2(nbu_2064,&apos;2064(&apos;||nbu_2064||&apos;) &apos;,null) || nvl2(nbu_2065,&apos;2065(&apos;||nbu_2065||&apos;) &apos;,null) ||
+nvl2(nbu_2066,&apos;2066(&apos;||nbu_2066||&apos;) &apos;,null) || nvl2(nbu_2067,&apos;2067(&apos;||nbu_2067||&apos;) &apos;,null) || nvl2(nbu_2068,&apos;2068(&apos;||nbu_2068||&apos;) &apos;,null) ||
+nvl2(nbu_2069,&apos;2069(&apos;||nbu_2069||&apos;) &apos;,null) || nvl2(nbu_2070,&apos;2070(&apos;||nbu_2070||&apos;) &apos;,null) || nvl2(nbu_2071,&apos;2071(&apos;||nbu_2071||&apos;) &apos;,null) ||
+nvl2(nbu_2072,&apos;2072(&apos;||nbu_2072||&apos;) &apos;,null) || nvl2(nbu_2073,&apos;2073(&apos;||nbu_2073||&apos;) &apos;,null) || nvl2(nbu_2074,&apos;2074(&apos;||nbu_2074||&apos;) &apos;,null) ||
+nvl2(nbu_2075,&apos;2075(&apos;||nbu_2075||&apos;) &apos;,null) || nvl2(nbu_2076,&apos;2076(&apos;||nbu_2076||&apos;) &apos;,null) || nvl2(nbu_2077,&apos;2077(&apos;||nbu_2077||&apos;) &apos;,null) ||
+nvl2(nbu_2078,&apos;2078(&apos;||nbu_2078||&apos;) &apos;,null) || nvl2(nbu_2079,&apos;2079(&apos;||nbu_2079||&apos;) &apos;,null) || nvl2(nbu_2080,&apos;2080(&apos;||nbu_2080||&apos;) &apos;,null) ||
+nvl2(nbu_2081,&apos;2081(&apos;||nbu_2081||&apos;) &apos;,null) || nvl2(nbu_2082,&apos;2082(&apos;||nbu_2082||&apos;) &apos;,null) || nvl2(nbu_2083,&apos;2083(&apos;||nbu_2083||&apos;) &apos;,null) ||
+nvl2(nbu_2084,&apos;2084(&apos;||nbu_2084||&apos;) &apos;,null) || nvl2(nbu_2085,&apos;2085(&apos;||nbu_2085||&apos;) &apos;,null) || nvl2(nbu_2086,&apos;2086(&apos;||nbu_2086||&apos;) &apos;,null) ||
+nvl2(nbu_2087,&apos;2087(&apos;||nbu_2087||&apos;) &apos;,null) || nvl2(nbu_2088,&apos;2088(&apos;||nbu_2088||&apos;) &apos;,null) || nvl2(nbu_2089,&apos;2089(&apos;||nbu_2089||&apos;) &apos;,null) ||
+nvl2(nbu_2090,&apos;2090(&apos;||nbu_2090||&apos;) &apos;,null) || nvl2(nbu_2091,&apos;2091(&apos;||nbu_2091||&apos;) &apos;,null) || nvl2(nbu_2092,&apos;2092(&apos;||nbu_2092||&apos;) &apos;,null) ||
+nvl2(nbu_2093,&apos;2093(&apos;||nbu_2093||&apos;) &apos;,null) || nvl2(nbu_2094,&apos;2094(&apos;||nbu_2094||&apos;) &apos;,null) || nvl2(nbu_2095,&apos;2095(&apos;||nbu_2095||&apos;) &apos;,null) ||
+nvl2(nbu_2096,&apos;2096(&apos;||nbu_2096||&apos;) &apos;,null) || nvl2(nbu_2097,&apos;2097(&apos;||nbu_2097||&apos;) &apos;,null) || nvl2(nbu_2098,&apos;2098(&apos;||nbu_2098||&apos;) &apos;,null) ||
+nvl2(nbu_2099,&apos;2099(&apos;||nbu_2099||&apos;) &apos;,null) || nvl2(nbu_2100,&apos;2100(&apos;||nbu_2100||&apos;) &apos;,null) || nvl2(nbu_2101,&apos;2101(&apos;||nbu_2101||&apos;) &apos;,null) ||
+nvl2(nbu_2102,&apos;2102(&apos;||nbu_2102||&apos;) &apos;,null) || nvl2(nbu_2103,&apos;2103(&apos;||nbu_2103||&apos;) &apos;,null) || nvl2(nbu_2104,&apos;2104(&apos;||nbu_2104||&apos;) &apos;,null)  
+nbu_related_2051_2104
+FROM t1</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>101172</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;attribute&quot;,&quot;label&quot;:&quot;Attribute&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;left&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;master_servers&quot;,&quot;label&quot;:&quot;Master Server(s)&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;clients&quot;,&quot;label&quot;:&quot;Clients&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;total_jobs&quot;,&quot;label&quot;:&quot;Total Jobs&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;success&quot;,&quot;label&quot;:&quot;Successful Jobs&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;parital&quot;,&quot;label&quot;:&quot;Parital Jobs&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;failed&quot;,&quot;label&quot;:&quot;Failed Jobs&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;clt_error&quot;,&quot;label&quot;:&quot;Client Errors&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbu_error&quot;,&quot;label&quot;:&quot;NBU Errors&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;clt_error_pct&quot;,&quot;label&quot;:&quot;Client Error%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbu_error_pct&quot;,&quot;label&quot;:&quot;NBU Error%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;partial_pct&quot;,&quot;label&quot;:&quot;Partial%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;success_pct&quot;,&quot;label&quot;:&quot;Success%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;client_related_errors&quot;,&quot;label&quot;:&quot;Client Related Errors&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbu_related_errors_10_99&quot;,&quot;label&quot;:&quot;NBU Related Errors 10-99&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbu_related_100_999&quot;,&quot;label&quot;:&quot;NBU Related Errors 100-999&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbu_related_2000_2050&quot;,&quot;label&quot;:&quot;NBU Related Errors 2000-2050&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;nbu_related_2051_2104&quot;,&quot;label&quot;:&quot;NBU Related Errors 2051-2104&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Error Code Summary by Attribute</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Attribute</caption>
+                    <name>attribute</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>left</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Master Server(s)</caption>
+                    <name>master_servers</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Clients</caption>
+                    <name>clients</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Total Jobs</caption>
+                    <name>total_jobs</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Successful Jobs</caption>
+                    <name>success</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Parital Jobs</caption>
+                    <name>parital</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Failed Jobs</caption>
+                    <name>failed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client Errors</caption>
+                    <name>clt_error</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>NBU Errors</caption>
+                    <name>nbu_error</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client Error%</caption>
+                    <name>clt_error_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>NBU Error%</caption>
+                    <name>nbu_error_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Partial%</caption>
+                    <name>partial_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Success%</caption>
+                    <name>success_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client Related Errors</caption>
+                    <name>client_related_errors</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>NBU Related Errors 10-99</caption>
+                    <name>nbu_related_errors_10_99</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>NBU Related Errors 100-999</caption>
+                    <name>nbu_related_100_999</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>NBU Related Errors 2000-2050</caption>
+                    <name>nbu_related_2000_2050</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>NBU Related Errors 2051-2104</caption>
+                    <name>nbu_related_2051_2104</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Reporting by ${queryCombo1}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.2fDKzGx6eTveUAFl0qFIqs3bd3JyiLD7fOJWXNOMi3g=

@@ -1,0 +1,621 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>-- Author: rich.rose@aptare.com
+-- Last Updated: 02/06/2012
+WITH
+full AS (--Find the last successful full backup that for each client
+SELECT
+nj.client_id,
+nj.policy_id,
+max(nj.job_id) job_id
+FROM apt_v_nbu_job nj
+WHERE nj.client_id IN (${hosts})
+AND nj.start_date BETWEEN ${startDate} AND ${endDate}
+AND nj.job_type = 101
+AND nj.summary_status IN (0,1)
+AND nj.expiration_date &gt;= sysdate
+GROUP BY 
+nj.client_id,nj.policy_id
+),
+incr AS (--Find the last successful incr backup that for each client
+SELECT
+nj.client_id,nj.policy_id,
+max(nj.job_id) job_id
+FROM apt_v_nbu_job nj
+WHERE nj.client_id IN (${hosts})
+AND nj.start_date BETWEEN ${startDate} AND ${endDate}
+AND nj.job_type = 102
+AND nj.summary_status IN (0,1)
+AND nj.expiration_date &gt;= sysdate
+GROUP BY nj.client_id,nj.policy_id
+),
+ftapes AS (--String together all the tapes used for full jobs
+SELECT
+full.client_id,
+full.policy_id,
+full.job_id,
+aptStringConcat(ntm.bar_code) ftapes
+FROM full, apt_v_nbu_job_tape_media jtm, apt_v_nbu_tape_media ntm
+WHERE full.job_id = jtm.job_id
+AND jtm.tape_media_id = ntm.tape_media_id
+GROUP BY full.client_id, full.policy_id, full.job_id
+),
+itapes AS (--String together all the tapes used for incr jobs
+SELECT
+incr.client_id,
+incr.job_id,
+incr.policy_id,
+aptStringConcat(ntm.bar_code) itapes
+FROM incr, apt_v_nbu_job_tape_media jtm, apt_v_nbu_tape_media ntm
+WHERE incr.job_id = jtm.job_id
+AND jtm.tape_media_id = ntm.tape_media_id
+GROUP BY incr.client_id,incr.policy_id,incr.job_id
+),
+ijobs AS (--Find all the incremental backups that occurred after the full
+SELECT
+nj.client_id,
+nj.policy_id,
+count(nj.job_id) job_count,
+sum(DECODE(nj.summary_status,0,1,1,1,0)) success,
+sum(DECODE(nj.summary_status,2,1,0)) failed,
+sum(DECODE(nj.summary_status,0,nj.duration_secs,1,nj.duration_secs,0)) duration_secs
+FROM full, apt_v_nbu_job nj
+WHERE nj.client_id = full.client_id
+AND nj.job_id &gt; full.job_id
+AND nj.job_type = 102
+GROUP BY nj.client_id,nj.policy_id
+)
+SELECT
+fj.master_host_name,
+fj.client_id,
+fj.client_host_name,
+fj.policy_id,
+fj.policy_name fj_policy_name,
+fj.schedule_name fj_schedule_name,
+fj.job_id fj_job_id,
+fj.nbu_job_id fj_nbu_job_id,
+ftapes,
+fj.finish_date fj_finish_date,
+fj.duration fj_duration,
+sysdate+(fj.duration_secs/60/60/24) est_full_revovery_date,
+ij.schedule_name ij_schedule_name,
+ij.job_id ij_job_id,
+ij.nbu_job_id ij_nbu_job_id,
+itapes,
+ij.finish_date ij_finish_date,
+DECODE(ijobs.job_count,null,&#039;white&#039;,&#039;blue&#039;) ijobs_count_status,
+nvl(ijobs.job_count,0) ijobs_job_count,
+CASE WHEN ijobs.success &gt;=1
+  THEN
+   CASE WHEN ijobs.failed &gt;= 1
+     THEN &#039;yellow&#039;
+   WHEN ijobs.failed = 0 
+     THEN &#039;green&#039;
+  END
+  ELSE &#039;red&#039;
+END ijobs_status,
+nvl(ijobs.success,0) success,
+nvl(ijobs.failed,0) failed,
+sysdate+(ijobs.duration_secs/60/60/24) est_incr_revovery_date
+FROM full, incr, apt_v_nbu_job_detail fj, apt_v_nbu_job_detail ij, ftapes, itapes, ijobs
+WHERE full.client_id = incr.client_id (+) 
+AND full.policy_id = incr.policy_id (+)
+AND full.client_id = ijobs.client_id (+) 
+AND full.job_id = fj.job_id 
+AND incr.job_id = ij.job_id
+AND full.job_id = ftapes.job_id 
+AND incr.job_id = itapes.job_id</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Policy Client Last Good Full and Incr with Tapes</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>101461</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Policy Client Last Good Full and Incr with Tapes</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Master Server</caption>
+                    <name>master_host_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>client_id</caption>
+                    <name>client_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client</caption>
+                    <name>client_host_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=displayServerDetail&amp;serverId=${row[&#039;client_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>policy_id</caption>
+                    <name>policy_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Policy</caption>
+                    <name>fj_policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=backupPolicy&amp;policyId=${row[&#039;policy_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Full Schedule</caption>
+                    <name>fj_schedule_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>fj_job_id</caption>
+                    <name>fj_job_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Full Job ID</caption>
+                    <name>fj_nbu_job_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Tapes</caption>
+                    <name>ftapes</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Finish Date</caption>
+                    <name>fj_finish_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail>NBU Last Full Job ID ${row[&#039;fj_nbu_job_id&#039;].data} </additionalDetail>
+                    <drillDown>systemName=backupDetails&amp;jobId=${row[&#039;fj_job_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>fj_duration</caption>
+                    <name>fj_duration</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Earliest Full&lt;br/&gt;Recovery</caption>
+                    <name>est_full_revovery_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail>Full Backup ran for ${row[&#039;fj_duration&#039;].data}</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Incr Schedule</caption>
+                    <name>ij_schedule_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>ij_job_id</caption>
+                    <name>ij_job_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Incr Job ID</caption>
+                    <name>ij_nbu_job_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Tapes</caption>
+                    <name>itapes</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Finish Date</caption>
+                    <name>ij_finish_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail>NBU Last Incremental Job ID ${row[&#039;ij_nbu_job_id&#039;].data} </additionalDetail>
+                    <drillDown>systemName=backupDetails&amp;jobId=${row[&#039;ij_job_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption></caption>
+                    <name>ijobs_count_status</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <additionalDetail>${row[&#039;ijobs_job_count&#039;].data} incrementals occured after last full</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>ijobs_job_count</caption>
+                    <name>ijobs_job_count</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption></caption>
+                    <name>ijobs_status</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <additionalDetail>There were ${row[&#039;success&#039;].data}  successful and ${row[&#039;failed&#039;].data} failed incrementals since last full</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>success</caption>
+                    <name>success</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>failed</caption>
+                    <name>failed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Earliest Incr&lt;br/&gt;Recovery</caption>
+                    <name>est_incr_revovery_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Master Server&quot;,&quot;name&quot;:&quot;master_host_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;client_id&quot;,&quot;name&quot;:&quot;client_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=displayServerDetail&amp;serverId=${row[&#039;client_id&#039;]}&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Client&quot;,&quot;name&quot;:&quot;client_host_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;policy_id&quot;,&quot;name&quot;:&quot;policy_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=backupPolicy&amp;policyId=${row[&#039;policy_id&#039;]}&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Policy&quot;,&quot;name&quot;:&quot;fj_policy_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Full Schedule&quot;,&quot;name&quot;:&quot;fj_schedule_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;fj_job_id&quot;,&quot;name&quot;:&quot;fj_job_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Full Job ID&quot;,&quot;name&quot;:&quot;fj_nbu_job_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Tapes&quot;,&quot;name&quot;:&quot;ftapes&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;NBU Last Full Job ID ${row[&#039;fj_nbu_job_id&#039;].data} &quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=backupDetails&amp;jobId=${row[&#039;fj_job_id&#039;]}&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Finish Date&quot;,&quot;name&quot;:&quot;fj_finish_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;fj_duration&quot;,&quot;name&quot;:&quot;fj_duration&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;Full Backup ran for ${row[&#039;fj_duration&#039;].data}&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Earliest Full&lt;br/&gt;Recovery&quot;,&quot;name&quot;:&quot;est_full_revovery_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Incr Schedule&quot;,&quot;name&quot;:&quot;ij_schedule_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;ij_job_id&quot;,&quot;name&quot;:&quot;ij_job_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Incr Job ID&quot;,&quot;name&quot;:&quot;ij_nbu_job_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Tapes&quot;,&quot;name&quot;:&quot;itapes&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;NBU Last Incremental Job ID ${row[&#039;ij_nbu_job_id&#039;].data} &quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=backupDetails&amp;jobId=${row[&#039;ij_job_id&#039;]}&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Finish Date&quot;,&quot;name&quot;:&quot;ij_finish_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;ijobs_job_count&#039;].data} incrementals occured after last full&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;label&quot;:&quot;&quot;,&quot;name&quot;:&quot;ijobs_count_status&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;ijobs_job_count&quot;,&quot;name&quot;:&quot;ijobs_job_count&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;There were ${row[&#039;success&#039;].data}  successful and ${row[&#039;failed&#039;].data} failed incrementals since last full&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;label&quot;:&quot;&quot;,&quot;name&quot;:&quot;ijobs_status&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;success&quot;,&quot;name&quot;:&quot;success&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;failed&quot;,&quot;name&quot;:&quot;failed&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Earliest Incr&lt;br/&gt;Recovery&quot;,&quot;name&quot;:&quot;est_incr_revovery_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Policy Client Last Good Full and Incr with Tapes</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

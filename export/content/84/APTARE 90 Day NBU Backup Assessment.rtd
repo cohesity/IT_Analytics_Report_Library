@@ -1,0 +1,732 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last updated: 09/05/2012
+WITH 
+t1 AS (--Individual Job Statistics
+SELECT
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.server_id END) server_count1,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.server_id END) server_count2,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.server_id END) server_count3,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.media_server_id END) media_server_count1,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.media_server_id END) media_server_count2,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.media_server_id END) media_server_count3,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.client_id END) client_count1,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.client_id END) client_count2,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.client_id END) client_count3,
+COUNT(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.job_id END) job_count1,
+COUNT(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.job_id END) job_count2,
+COUNT(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.job_id END) job_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.summary_status,0,1,0) END) successful_job_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.summary_status,0,1,0) END) successful_job_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.summary_status,0,1,0) END) successful_job_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.summary_status,1,1,0) END) partial_job_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.summary_status,1,1,0) END) partial_job_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.summary_status,1,1,0) END) partial_job_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.summary_status,2,1,0) END) failed_job_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.summary_status,2,1,0) END) failed_job_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.summary_status,2,1,0) END) failed_job_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN CASE WHEN (started_readwrite - start_date)*24*60 BETWEEN 5 AND 15 THEN 1 ELSE 0 END END) qjob515_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN CASE WHEN (started_readwrite - start_date)*24*60 BETWEEN 5 AND 15 THEN 1 ELSE 0 END END) qjob515_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN CASE WHEN (started_readwrite - start_date)*24*60 BETWEEN 5 AND 15 THEN 1 ELSE 0 END END) qjob515_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN CASE WHEN (started_readwrite - start_date)*24*60 &gt;= 15 THEN 1 ELSE 0 END END) qjob15_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN CASE WHEN (started_readwrite - start_date)*24*60 &gt;= 15 THEN 1 ELSE 0 END END) qjob15_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN CASE WHEN (started_readwrite - start_date)*24*60 &gt;= 15 THEN 1 ELSE 0 END END) qjob15_count3,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.duration_secs/60 END) avg_duration1,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.duration_secs/60 END) avg_duration2,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.duration_secs/60 END) avg_duration3,
+MAX(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.duration_secs/60 END) max_duration1,
+MAX(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.duration_secs/60 END) max_duration2,
+MAX(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.duration_secs/60 END) max_duration3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN CASE WHEN duration_secs/60/60 BETWEEN 0 AND 12 THEN 1 ELSE 0 END END) job_l12_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN CASE WHEN duration_secs/60/60 BETWEEN 0 AND 12 THEN 1 ELSE 0 END END) job_l12_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN CASE WHEN duration_secs/60/60 BETWEEN 0 AND 12 THEN 1 ELSE 0 END END) job_l12_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN CASE WHEN duration_secs/60/60 BETWEEN 12 AND 24 THEN 1 ELSE 0 END END) job_12_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN CASE WHEN duration_secs/60/60 BETWEEN 12 AND 24 THEN 1 ELSE 0 END END) job_12_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN CASE WHEN duration_secs/60/60 BETWEEN 12 AND 24 THEN 1 ELSE 0 END END) job_12_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN CASE WHEN duration_secs/60/60 &gt;= 24 THEN 1 ELSE 0 END END) job_24_count1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN CASE WHEN duration_secs/60/60 &gt;= 24 THEN 1 ELSE 0 END END) job_24_count2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN CASE WHEN duration_secs/60/60 &gt;= 24 THEN 1 ELSE 0 END END) job_24_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.kilobytes/1024/1024 END) job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.kilobytes/1024/1024 END) job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.kilobytes/1024/1024 END) job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.job_type,101,j.kilobytes/1024/1024,0) END) full_job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.job_type,101,j.kilobytes/1024/1024,0) END) full_job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.job_type,101,j.kilobytes/1024/1024,0) END) full_job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.job_type,102,j.kilobytes/1024/1024,0) END) incr_job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.job_type,102,j.kilobytes/1024/1024,0) END) incr_job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.job_type,102,j.kilobytes/1024/1024,0) END) incr_job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.job_type,112,j.kilobytes/1024/1024,0) END) appl_job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.job_type,112,j.kilobytes/1024/1024,0) END) appl_job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.job_type,112,j.kilobytes/1024/1024,0) END) appl_job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.job_type,107,j.kilobytes/1024/1024,0) END) dup_job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.job_type,107,j.kilobytes/1024/1024,0) END) dup_job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.job_type,107,j.kilobytes/1024/1024,0) END) dup_job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN DECODE(j.policy_type_name,&#039;NDMP&#039;,j.kilobytes/1024/1024,0) END) ndmp_job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN DECODE(j.policy_type_name,&#039;NDMP&#039;,j.kilobytes/1024/1024,0) END) ndmp_job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN DECODE(j.policy_type_name,&#039;NDMP&#039;,j.kilobytes/1024/1024,0) END) ndmp_job_volume3,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.client_id||j.policy_id||j.schedule_id END) cps_combos1,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.client_id||j.policy_id||j.schedule_id END) cps_combos2,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.client_id||j.policy_id||j.schedule_id END) cps_combos3,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.duration_secs/60 END) avg_duration,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.duration_secs/60 END) avg_duration,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.duration_secs/60 END) avg_duration,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN jtm.drive_id END) drive_count1,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN jtm.drive_id END) drive_count2,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN jtm.drive_id END) drive_count3,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN jtm.tape_media_id END) tape_count1,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN jtm.tape_media_id END) tape_count2,
+COUNT(DISTINCT CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN jtm.tape_media_id END) tape_count3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN jtm.kilobytes/1024/1024 END) tape_job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN jtm.kilobytes/1024/1024 END) tape_job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN jtm.kilobytes/1024/1024 END) tape_job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN jdm.written_kilobytes/1024/1024 END) disk_job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN jdm.written_kilobytes/1024/1024 END) disk_job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN jdm.written_kilobytes/1024/1024 END) disk_job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.nbr_of_files END) tot_nbr_of_files1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.nbr_of_files END) tot_nbr_of_files2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.nbr_of_files END) tot_nbr_of_files3
+FROM apt_v_nbu_job_detail j, apt_v_nbu_job_tape_media jtm, apt_v_nbu_job_disk_media jdm
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN sysdate-90 AND sysdate
+AND j.job_type &lt;&gt; 105
+AND j.job_id = jtm.job_id(+)
+AND j.job_id = jdm.job_id(+)
+),
+t2 AS (--Daily Aggregates
+SELECT 
+MAX(max_mb_sec1) max_daily_mb_sec1,
+MAX(max_mb_sec2) max_daily_mb_sec2,
+MAX(max_mb_sec3) max_daily_mb_sec3,
+AVG(max_mb_sec1) avg_daily_mb_sec1,
+AVG(max_mb_sec2) avg_daily_mb_sec2,
+AVG(max_mb_sec3) avg_daily_mb_sec3,
+AVG(job_volume1) avg_daily_job_volume1,
+AVG(job_volume2) avg_daily_job_volume2,
+AVG(job_volume3) avg_daily_job_volume3,
+MAX(job_volume1) max_daily_job_volume1,
+MAX(job_volume2) max_daily_job_volume2,
+MAX(job_volume3) max_daily_job_volume3,
+AVG(tot_nbr_of_files1) avg_daily_nbr_of_files1,
+AVG(tot_nbr_of_files2) avg_daily_nbr_of_files2,
+AVG(tot_nbr_of_files3) avg_daily_nbr_of_files3,
+MAX(tot_nbr_of_files1) max_daily_nbr_of_files1,
+MAX(tot_nbr_of_files2) max_daily_nbr_of_files2,
+MAX(tot_nbr_of_files3) max_daily_nbr_of_files3
+FROM
+(SELECT
+TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;),
+MAX(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.mbytes_sec END) max_mb_sec1,
+MAX(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.mbytes_sec END) max_mb_sec2,
+MAX(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.mbytes_sec END) max_mb_sec3,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.mbytes_sec END) avg_mb_sec1,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.mbytes_sec END) avg_mb_sec2,
+AVG(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.mbytes_sec END) avg_mb_sec3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.kilobytes/1024/1024 END) job_volume1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.kilobytes/1024/1024 END) job_volume2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.kilobytes/1024/1024 END) job_volume3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.nbr_of_files END) tot_nbr_of_files1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.nbr_of_files END) tot_nbr_of_files2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.nbr_of_files END) tot_nbr_of_files3
+FROM apt_v_nbu_job j
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN sysdate-90 AND sysdate
+AND j.job_type &lt;&gt; 105
+GROUP BY TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;))
+),
+t3 AS (--Future Expiring data
+SELECT
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    AND j.expiration_date &gt; j.start_date THEN j.kilobytes/1024/1024 END) tot_data_expiring1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 AND j.expiration_date &gt; j.start_date THEN j.kilobytes/1024/1024 END) tot_data_expiring2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 AND j.expiration_date &gt; j.start_date THEN j.kilobytes/1024/1024 END) tot_data_expiring3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    AND j.expiration_date BETWEEN j.start_date AND j.start_date+30 THEN j.kilobytes/1024/1024 END) data_expiring_30_1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 AND j.expiration_date BETWEEN j.start_date AND j.start_date+30 THEN j.kilobytes/1024/1024 END) data_expiring_30_2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 AND j.expiration_date BETWEEN j.start_date AND j.start_date+30 THEN j.kilobytes/1024/1024 END) data_expiring_30_3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    AND j.expiration_date BETWEEN j.start_date AND j.start_date+365.25 THEN j.kilobytes/1024/1024 END) data_expiring_1y_1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 AND j.expiration_date BETWEEN j.start_date AND j.start_date+365.25 THEN j.kilobytes/1024/1024 END) data_expiring_1y_2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 AND j.expiration_date BETWEEN j.start_date AND j.start_date+365.25 THEN j.kilobytes/1024/1024 END) data_expiring_1y_3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    AND j.expiration_date BETWEEN j.start_date+356.25 AND j.start_date+1826 THEN j.kilobytes/1024/1024 END) data_expiring_5y_1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 AND j.expiration_date BETWEEN j.start_date+356.25 AND j.start_date+1826 THEN j.kilobytes/1024/1024 END) data_expiring_5y_2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 AND j.expiration_date BETWEEN j.start_date+356.25 AND j.start_date+1826 THEN j.kilobytes/1024/1024 END) data_expiring_5y_3,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    AND j.expiration_date &gt; j.start_date+1826 THEN j.kilobytes/1024/1024 END) data_expiring_o5_1,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 AND j.expiration_date &gt; j.start_date+1826 THEN j.kilobytes/1024/1024 END) data_expiring_o5_2,
+SUM(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 AND j.expiration_date &gt; j.start_date+1826 THEN j.kilobytes/1024/1024 END) data_expiring_o5_3
+FROM apt_v_nbu_job j
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN sysdate-90 AND sysdate
+AND j.job_type &lt;&gt; 105
+),
+t4 AS (--Failed Clients 
+SELECT
+COUNT(failed_client1) failed_clients1,
+COUNT(failed_client2) failed_clients2,
+COUNT(failed_client3) failed_clients3
+FROM (SELECT
+j.client_id,
+TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;),
+MIN(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.summary_status END) failed_client1,
+MIN(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.summary_status END) failed_client2,
+MIN(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.summary_status END) failed_client3
+FROM apt_v_nbu_job j
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN sysdate-90 AND sysdate
+GROUP BY j.client_id, TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;)
+HAVING MIN(j.summary_status) = 2)
+),
+t5 AS (--Sum of the largest full for each client done in a day. AKA Front End GB
+SELECT
+SUM(sum_of_fulls1) sum_of_fulls1,
+SUM(sum_of_fulls2) sum_of_fulls2,
+SUM(sum_of_fulls3) sum_of_fulls3
+FROM (SELECT
+j.client_id,j.policy_id,j.schedule_id,TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;),
+MAX(CASE WHEN j.start_date BETWEEN sysdate-30 AND sysdate    THEN j.kilobytes/1024/1024 END) sum_of_fulls1,
+MAX(CASE WHEN j.start_date BETWEEN sysdate-60 AND sysdate-30 THEN j.kilobytes/1024/1024 END) sum_of_fulls2,
+MAX(CASE WHEN j.start_date BETWEEN sysdate-90 AND sysdate-60 THEN j.kilobytes/1024/1024 END) sum_of_fulls3
+FROM apt_v_nbu_job j
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN sysdate-90 AND sysdate
+AND j.job_type IN (101)
+GROUP BY j.client_id,j.policy_id,j.schedule_id,TO_CHAR(j.start_date,&#039;MM/DD/YYYY&#039;))
+)
+SELECT
+&#039;Number of Master Servers&#039; kpi_metric,
+server_count1 kpi_value1, server_count2 kpi_value2, server_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Media Servers&#039; kpi_metric,
+media_server_count1 kpi_value1, media_server_count2 kpi_value2, media_server_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Clients&#039; kpi_metric,
+client_count1 kpi_value1, client_count2 kpi_value2, client_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Client Policy Schedule Combinations&#039; kpi_metric,
+cps_combos1 kpi_value1, cps_combos2 kpi_value2, cps_combos3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Client Data to Protect: Sum of Each Clients Largest Full Backup (GB)&#039; kpi_metric,
+sum_of_fulls1 kpi_value1, sum_of_fulls2 kpi_value2, sum_of_fulls3 kpi_value3
+FROM t5
+UNION ALL
+SELECT
+&#039;Total Amount of Streamed Data (GB)&#039; kpi_metric,
+job_volume1 kpi_value1, job_volume2 kpi_value2, job_volume3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Streamed Data From Full Backups (GB)&#039; kpi_metric,
+full_job_volume1 kpi_value1, full_job_volume2 kpi_value2, full_job_volume3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Streamed Data From Incremental Backups (GB)&#039; kpi_metric,
+incr_job_volume1 kpi_value1, incr_job_volume2 kpi_value2, incr_job_volume3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Streamed Data From Application Backups (GB)&#039; kpi_metric,
+appl_job_volume1 kpi_value1, appl_job_volume2 kpi_value2, appl_job_volume3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Streamed Data From Duplication Jobs (GB)&#039; kpi_metric,
+dup_job_volume1 kpi_value1, dup_job_volume2 kpi_value2, dup_job_volume3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Streamed Data From NDMP Backups (GB)&#039; kpi_metric,
+ndmp_job_volume1 kpi_value1, ndmp_job_volume2 kpi_value2, ndmp_job_volume3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Total Number of Backup Jobs&#039; kpi_metric,
+job_count1 kpi_value1, job_count2 kpi_value2, job_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Total Number of Successful Backup Jobs&#039; kpi_metric,
+successful_job_count1 kpi_value1, successful_job_count2 kpi_value2, successful_job_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Total Number of Backup Jobs with Skipped Files (Partially Successful)&#039; kpi_metric,
+partial_job_count1 kpi_value1, partial_job_count2 kpi_value2, partial_job_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Total Number of Failed Backup Jobs&#039; kpi_metric,
+failed_job_count1 kpi_value1, failed_job_count2 kpi_value2, failed_job_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Percent of Failed Backup Jobs&#039; kpi_metric,
+ROUND(failed_job_count1/DECODE(job_count1,0,null,job_count1)*100,2) kpi_value1, 
+ROUND(failed_job_count2/DECODE(job_count2,0,null,job_count2)*100,2) kpi_value2, 
+ROUND(failed_job_count3/DECODE(job_count3,0,null,job_count3)*100,2) kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Jobs Queued 5 to 15 Minutes&#039; kpi_metric,
+qjob515_count1 kpi_value1, qjob515_count2 kpi_value2, qjob515_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Percent of Jobs Queued 5 to 15 Minutes&#039; kpi_metric,
+ROUND(qjob515_count1/DECODE(job_count1,0,null,job_count1)*100,2) kpi_value1, 
+ROUND(qjob515_count2/DECODE(job_count2,0,null,job_count2)*100,2) kpi_value2, 
+ROUND(qjob515_count3/DECODE(job_count3,0,null,job_count3)*100,2) kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Jobs Queued Over 15 Minutes&#039; kpi_metric,
+qjob15_count1 kpi_value1, qjob15_count2 kpi_value2, qjob15_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Percent of Jobs Queued Over 15 Minutes&#039; kpi_metric,
+ROUND(qjob15_count1/DECODE(job_count1,0,null,job_count1)*100,2) kpi_value1, 
+ROUND(qjob15_count2/DECODE(job_count2,0,null,job_count2)*100,2) kpi_value2, 
+ROUND(qjob15_count3/DECODE(job_count3,0,null,job_count3)*100,2) kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Average Job Duration (Minutes)&#039; kpi_metric,
+avg_duration1 kpi_value1, avg_duration2 kpi_value2, avg_duration3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Longest Job Duration (Minutes)&#039; kpi_metric,
+max_duration1 kpi_value1, max_duration2 kpi_value2, max_duration3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Backups Taking Less Than 12 Hours to Complete&#039; kpi_metric,
+job_l12_count1 kpi_value1, job_12_count2 kpi_value2, job_l12_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Percent of Backups Taking Less Than 12 Hours to Complete&#039; kpi_metric,
+ROUND(job_l12_count1/DECODE(job_count1,0,null,job_count1)*100,2) kpi_value1, 
+ROUND(job_l12_count2/DECODE(job_count2,0,null,job_count2)*100,2) kpi_value2, 
+ROUND(job_l12_count3/DECODE(job_count3,0,null,job_count3)*100,2) kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Backups Taking 12 or More Hours&#039; kpi_metric,
+job_12_count1 kpi_value1, job_12_count2 kpi_value2, job_12_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Percent of Backups Taking 12 or More Hours&#039; kpi_metric,
+ROUND(job_12_count1/DECODE(job_count1,0,null,job_count1)*100,2) kpi_value1, 
+ROUND(job_12_count2/DECODE(job_count2,0,null,job_count2)*100,2) kpi_value2, 
+ROUND(job_12_count3/DECODE(job_count3,0,null,job_count3)*100,2) kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Backups Taking 24 or More Hours&#039; kpi_metric,
+job_24_count1 kpi_value1, job_24_count2 kpi_value2, job_24_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Percent of Backups Taking 24 or More Hours&#039; kpi_metric,
+ROUND(job_24_count1/DECODE(job_count1,0,null,job_count1)*100,2) kpi_value1, 
+ROUND(job_24_count2/DECODE(job_count2,0,null,job_count2)*100,2) kpi_value2, 
+ROUND(job_24_count3/DECODE(job_count3,0,null,job_count3)*100,2) kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Tapes Used&#039; kpi_metric,
+tape_count1 kpi_value1, tape_count2 kpi_value2, tape_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Number of Tape Drives Used&#039; kpi_metric,
+drive_count1 kpi_value1, drive_count2 kpi_value2, drive_count3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Data Streamed to Tape (GB)&#039; kpi_metric,
+tape_job_volume1 kpi_value1, tape_job_volume2 kpi_value2, tape_job_volume3 kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Streamed Data per of Tape Drive (GB)&#039; kpi_metric,
+ROUND(tape_job_volume1/drive_count1,2) kpi_value1, 
+ROUND(tape_job_volume2/drive_count2,2) kpi_value2, 
+ROUND(tape_job_volume3/drive_count3,2) kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Amount of Data Streamed to Disk (GB)&#039; kpi_metric,
+disk_job_volume1 kpi_value1, disk_job_volume2 kpi_value2, disk_job_volume3 kpi_value3 
+FROM t1
+UNION ALL
+SELECT
+&#039;Average Daily Throughput MB/Sec&#039; kpi_metric,
+avg_daily_mb_sec1 kpi_value1, avg_daily_mb_sec2 kpi_value2, avg_daily_mb_sec3 kpi_value3
+FROM t2
+UNION ALL
+SELECT
+&#039;Highest Daily Throughput MB/Sec&#039; kpi_metric,
+max_daily_mb_sec1 kpi_value1, max_daily_mb_sec2 kpi_value2, max_daily_mb_sec3 kpi_value3
+FROM t2
+UNION ALL
+SELECT
+&#039;Largest Daily Backup Volume (GB)&#039; kpi_metric,
+max_daily_job_volume1 kpi_value1, max_daily_job_volume2 kpi_value2, max_daily_job_volume3 kpi_value3
+FROM t2
+UNION ALL
+SELECT
+&#039;Average Daily Backup Volume (GB)&#039; kpi_metric,
+avg_daily_job_volume1 kpi_value1, avg_daily_job_volume2 kpi_value2, avg_daily_job_volume3 kpi_value3
+FROM t2
+UNION ALL
+SELECT
+&#039;Total Number of Files Backed up&#039; kpi_metric,
+tot_nbr_of_files1 kpi_value1, tot_nbr_of_files2 kpi_value2, tot_nbr_of_files3 kpi_value3
+FROM t1
+UNION ALL
+SELECT
+&#039;Highest Daily Number of Files Backed up&#039; kpi_metric,
+max_daily_nbr_of_files1 kpi_value1, max_daily_nbr_of_files2 kpi_value2, max_daily_nbr_of_files3 kpi_value3
+FROM t2
+UNION ALL
+SELECT
+&#039;Average Daily Number of Files Backed up&#039; kpi_metric,
+avg_daily_nbr_of_files1 kpi_value1, avg_daily_nbr_of_files2 kpi_value2, avg_daily_nbr_of_files3 kpi_value3
+FROM t2
+UNION ALL
+SELECT
+&#039;Total Amount of Retained Data Created: Expiring in the Future (GB)&#039; kpi_metric,
+tot_data_expiring1 kpi_value1, tot_data_expiring2 kpi_value2, tot_data_expiring3 kpi_value3
+FROM t3
+UNION ALL
+SELECT
+&#039;Amount of Retained Data Created: Expiring Between 1 Month and 1 Year (GB)&#039; kpi_metric,
+data_expiring_1y_1 kpi_value1, data_expiring_1y_2 kpi_value2, data_expiring_1y_3 kpi_value3
+FROM t3
+UNION ALL
+SELECT
+&#039;Percent of Retained Data Created: Expiring Between 1 Month and 1 Year&#039; kpi_metric,
+ROUND(data_expiring_1y_1/DECODE(tot_data_expiring1,0,null,tot_data_expiring1)*100,2) kpi_value1, 
+ROUND(data_expiring_1y_2/DECODE(tot_data_expiring2,0,null,tot_data_expiring2)*100,2) kpi_value2, 
+ROUND(data_expiring_1y_3/DECODE(tot_data_expiring3,0,null,tot_data_expiring3)*100,2) kpi_value3 
+FROM t3
+UNION ALL
+SELECT
+&#039;Amount of Retained Data Created: Expiring Between 1 and 5 Years (GB)&#039; kpi_metric,
+data_expiring_5y_1 kpi_value1, data_expiring_5y_2 kpi_value2, data_expiring_5y_3 kpi_value3
+FROM t3
+UNION ALL
+SELECT
+&#039;Percent of Retained Data Created: Expiring Between 1 and 5 Years&#039; kpi_metric,
+ROUND(data_expiring_5y_1/DECODE(tot_data_expiring1,0,null,tot_data_expiring1)*100,2) kpi_value1, 
+ROUND(data_expiring_5y_2/DECODE(tot_data_expiring2,0,null,tot_data_expiring2)*100,2) kpi_value2, 
+ROUND(data_expiring_5y_3/DECODE(tot_data_expiring3,0,null,tot_data_expiring3)*100,2) kpi_value3 
+FROM t3
+UNION ALL
+SELECT
+&#039;Amount of Retained Data Created: Expiring Over 5 Years (GB)&#039; kpi_metric,
+data_expiring_o5_1 kpi_value1, data_expiring_o5_2 kpi_value2, data_expiring_o5_3 kpi_value3
+FROM t3
+UNION ALL
+SELECT
+&#039;Percent of Retained Data Created: Expiring Over 5 Years&#039; kpi_metric,
+ROUND(data_expiring_o5_1/DECODE(tot_data_expiring1,0,null,tot_data_expiring1)*100,2) kpi_value1, 
+ROUND(data_expiring_o5_2/DECODE(tot_data_expiring2,0,null,tot_data_expiring2)*100,2) kpi_value2, 
+ROUND(data_expiring_o5_3/DECODE(tot_data_expiring3,0,null,tot_data_expiring3)*100,2) kpi_value3 
+FROM t3
+UNION ALL
+SELECT
+&#039;Total Number of Daily Failed Clients&#039; kpi_metric,
+failed_clients1 kpi_value1, failed_clients2 kpi_value2, failed_clients3 kpi_value3
+FROM t4
+UNION ALL
+SELECT
+&#039;Average Daily Client Success Rate&#039; kpi_metric,
+ROUND((client_count1 - (failed_clients1/30))/DECODE(client_count1,0,null,client_count1)*100,2) kpi_value1, 
+ROUND((client_count2 - (failed_clients2/30))/DECODE(client_count2,0,null,client_count2)*100,2) kpi_value2, 
+ROUND((client_count3 - (failed_clients3/30))/DECODE(client_count3,0,null,client_count3)*100,2) kpi_value3 
+FROM t1,t4
+UNION ALL
+SELECT
+&#039;Load Average: Max Daily Volume/Average Daily Volume&#039; kpi_metric,
+ROUND(max_daily_job_volume1/avg_daily_job_volume1,2) kpi_value1, 
+ROUND(max_daily_job_volume2/avg_daily_job_volume2,2) kpi_value2, 
+ROUND(max_daily_job_volume3/avg_daily_job_volume3,2) kpi_value3 
+FROM t2
+
+</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>APTARE 90 Day NBU Backup Assessment</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>APTARE 90 Day NBU Backup Assessment</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Key Performance Indicator</caption>
+                    <name>kpi_metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Last 30 Days</caption>
+                    <name>kpi_value1</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.##</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>30 - 60 Days Ago</caption>
+                    <name>kpi_value2</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.##</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>60 - 90 Days Ago</caption>
+                    <name>kpi_value3</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.##</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Key Performance Indicator&quot;,&quot;name&quot;:&quot;kpi_metric&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.##&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Last 30 Days&quot;,&quot;name&quot;:&quot;kpi_value1&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.##&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;30 - 60 Days Ago&quot;,&quot;name&quot;:&quot;kpi_value2&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.##&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;60 - 90 Days Ago&quot;,&quot;name&quot;:&quot;kpi_value3&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>APTARE 90 Day NBU Backup Assessment</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

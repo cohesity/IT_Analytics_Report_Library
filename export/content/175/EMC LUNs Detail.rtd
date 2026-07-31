@@ -1,0 +1,490 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>SELECT DISTINCT array_family,storage_array_id,array_name,
+emulation_type,group_name,is_mapped,is_mapped_not_masked,total_capacity_gb, is_synchronized,last_updated,logical_unit_name,lun_type,nbr_allocated_luns,nbr_of_luns,normalized_raid_type,raid_type,rdf_grp_name,rdf_grp_nbr,rdf_mode,rdf_state,bcv_pair_state,device_rdf_state
+FROM aps_v_emc_sym_logical_unit
+WHERE &#039;${freeCombo1}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo1}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN is_mapped = &#039;Y&#039;  THEN &#039;Yes&#039;
+        WHEN is_mapped = &#039;N&#039;  THEN &#039;No&#039;
+      END
+   ELSE &#039;All&#039;
+ END
+AND &#039;${freeCombo2}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo2}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN is_mapped_not_masked = &#039;Y&#039;  THEN &#039;Yes&#039;
+        WHEN is_mapped_not_masked = &#039;N&#039;  THEN &#039;No&#039;
+      END
+   ELSE &#039;All&#039;
+ END
+AND &#039;${freeCombo3}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo3}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN raid_type LIKE &#039;RAID-5%&#039;  THEN &#039;RAID-5&#039;
+        WHEN raid_type NOT LIKE &#039;RAID-5%&#039; THEN &#039;Other&#039;
+      END
+   ELSE &#039;All&#039;
+ END
+AND &#039;${queryCombo1}&#039; IN 
+  CASE 
+    WHEN &#039;${queryCombo1}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN lun_type LIKE &#039;${queryCombo1}&#039; THEN &#039;${queryCombo1}&#039;
+      END
+   ELSE &#039;All&#039;
+ END</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>EMC LUNs Detail</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>No,Yes,All</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>All,No,Yes</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>RAID-5,Other,All</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Mapped:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>RAID Type:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Mapped Not Masked:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>sql</string>
+                    <string>SELECT DISTINCT lun_type the_key, lun_type the_value from aps_v_emc_sym_logical_unit UNION SELECT &#039;All&#039; the_key, &#039;All&#039; the_value FROM dual</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT DISTINCT lun_type the_key, lun_type the_value from aps_v_emc_sym_logical_unit UNION SELECT &#039;All&#039; the_key, &#039;All&#039; the_value FROM dual</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>LUN Type:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100355</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*All Values in (GB) Mapped = ${freeCombo1}, Mapped Not Masked =  ${freeCombo2},RAID Type =  ${freeCombo2}, LUN Type = ${queryCombo1} *Usable is considered RAID-5 STANDARD not mapped</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>EMC LUNs Detail</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Array Family</caption>
+                    <name>array_family</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>storage_array_id</caption>
+                    <name>storage_array_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatPattern>######</formatPattern>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Array</caption>
+                    <name>array_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown>systemName=arrayCapacity&amp;arrayIds=${row[&#039;storage_array_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Emulation Type</caption>
+                    <name>emulation_type</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Group Name</caption>
+                    <name>group_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Is Mapped</caption>
+                    <name>is_mapped</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>center</align>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Is Mapped &lt;br /&gt;and not Masked</caption>
+                    <name>is_mapped_not_masked</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>center</align>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Total Capacity(GB)</caption>
+                    <name>total_capacity_gb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Synced</caption>
+                    <name>is_synchronized</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Last Updated</caption>
+                    <name>last_updated</name>
+                    <fieldIndex>0</fieldIndex>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Logical Unit Name</caption>
+                    <name>logical_unit_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>LUN Type</caption>
+                    <name>lun_type</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption># Allocated LUNs</caption>
+                    <name>nbr_allocated_luns</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption># LUNs</caption>
+                    <name>nbr_of_luns</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>RAID Type Normalized</caption>
+                    <name>normalized_raid_type</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>RAID Type</caption>
+                    <name>raid_type</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>rdf_grp_name</caption>
+                    <name>rdf_grp_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>rdf_grp_nbr</caption>
+                    <name>rdf_grp_nbr</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatPattern>#,##0</formatPattern>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>rdf_mode</caption>
+                    <name>rdf_mode</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>rdf_state</caption>
+                    <name>rdf_state</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>BCV Pair State</caption>
+                    <name>bcv_pair_state</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Device RDF State</caption>
+                    <name>device_rdf_state</name>
+                    <fieldIndex>0</fieldIndex>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Array Family&quot;,&quot;name&quot;:&quot;array_family&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;######&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;storage_array_id&quot;,&quot;name&quot;:&quot;storage_array_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=arrayCapacity&amp;arrayIds=${row[&#039;storage_array_id&#039;]}&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Array&quot;,&quot;name&quot;:&quot;array_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Emulation Type&quot;,&quot;name&quot;:&quot;emulation_type&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Group Name&quot;,&quot;name&quot;:&quot;group_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Is Mapped&quot;,&quot;name&quot;:&quot;is_mapped&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Is Mapped &lt;br /&gt;and not Masked&quot;,&quot;name&quot;:&quot;is_mapped_not_masked&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Total Capacity(GB)&quot;,&quot;name&quot;:&quot;total_capacity_gb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Synced&quot;,&quot;name&quot;:&quot;is_synchronized&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;char&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Last Updated&quot;,&quot;name&quot;:&quot;last_updated&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Logical Unit Name&quot;,&quot;name&quot;:&quot;logical_unit_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;LUN Type&quot;,&quot;name&quot;:&quot;lun_type&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;# Allocated LUNs&quot;,&quot;name&quot;:&quot;nbr_allocated_luns&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;# LUNs&quot;,&quot;name&quot;:&quot;nbr_of_luns&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;RAID Type Normalized&quot;,&quot;name&quot;:&quot;normalized_raid_type&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;RAID Type&quot;,&quot;name&quot;:&quot;raid_type&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;rdf_grp_name&quot;,&quot;name&quot;:&quot;rdf_grp_name&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;rdf_grp_nbr&quot;,&quot;name&quot;:&quot;rdf_grp_nbr&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;rdf_mode&quot;,&quot;name&quot;:&quot;rdf_mode&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;rdf_state&quot;,&quot;name&quot;:&quot;rdf_state&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;BCV Pair State&quot;,&quot;name&quot;:&quot;bcv_pair_state&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Device RDF State&quot;,&quot;name&quot;:&quot;device_rdf_state&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;varchar2&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>EMC LUNs Detail</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

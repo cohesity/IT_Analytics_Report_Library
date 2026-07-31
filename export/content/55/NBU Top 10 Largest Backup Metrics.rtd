@@ -1,0 +1,335 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Updated: 08/25/2011
+--This one template can create hundreds of different pie charts depending on the selections
+--Report by: Client,Master Server,Media Server,Storage Unit,Policy,Policy Type,Job Type,Schedule,Schedule Type,Try Count
+--On: Job Size(GB),Client Count,File Count,Job Count,Successful Jobs,Partial Jobs,Failed Jobs,MB/sec,Duration(Min)
+
+WITH t1 as (
+SELECT 
+nvl(DECODE(&#039;${freeCombo1}&#039;,
+&#039;Client&#039;,client_host_name,
+&#039;Master Server&#039;,master_host_name,
+&#039;Media Server&#039;,media_host_name,
+&#039;Storage Unit&#039;,storage_unit_label,
+&#039;Policy&#039;,policy_name,
+&#039;Policy Type&#039;,policy_type_name,
+&#039;Job Type&#039;,job_type_name,
+&#039;Schedule&#039;,schedule_name,
+&#039;Schedule Type&#039;,schedule_type_name,
+&#039;Try Count&#039;,try_count),&#039;None&#039;) unit,  
+round(sum(kilobytes/1024/1024),2) job_size_gb,
+count(DISTINCT client_id) client_count,
+sum(nbr_of_files) file_count,
+count(DISTINCT job_id) job_count,
+sum(DECODE(summary_status,0,1)) successful_jobs,
+sum(DECODE(summary_status,1,1)) partial_jobs,
+sum(DECODE(summary_status,2,1)) failed_jobs,
+round(avg(mbytes_sec),2) mbytes_sec,
+round(avg(duration_secs/60),2) duration_min
+FROM apt_v_nbu_job_detail
+WHERE start_date BETWEEN ${startDate} AND ${endDate}
+AND client_id in (${hosts})
+GROUP BY 
+nvl(DECODE(&#039;${freeCombo1}&#039;,
+&#039;Client&#039;,client_host_name,
+&#039;Master Server&#039;,master_host_name,
+&#039;Media Server&#039;,media_host_name,
+&#039;Storage Unit&#039;,storage_unit_label,
+&#039;Policy&#039;,policy_name,
+&#039;Policy Type&#039;,policy_type_name,
+&#039;Job Type&#039;,job_type_name,
+&#039;Schedule&#039;,schedule_name,
+&#039;Schedule Type&#039;,schedule_type_name,
+&#039;Try Count&#039;,try_count),&#039;None&#039;)
+),
+t2 AS (
+SELECT
+nvl(unit,&#039;Unknown&#039;) unit,
+DECODE(&#039;${freeCombo2}&#039;,
+&#039;Job Size(GB)&#039;,job_size_gb,
+&#039;Client Count&#039;,client_count,
+&#039;File Count&#039;,file_count,
+&#039;Job Count&#039;,job_count,
+&#039;Successful Jobs&#039;,successful_jobs,
+&#039;Partial Jobs&#039;,partial_jobs,
+&#039;Failed Jobs&#039;,failed_jobs,
+&#039;MB/sec&#039;,mbytes_sec,
+&#039;Duration(Min)&#039;,duration_min
+) the_metric
+FROM t1 
+ORDER BY 2 DESC
+)
+SELECT unit,the_metric FROM t2
+WHERE rownum &lt;= ${freeCombo3}</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Top 10 Largest Backup Metrics</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>Client,Master Server,Media Server,Storage Unit,Policy,Policy Type,Job Type,Schedule,Schedule Type,Try Count</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>Job Size(GB),Client Count,File Count,Job Count,Successful Jobs,Partial Jobs,Failed Jobs,MB/sec,Duration(Min)</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>5,10,15,20</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Report by:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>Top:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>On:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>dynamicPie</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>* Top ${freeCombo3} ${freeCombo2} by ${freeCombo1} </string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>*Top  ${freeCombo3} ${freeCombo2} by ${freeCombo1} </string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Top 10 Largest Backup Metrics</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption></caption>
+                    <name>unit</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pie</type>
+                    <caption>the_metric</caption>
+                    <name>the_metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail>${row[&#039;the_metric&#039;].data} </additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;&quot;,&quot;name&quot;:&quot;unit&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;the_metric&#039;].data} &quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;the_metric&quot;,&quot;name&quot;:&quot;the_metric&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Top 10 Largest Backup Metrics</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

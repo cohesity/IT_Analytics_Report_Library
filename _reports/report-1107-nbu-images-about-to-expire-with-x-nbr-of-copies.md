@@ -1,0 +1,21 @@
+---
+title: "NBU Images About to Expire with x Nbr of Copies"
+report_id: 1107
+rtd_name: "NBU Images About to Expire with x Nbr of Copies.rtd"
+description: "NBU Images About to Expire"
+problem_statement: "This report can help determine if you need to intervene in order to save critical data.\r\nYou may find the one and only copy of a backup image is expiring in the next 24 hrs.\r\nIf it is determined to contain critical data, the bpexpidate command can be run to extend the expiration date a safer time in the future.\r\nThis is a companion report to NBU Tapes to Destroy and NBU Images to Destroy"
+author: ""
+modified_date: "2023-07-14"
+download_count: 0
+has_video: false
+video_url: ""
+thumbnail: true
+has_sample: true
+has_sql: true
+sql_query: "--Author: rich.rose@aptare.com\n--Last Modified: 11/06/2015\nWITH t1 as (\nSELECT \nj.backup_id,\ncount(j.job_id) num_copies\nFROM apt_v_nbu_job j\nWHERE j.client_id IN (${hosts})\nAND j.backup_id is not null\nAND '${freeCombo1}' IN \n  CASE \n    WHEN '${freeCombo1}' NOT IN ('All') THEN\n      CASE\n        WHEN j.expiration_date IS NULL THEN  'Null'\n        WHEN j.expiration_date < sysdate THEN  'Expired'\n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+1 THEN  '1 Day' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+2 THEN  '2 Days' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+3 THEN  '3 Days' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+7 THEN  '7 Days' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+31 THEN  '1 Month' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+93 THEN  '3 Months'\n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+186 THEN '6 Months'\n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+365.25 THEN '1 Yr'\n        WHEN j.expiration_date > sysdate+365.25 THEN 'Over 1 Yr'\n      END\n   ELSE 'All'\n END\nGROUP BY j.backup_id\nHAVING count(j.job_id) > 1\n),\nt2 as (\nSELECT \nj.backup_id,\ncount(j.job_id) num_copies\nFROM apt_v_nbu_job j\nWHERE j.client_id IN (${hosts})\nAND j.backup_id is not null\nAND '${freeCombo1}' IN \n  CASE \n    WHEN '${freeCombo1}' NOT IN ('All') THEN\n      CASE\n        WHEN j.expiration_date IS NULL THEN  'Null'\n        WHEN j.expiration_date < sysdate THEN  'Expired'\n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+1 THEN  '1 Day' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+2 THEN  '2 Days' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+3 THEN  '3 Days' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+7 THEN  '7 Days' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+31 THEN  '1 Month' \n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+93 THEN  '3 Months'\n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+186 THEN '6 Months'\n        WHEN j.expiration_date BETWEEN sysdate AND sysdate+365.25 THEN '1 Yr'\n        WHEN j.expiration_date > sysdate+365.25 THEN 'Over 1 Yr'\n      END\n   ELSE 'All'\n END\nGROUP BY j.backup_id\nHAVING count(j.job_id) = 1\n),\nt3 as (\nSELECT\nj.client_id, \nj.backup_id, \nj.client_host_name,\nj.expiration_date,\nt1.num_copies,\nj.expiration_date-sysdate expire_days,\nj.finish_date\nFROM apt_v_nbu_job j,t1\nWHERE j.backup_id = t1.backup_id\nUNION ALL\nSELECT\nDISTINCT\nj.client_id, \nj.backup_id, \nj.client_host_name,\nj.expiration_date,\nt2.num_copies,\nj.expiration_date-sysdate expire_days,\nj.finish_date\nFROM apt_v_nbu_job j,t2\nWHERE j.backup_id = t2.backup_id\n),\nt4 as (\nSELECT DISTINCT\nclient_id, \nbackup_id, \nclient_host_name,\nfinish_date,\nexpiration_date,\nnum_copies,\nexpire_days\nFROM t3\nWHERE '${freeCombo2}' IN \n  CASE \n    WHEN '${freeCombo2}' NOT IN ('All') THEN\n      CASE\n        WHEN num_copies = 1  THEN '1 Copy'\n        WHEN num_copies > 1  THEN '2 or More Copies'\n      END\n   ELSE 'All'\n END\n)\nSELECT \nclient_id, \nbackup_id, \nclient_host_name,\nfinish_date,\nexpiration_date,\nnum_copies,\nexpire_days\nFROM t4"
+has_explanation: false
+products: [{"slug": "backup-manager-veritas-netbackup", "name": "Veritas NetBackup"}]
+categories: []
+product_slugs: ["backup-manager-veritas-netbackup"]
+category_slugs: []
+---

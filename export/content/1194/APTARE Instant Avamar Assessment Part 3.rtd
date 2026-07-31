@@ -1,0 +1,507 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>c844b239-4e34-4332-9ef9-ece1a44f2b01</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>09/08/2016</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>APTARE Instant Avamar Assessment Part 3</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT hostname the_key, hostname the_value FROM apt_v_server s, apt_v_avm_axion_system av WHERE s.server_id = av.master_server_id</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Avamar Server:</string>
+                  </entry>
+                  <entry>
+                    <string>sql</string>
+                    <string>SELECT hostname the_key, hostname the_value FROM apt_v_server s, apt_v_avm_axion_system av WHERE s.server_id = av.master_server_id</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>APTARE Instant Avamar Assessment Part 3</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last updated: 09/07/2016
+--Provides Several Key Performance Indicators for an Avamar Environment
+WITH 
+VAR AS (
+SELECT
+ROUND((${endDate} - ${startDate}),2) nbrOfDays,
+${startDate} startDate,
+DECODE(&apos;${freeCombo1}&apos;,
+&apos;KB&apos;,1,&apos;MB&apos;,1024,&apos;GB&apos;,(1024*1024),&apos;TB&apos;,(1024*1024*1024),&apos;PB&apos;,(1024*1024*1024*1024)) div_by,
+&apos;${freeCombo1}&apos; the_unit 
+FROM apt_v_dual
+),
+t0 AS (--Calculates Indiviapt_v_dual Job Statistics
+SELECT
+count(DISTINCT j.client_id) client_count,
+count(j.job_id) job_count,
+SUM(DECODE(j.summary_status,0,1,0)) successful_job_count,
+SUM(DECODE(j.summary_status,1,1,0)) partial_job_count,
+SUM(DECODE(j.summary_status,2,1,0)) failed_job_count,
+AVG(j.duration_secs) avg_duration1,
+MAX(j.duration_secs) max_duration1,
+SUM(CASE WHEN j.duration_secs/60/60 &gt;= 1 THEN 1 ELSE 0 END) job_g1_count,
+SUM(CASE WHEN j.duration_secs/60/60 BETWEEN 1 AND 6 THEN 1 ELSE 0 END) job_16_count,
+SUM(CASE WHEN j.duration_secs/60/60 BETWEEN 6 AND 12 THEN 1 ELSE 0 END) job_612_count,
+SUM(CASE WHEN j.duration_secs/60/60 BETWEEN 12 AND 24 THEN 1 ELSE 0 END) job_1224_count,
+SUM(CASE WHEN j.duration_secs/60/60 &gt;= 24 THEN 1 ELSE 0 END) job_g24_count,
+ROUND(AVG(aa.scanned_kb/div_by),2) avg_scanned,
+ROUND(MAX(aa.scanned_kb/div_by),2) max_scanned,
+ROUND(SUM(aa.modified_not_sent_kb/div_by),2) modified_not_sent,
+ROUND(SUM(aa.modified_sent_kb/div_by),2) modified_sent,
+ROUND(SUM(j.kilobytes/div_by),2) job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (701) THEN aa.modified_sent_kb/div_by ELSE 0 END),2) on_demand_job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (702) THEN aa.modified_sent_kb/div_by ELSE 0 END),2) sched_job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (703) THEN aa.modified_sent_kb/div_by ELSE 0 END),2) restore_job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (706) THEN aa.modified_sent_kb/div_by ELSE 0 END),2) rep_dst_job_volume,
+ROUND(SUM(CASE WHEN j.job_type IN (707) THEN aa.modified_sent_kb/div_by ELSE 0 END),2) rep_src_job_volume,
+ROUND(SUM(CASE WHEN j.job_type NOT IN (701,702,703,706,707) THEN j.kilobytes/var.div_by ELSE 0 END),2) other_job_volume,
+AVG(j.duration_secs/60 ) avg_duration,
+AVG(j.nbr_of_files/1000000) avg_nbr_of_files,
+MAX(j.nbr_of_files/1000000) max_nbr_of_files,
+(SUM(aa.modified_sent_kb)/(SUM(aa.modified_not_sent_kb)+.0001))*100 dedupe_pct
+FROM apt_v_job j, apt_v_avm_activities aa, var
+WHERE j.client_id IN (${hosts})
+AND j.server_name LIKE &apos;${queryCombo1}&apos;
+AND j.start_date BETWEEN ${startDate} AND ${endDate}
+AND j.job_id = aa.job_id 
+),
+t1 AS (--Get all the special plugins
+SELECT
+SUM(DECODE(pc.plugin_name,&apos;AIX&apos;,aa.modified_sent_kb/div_by,0)) aix,
+SUM(DECODE(pc.plugin_name,&apos;AIX Agent&apos;,aa.modified_sent_kb/div_by,0)) aix_agent,
+SUM(DECODE(pc.plugin_name,&apos;DB2&apos;,aa.modified_sent_kb/div_by,0)) db2,
+SUM(DECODE(pc.plugin_name,&apos;dto&apos;,aa.modified_sent_kb/div_by,0)) dto,
+SUM(DECODE(pc.plugin_name,&apos;dtorestore&apos;,aa.modified_sent_kb/div_by,0)) dtorrestore,
+SUM(DECODE(pc.plugin_name,&apos;EMC Celerra&apos;,aa.modified_sent_kb/div_by,0)) emc_celerra,
+SUM(DECODE(pc.plugin_name,&apos;Exchange Database&apos;,aa.modified_sent_kb/div_by,0)) exchange_database,
+SUM(DECODE(pc.plugin_name,&apos;Exchange GLR&apos;,aa.modified_sent_kb/div_by,0)) exchange_glr,
+SUM(DECODE(pc.plugin_name,&apos;Exchange Message&apos;,aa.modified_sent_kb/div_by,0)) exchange_message,
+SUM(DECODE(pc.plugin_name,&apos;Exchange VSS Writer 2007&apos;,aa.modified_sent_kb/div_by,0)) exchange_vss_writer,
+SUM(DECODE(pc.plugin_name,&apos;Exchange Webservice 2007&apos;,aa.modified_sent_kb/div_by,0)) exchange_webservice,
+SUM(DECODE(pc.plugin_name,&apos;ExchangeDB03-07&apos;,aa.modified_sent_kb/div_by,0)) exchangedb,
+SUM(DECODE(pc.plugin_name,&apos;FreeBSD Agent&apos;,aa.modified_sent_kb/div_by,0)) freebsd_agent,
+SUM(DECODE(pc.plugin_name,&apos;HP-UX&apos;,aa.modified_sent_kb/div_by,0)) hp_ux,
+SUM(DECODE(pc.plugin_name,&apos;HP-UX Agent&apos;,aa.modified_sent_kb/div_by,0)) hpux_agent,
+SUM(DECODE(pc.plugin_name,&apos;Hyper-V GLR&apos;,aa.modified_sent_kb/div_by,0)) hyper_v_glr,
+SUM(DECODE(pc.plugin_name,&apos;Hyper-V VSS&apos;,aa.modified_sent_kb/div_by,0)) hyper_v_vss,
+SUM(DECODE(pc.plugin_name,&apos;Isilon Filer&apos;,aa.modified_sent_kb/div_by,0)) isilon_filer,
+SUM(DECODE(pc.plugin_name,&apos;Linux Agent&apos;,aa.modified_sent_kb/div_by,0)) linux_agent,
+SUM(DECODE(pc.plugin_name,&apos;lotus&apos;,aa.modified_sent_kb/div_by,0)) lotus,
+SUM(DECODE(pc.plugin_name,&apos;Macintosh Agent&apos;,aa.modified_sent_kb/div_by,0)) mac_agent,
+SUM(DECODE(pc.plugin_name,&apos;MacOSX&apos;,aa.modified_sent_kb/div_by,0)) macos,
+SUM(DECODE(pc.plugin_name,&apos;moss&apos;,aa.modified_sent_kb/div_by,0)) moss,
+SUM(DECODE(pc.plugin_name,&apos;NDMP&apos;,aa.modified_sent_kb/div_by,0)) ndmp,
+SUM(DECODE(pc.plugin_name,&apos;Netapp Filer&apos;,aa.modified_sent_kb/div_by,0)) netapp_filer,
+SUM(DECODE(pc.plugin_name,&apos;netware&apos;,aa.modified_sent_kb/div_by,0)) netware,
+SUM(DECODE(pc.plugin_name,&apos;Netware Agent&apos;,aa.modified_sent_kb/div_by,0)) netware_agent,
+SUM(DECODE(pc.plugin_name,&apos;Novell Netware&apos;,aa.modified_sent_kb/div_by,0)) novell_netware,
+SUM(DECODE(pc.plugin_name,&apos;Oracle&apos;,aa.modified_sent_kb/div_by,0)) oracle,
+SUM(DECODE(pc.plugin_name,&apos;Oracle ZFS&apos;,aa.modified_sent_kb/div_by,0)) oracle_zfs,
+SUM(DECODE(pc.plugin_name,&apos;Replicate&apos;,aa.modified_sent_kb/div_by,0)) replicate,
+SUM(DECODE(pc.plugin_name,&apos;SAP&apos;,aa.modified_sent_kb/div_by,0)) sap,
+SUM(DECODE(pc.plugin_name,&apos;SCO OpenServer Agent&apos;,aa.modified_sent_kb/div_by,0)) sco,
+SUM(DECODE(pc.plugin_name,&apos;SharePoint GLR&apos;,aa.modified_sent_kb/div_by,0)) sharepoint_glr,
+SUM(DECODE(pc.plugin_name,&apos;SharePoint VSS&apos;,aa.modified_sent_kb/div_by,0)) sharepoint_vss,
+SUM(DECODE(pc.plugin_name,&apos;Solaris Agent&apos;,aa.modified_sent_kb/div_by,0)) solaris_agent,
+SUM(DECODE(pc.plugin_name,&apos;SQL&apos;,aa.modified_sent_kb/div_by,0)) sql_agent,
+SUM(DECODE(pc.plugin_name,&apos;SQLVSS&apos;,aa.modified_sent_kb/div_by,0)) sql_vss,
+SUM(DECODE(pc.plugin_name,&apos;Sybase&apos;,aa.modified_sent_kb/div_by,0)) sybase,
+SUM(DECODE(pc.plugin_name,&apos;Unix&apos;,aa.modified_sent_kb/div_by,0)) unix,
+SUM(DECODE(pc.plugin_name,&apos;UnixWare Agent&apos;,aa.modified_sent_kb/div_by,0)) unixware_agent,
+SUM(DECODE(pc.plugin_name,&apos;UNKNOWN&apos;,aa.modified_sent_kb/div_by,0)) unknown,
+SUM(DECODE(pc.plugin_name,&apos;update&apos;,aa.modified_sent_kb/div_by,0)) update_agent,
+SUM(DECODE(pc.plugin_name,&apos;vappimage&apos;,aa.modified_sent_kb/div_by,0)) vappimage,
+SUM(DECODE(pc.plugin_name,&apos;vdrmigration&apos;,aa.modified_sent_kb/div_by,0)) vdrmigration,
+SUM(DECODE(pc.plugin_name,&apos;vmglr&apos;,aa.modified_sent_kb/div_by,0)) vmglr,
+SUM(DECODE(pc.plugin_name,&apos;vmimage&apos;,aa.modified_sent_kb/div_by,0)) vmimage,
+SUM(DECODE(pc.plugin_name,&apos;vmimagel&apos;,aa.modified_sent_kb/div_by,0)) vmimagel,
+SUM(DECODE(pc.plugin_name,&apos;vmimagew&apos;,aa.modified_sent_kb/div_by,0)) vmimagew,
+SUM(DECODE(pc.plugin_name,&apos;vmir&apos;,aa.modified_sent_kb/div_by,0)) vmir,
+SUM(DECODE(pc.plugin_name,&apos;vmwfile&apos;,aa.modified_sent_kb/div_by,0)) vmwfile,
+SUM(DECODE(pc.plugin_name,&apos;vmwfilel&apos;,aa.modified_sent_kb/div_by,0)) vmwfilel,
+SUM(DECODE(pc.plugin_name,&apos;vmwfilew&apos;,aa.modified_sent_kb/div_by,0)) vmwfilew,
+SUM(DECODE(pc.plugin_name,&apos;VSS&apos;,aa.modified_sent_kb/div_by,0)) vss,
+SUM(DECODE(pc.plugin_name,&apos;winclusterfs&apos;,aa.modified_sent_kb/div_by,0)) winclusterfs,
+SUM(DECODE(pc.plugin_name,&apos;Windows&apos;,aa.modified_sent_kb/div_by,0)) windows,
+SUM(DECODE(pc.plugin_name,&apos;Windows Agent&apos;,aa.modified_sent_kb/div_by,0)) windows_agent
+FROM apt_v_avm_activities aa, apt_v_avm_plugin_catalog pc, var
+WHERE aa.plugin_id = pc.plugin_id
+AND aa.start_date BETWEEN ${startDate} AND ${endDate}
+AND aa.server_name LIKE &apos;${queryCombo1}&apos;
+)
+SELECT 001 sort_order, &apos;&lt;b&gt;Total Modified Sent&lt;/b&gt;&apos; kpi_metric, TO_CHAR(modified_sent,&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+&apos; &apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- AIX Plugin Sent&apos; kpi_metric, TO_CHAR((aix+aix_agent),&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((aix+aix_agent)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- DB2 Plugin Sent&apos; kpi_metric, TO_CHAR(db2,&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((db2)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- DTO Plugin Sent&apos; kpi_metric, TO_CHAR((dto+dtorrestore),&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((dto+dtorrestore)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- EMC Celerra Plugin Sent&apos; kpi_metric, TO_CHAR(emc_celerra,&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((emc_celerra)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- Exchange Plugin Sent&apos; kpi_metric, TO_CHAR((exchange_database+exchange_glr+exchange_message+exchange_vss_writer+exchange_webservice+exchangedb),&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((exchange_database+exchange_glr+exchange_message+exchange_vss_writer+exchange_webservice+exchangedb)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- Oracle and Oracle ZFS Plugin Sent&apos; kpi_metric, TO_CHAR((oracle+oracle_zfs),&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((oracle+oracle_zfs)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- NetApp and NDMP Plugin Sent&apos; kpi_metric, TO_CHAR((netapp_filer+ndmp),&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((netapp_filer+ndmp)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- VMWARE Plugin Sent&apos; kpi_metric, TO_CHAR((vappimage+vdrmigration+vmglr+vmimage+vmimagel+vmimagew+vmir+vmwfile+vmwfilel+vmwfilew),&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((vappimage+vdrmigration+vmglr+vmimage+vmimagel+vmimagew+vmir+vmwfile+vmwfilel+vmwfilew)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var UNION
+SELECT 002 sort_order, &apos;-- Windows Plugin Sent&apos; kpi_metric, TO_CHAR((winclusterfs+windows+windows_agent),&apos;999,999,999.00&apos;)||the_unit kpi_value1, 
+TO_CHAR(ROUND((winclusterfs+windows+windows_agent)/DECODE(modified_sent,0,null,modified_sent)*100,2))||&apos;%&apos; kpi_value2 
+FROM t0,t1, var</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100697</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;sort_order&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;kpi_metric&quot;,&quot;label&quot;:&quot;Key Performance Indicator&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;left&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;kpi_value1&quot;,&quot;label&quot;:&quot;Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;kpi_value2&quot;,&quot;label&quot;:&quot;%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>APTARE Instant Avamar Assessment Part 3</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Key Performance Indicator</caption>
+                    <name>kpi_metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>left</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Value</caption>
+                    <name>kpi_value1</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>%</caption>
+                    <name>kpi_value2</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Avamar Server: ${queryCombo1} *Values in: ${freeCombo1} </string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>./WejbV+3f7uU5xhP1le4BceVbbVzNfTSnIkCvbI+/bA=

@@ -1,0 +1,21 @@
+---
+title: "NetApp Volume Available Capacity POP Forecast"
+report_id: 1128
+rtd_name: "NetApp Volume Available Capacity POP Forecast.rtd"
+description: "NetApp Volume Available Capacity POP Forecast"
+problem_statement: "Shows when a NetApp Volume will run out of capacity using a Period Over Period algorithm."
+author: "rich.rose@aptare.com"
+modified_date: "2023-07-14"
+download_count: 0
+has_video: false
+video_url: ""
+thumbnail: true
+has_sample: true
+has_sql: true
+sql_query: "--Author: rich.rose@aptare.com\n--Last Modified: 05/22/2014\n--Computes the future capacity of an Data Domain based on \n--a Period over Period forecasting method\n--SELECT DISTINCT system_name|| '-' ||volume_name host_key, system_name|| '-' ||volume_name host_value FROM aps_v_nap_volume ORDER BY 1\nWITH \nd0 AS (--Convert the human readable date selection to numeric values\nSELECT\nDECODE('${freeCombo1}','Day',1,'Week',7,'Month',31,'Quarter',93,'Year',365.24) nbr_of_days,\nto_number('${freeCombo2}') forecast_periods,\nDECODE('${freeCombo3}',\n'KB',1,'MB',(1024),'GB',(1024*1024),'TB',(1024*1024*1024),'PB',(1024*1024*1024*1024)) div_by \nFROM apt_v_dual\n),\na0 AS (--Get all the capacity merics for each period\nSELECT \nvl.nap_volume_id,\nTRUNC(vl.log_date,DECODE('${freeCombo1}','Day','DD','Week','WW','Month','MM','Quarter','Q','Year','YY')) log_date,\nROW_NUMBER() OVER (PARTITION BY vl.nap_volume_id ORDER BY vl.nap_volume_id) row_number,\nROUND(MAX((vl.total_size_kb - vl.used_size_kb)/div_by),2) available\nFROM aps_v_nap_volume_log vl, aps_v_nap_volume_log v, d0 \nWHERE vl.log_date BETWEEN ${startDate} AND ${endDate}\nAND vl.nap_volume_id = v.nap_volume_id\nAND v.system_name|| '-' ||v.volume_name = '${queryCombo1}'\nGROUP BY vl.nap_volume_id,trunc(vl.log_date,DECODE('${freeCombo1}','Day','DD','Week','WW','Month','MM','Quarter','Q','Year','YY'))\n),\na1 AS (\nSELECT \nnap_volume_id,\nlog_date,\nrow_number,\nROUND(SUM(available),2) available\nFROM a0\nGROUP BY nap_volume_id,log_date,row_number\n),\np0 AS (--Get the first and last period number for each array & pool \nSELECT\nnap_volume_id,\nMIN(row_number) first_period_number, --First period will always be 1\nMAX(row_number) last_period_number, --Last period is the current period or last time data was collected\nmin(log_date) first_period_date,\nMAX(log_date) last_period_date,\nCOUNT(log_date) period_count\nFROM a1\nGROUP BY \nnap_volume_id\n),\npop1 AS (--Get the first and last period metrics based on the row number of the periods\nSELECT\na1.nap_volume_id, \nMAX(last_period_number) nbr_of_periods,\nSUM(DECODE(a1.row_number,first_period_number,a1.available,0)) first_available,\nSUM(DECODE(a1.row_number,last_period_number,a1.available,0)) last_available\nFROM a1,p0\nWHERE a1.nap_volume_id = p0.nap_volume_id\nGROUP BY a1.nap_volume_id\n),\npop2 AS (--Calculate the Period Over Period Changes\nSELECT\nnap_volume_id, \nfirst_available,\nlast_available,\nROUND((last_available - first_available),2) pop_available_delta,\nROUND((last_available - first_available) / DECODE(nbr_of_periods,0,null,nbr_of_periods),2) pop_available_trend\nFROM pop1\n) \nSELECT --Plot the prior history\na1.log_date, \na1.available,\n0 future_available,\npop2.last_available - (pop2.pop_available_trend*(period_count-ROWNUM)) available_trend_line\nFROM a1, p0, pop2\nWHERE a1.nap_volume_id = pop2.nap_volume_id\nAND a1.nap_volume_id = p0.nap_volume_id\nUNION ALL --Future values\nSELECT \ntrunc(the_date,DECODE('${freeCombo1}','Day','DD','Week','WW','Month','MM','Quarter','Q','Year','YY')) log_date,\n0 available,\npop2.last_available + (pop2.pop_available_trend * ROWNUM) future_available,\npop2.last_available + (pop2.pop_available_trend * ROWNUM) available_trend_line\nFROM a1, pop2, d0, p0, TABLE(rtd.APTlistOfDates(p0.last_period_date + d0.nbr_of_days,p0.last_period_date + (d0.forecast_periods*d0.nbr_of_days),DECODE('${freeCombo1}','Day',11,'Week',12,'Month',13,'Quarter',14,'Year',15))) the_dates\nWHERE a1.nap_volume_id = pop2.nap_volume_id\nAND a1.nap_volume_id = p0.nap_volume_id\nAND a1.row_number = p0.period_count --Only need the last row\nORDER BY 1"
+has_explanation: false
+products: [{"slug": "capacity-manager-general-all-storage-vendors", "name": "General (All Storage Vendors)"}]
+categories: []
+product_slugs: ["capacity-manager-general-all-storage-vendors"]
+category_slugs: []
+---

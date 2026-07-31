@@ -1,0 +1,677 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>Mon-Thur Weekday, Fri PM -Monday AM = Weekend Blackout Window checks</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>d4edfff0-8783-4ab0-9b19-94b13d62406d</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>2023-01-12: Mon-Thur Weekday, Fri PM - Monday AM = Weekend Blackout Window checks</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Check for Backup Window Exceptions - Weekdays and entire weekend open</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeText</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>dataType2</string>
+                    <string>number</string>
+                  </entry>
+                  <entry>
+                    <string>freeText2</string>
+                    <string>Blackout start time (24 hour clock)</string>
+                  </entry>
+                  <entry>
+                    <string>dataType3</string>
+                    <string>number</string>
+                  </entry>
+                  <entry>
+                    <string>freeText3</string>
+                    <string>Blackout end time (24 hour clock)</string>
+                  </entry>
+                  <entry>
+                    <string>freeTextDefaultValue3</string>
+                    <string>17</string>
+                  </entry>
+                  <entry>
+                    <string>freeTextDefaultValue2</string>
+                    <string>7</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Check for Backup Window Exceptions - Weekdays and entire weekend open</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>-- Author: ernie.bergan@veritas.com
+-- Last Modified January 12, 2024
+-- Added selection of specific job types.
+/*  NBU job types as of 2022/08/12 - list in APT_JOB_TYPE  ---
+101	Full Backup
+102	Differential Incr Backup
+137	Cumulative Incr Backup
+103	Catalog Backup
+112	Application Backup
+104	Archive
+105	Restore
+106	Verify
+107	Duplication
+108	Import
+109	Vault
+110	Label
+111	Media Erase
+113	Tape Mount Request
+114	Tape Drive Cleaning
+115	Format Optical Media
+116	Inventory Library
+117	DB Recovery
+118	Media Listing
+119	Qualification
+120	Live Update
+121	Replication Duplicate
+122	Replication Import
+123	Replication (Snapshot)
+130	Snapshot
+124	Snap Index
+125	Backup From Snapshot
+126	Import (Snapshot)
+127	Application State Capture
+128	Indexing
+129	Index Cleanup
+131	Activate Instant Recovery
+132	Deactivate Instant Recovery
+133	Reactivate Instant Recovery
+134	Stop Instant Recovery
+135	Instant Recovery
+136	Image Cleanup
+138	Automatic Schedule
+139	RMAN Catalog
+140	Lock VM
+141	Deployment
+142	Instant Access
+143	Cloud Snapshot Replication
+*/
+-- Last Modified July 17, 2022
+-- Removed incorrect call against apt_v_job_detail
+-- Added check to exclude jobs without finish_date
+-- Added faster logic for NBU policy name resolution
+
+-- Previously Modified June 27, 2022
+-- Added regular date and scoping
+-- Removed any restrictions on rows returns, added primary server, client, policy, job types to each row.
+
+-- Original report logic was hardcoded to:
+-- Computations for Backup windows that are defined:
+-- Monday 5 PM to 7 AM next day  (day of week = 1)
+-- Tuesday 5 PM to 7 AM next day (day of week = 2)
+-- Wednesday 5 PM to 7 AM next day
+-- Thursday 5 PM to 7 AM next day  (day of week= 4)
+-- Friday 5 PM to 7 AM Monday  (day of week=5:Friday 6:Saturday 7: Sunday
+--
+-- IMPORTANT:  Jobs that start in the blackout window for a given day will be flagged that their backup window --opened at 5 PM of the next backup window
+-- Any job exceeding 24 hours duration will be flagged in job_finish_check.
+With t1 as (
+select job_id from apt_v_job where start_date between ${startDate} and ${endDate} --sysdate-30 and sysdate
+and finish_date is not null
+and client_id in (${hosts})
+AND job_type in (101,102,103,137,112,121,122)
+),
+sliced AS (
+SELECT 
+1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;) Day_of_week_int,
+DECODE((1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;)),1,&apos;MON&apos;,2,&apos;TUE&apos;,3,&apos;WED&apos;,4,&apos;THU&apos;,5,&apos;FRI&apos;,6,&apos;SAT&apos;,7,&apos;SUN&apos;) day_of_week_start,
+DECODE((1 + TRUNC(j.finish_date) - TRUNC(j.finish_date,&apos;IW&apos;)),1,&apos;MON&apos;,2,&apos;TUE&apos;,3,&apos;WED&apos;,4,&apos;THU&apos;,5,&apos;FRI&apos;,6,&apos;SAT&apos;,7,&apos;SUN&apos;) day_of_week_finish,
+DECODE((1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;)),5,&apos;Weekend&apos;,6,&apos;Weekend&apos;,7,&apos;Weekend&apos;,&apos;Weekday&apos;) week_day_or_end,
+j.start_date,
+j.finish_date,
+to_char(j.start_date,&apos;DD-MON-YY HH24:MI:SS&apos;) start_date_char,
+to_char(j.finish_date,&apos;DD-MON-YY HH24:MI:SS&apos;) finish_date_char,
+CASE -- Compute backup window opening
+WHEN 1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;) = 1 THEN --Monday 
+  CASE WHEN (j.start_date - TRUNC(j.start_date)) &lt; ${freeText2}/24 THEN  --Window opened previous Friday at 5 PM
+  trunc(j.start_date) - ${freeText2}/24 - 2
+  ELSE -- after the blackout window.  Start window at end of blackout
+  trunc(j.start_date) + ${freeText3}/24
+  END 
+WHEN 1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;) between 2 AND 4 THEN --Tuesday thru Thursday
+  CASE WHEN (j.start_date - TRUNC(j.start_date)) &lt; ${freeText2}/24 THEN  --same day as window closes
+  trunc(j.start_date) - ${freeText2}/24 
+  ELSE -- after the blackout window.  Start window at end of blackout window
+  trunc(j.start_date) + ${freeText3}/24
+  END 
+ELSE  -- A Friday, Saturday, or Sunday, so backup window begins Friday at end of blackout 
+  CASE WHEN (j.start_date - TRUNC(j.start_date)) &lt; ${freeText2}/24 THEN  
+  trunc(j.start_date) - ${freeText2}/24 - (TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;) - 5)
+  ELSE -- after the blackout window.  Start window at end of blackout
+  trunc(j.start_date) + ${freeText3}/24 - ((1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;) - 5))
+  END 
+END window_opens,
+
+CASE 
+WHEN (1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;)) = 1 THEN -- Monday
+  CASE WHEN (j.start_date - TRUNC(j.start_date)) &lt; ${freeText2}/24 THEN  --same day as window closes, before window close
+    trunc(j.start_date) + ${freeText2}/24
+  ELSE -- after the blackout window.  Start window at blackout the next day
+    trunc(j.start_date) + 1 + ${freeText2}/24
+  END
+WHEN (1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;)) between 2 AND 4 THEN --Tuesday thru Thursday
+  CASE WHEN (j.start_date - TRUNC(j.start_date)) &lt; ${freeText2}/24 THEN  --same day as window closes, before window close
+    trunc(j.start_date) + ${freeText2}/24
+  ELSE -- after the blackout window.  Start window at end of blackout next day
+    trunc(j.start_date) + 1 + ${freeText2}/24
+  END
+ELSE -- A Friday, Saturday, or Sunday, so backup window ends Monday at beginning of blackout
+    trunc(j.start_date) + ${freeText2}/24 + (8 - (1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;)))
+END window_closes,
+
+CASE WHEN (j.start_date - TRUNC(j.start_date)) between ${freeText2}/24 and ${freeText3}/24 AND DECODE((1 + TRUNC(j.start_date) - TRUNC(j.start_date,&apos;IW&apos;)),1,&apos;MON&apos;,2,&apos;TUE&apos;,3,&apos;WED&apos;,4,&apos;THU&apos;,5,&apos;FRI&apos;,6,&apos;SAT&apos;,7,&apos;SUN&apos;) NOT IN (&apos;SAT&apos;,&apos;SUN&apos;) THEN
+   &apos;Job Start in Blackout Window&apos;
+ELSE
+   &apos;No violation&apos;
+END Job_start_check,
+
+CASE WHEN j.finish_date-j.start_date &gt; 1 THEN
+   &apos;Job ran more than 24 hours&apos;
+WHEN (j.finish_date - TRUNC(j.finish_date)) between ${freeText2}/24 and ${freeText3}/24 AND DECODE((1 + TRUNC(j.finish_date) - TRUNC(j.finish_date,&apos;IW&apos;)),1,&apos;MON&apos;,2,&apos;TUE&apos;,3,&apos;WED&apos;,4,&apos;THU&apos;,5,&apos;FRI&apos;,6,&apos;SAT&apos;,7,&apos;SUN&apos;) NOT IN (&apos;SAT&apos;,&apos;SUN&apos;) THEN
+   &apos;Job Finish in Blackout Window&apos;
+ELSE
+   &apos;No violation&apos;
+END Job_finish_check,
+t1.job_id,
+j.server_name,
+j.client_name,
+j.job_type_name
+from apt_v_job j, t1
+where j.job_id = t1.job_id 
+)
+--select * from sliced
+,pname as (
+select t1.job_id, policy_name
+FROM t1, apt_v_nbu_job_detail jd
+WHERE t1.job_id = jd.job_id
+)
+--select * from pname;
+select day_of_week_int,day_of_week_start,week_day_or_end, start_date,window_opens,
+finish_date, day_of_week_finish,window_closes, job_start_check, job_finish_check,
+CASE WHEN finish_date &gt; window_closes then
+&apos;Job finishes after window closed&apos;
+ELSE
+&apos;OK&apos;
+END Post_Process_window_chk,
+s.job_id,
+server_name,
+client_name,
+policy_name,
+job_type_name
+from sliced s, pname
+WHERE s.job_id = pname.job_id (+)
+--where job_start_check != &apos;No violation&apos;  OR job_finish_check != &apos;No violation&apos; OR j.finish_date &gt; window_closes
+order by start_date, client_name</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100082</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100586</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;day_of_week_int&quot;,&quot;label&quot;:&quot;day_of_week_int&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;day_of_week_start&quot;,&quot;label&quot;:&quot;Day of Week Start&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;week_day_or_end&quot;,&quot;label&quot;:&quot;Weekday or Weekend&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;start_date&quot;,&quot;label&quot;:&quot;Start Date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;window_opens&quot;,&quot;label&quot;:&quot;Backup Window Opens&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;finish_date&quot;,&quot;label&quot;:&quot;Finish Date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;day_of_week_finish&quot;,&quot;label&quot;:&quot;Day of Week Finish&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;window_closes&quot;,&quot;label&quot;:&quot;Backup Window Closes&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;job_start_check&quot;,&quot;label&quot;:&quot;Job Start Check&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;job_finish_check&quot;,&quot;label&quot;:&quot;Job Finish Check&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;post_process_window_chk&quot;,&quot;label&quot;:&quot;24 hour check&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;job_id&quot;,&quot;label&quot;:&quot;Job ID&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;########&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=backupDetails&amp;jobId=${row[&apos;job_id&apos;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;server_name&quot;,&quot;label&quot;:&quot;Primary Server&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;client_name&quot;,&quot;label&quot;:&quot;Client Name&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;policy_name&quot;,&quot;label&quot;:&quot;Policy Name&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;job_type_name&quot;,&quot;label&quot;:&quot;Job Type&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Check for Backup Window Exceptions - Weekdays and entire weekend open</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>day_of_week_int</caption>
+                    <name>day_of_week_int</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Day of Week Start</caption>
+                    <name>day_of_week_start</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Weekday or Weekend</caption>
+                    <name>week_day_or_end</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Start Date</caption>
+                    <name>start_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Backup Window Opens</caption>
+                    <name>window_opens</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Finish Date</caption>
+                    <name>finish_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Day of Week Finish</caption>
+                    <name>day_of_week_finish</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Backup Window Closes</caption>
+                    <name>window_closes</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Job Start Check</caption>
+                    <name>job_start_check</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Job Finish Check</caption>
+                    <name>job_finish_check</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>24 hour check</caption>
+                    <name>post_process_window_chk</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Job ID</caption>
+                    <name>job_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>########</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=backupDetails&amp;jobId=${row[&apos;job_id&apos;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Primary Server</caption>
+                    <name>server_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client Name</caption>
+                    <name>client_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Policy Name</caption>
+                    <name>policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Job Type</caption>
+                    <name>job_type_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Weekday Blackout Window Begins at ${freeText2} and Ends at ${freeText3}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.ZbS2RTG4SaksJkMFPOwLRB74brINJNZwdfw+R+IWEac=

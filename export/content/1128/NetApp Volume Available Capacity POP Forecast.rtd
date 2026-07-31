@@ -1,0 +1,462 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>f6bdfe16-5947-43ae-859f-991c977433be</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>NetApp Volume Available Capacity POP Forecast</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NetApp Volume Available Capacity POP Forecast</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>1,2,3,4,5,6,7,8,9,10,11,12,24,36,48</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Forecast Periods: </string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>PB,TB,GB,MB,KB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>Day,Week,Month,Quarter,Year</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Group by:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT DISTINCT system_name|| &apos;-&apos; ||volume_name host_key, system_name|| &apos;-&apos; ||volume_name host_value FROM aps_v_nap_volume ORDER BY 1</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>System - Volume:</string>
+                  </entry>
+                  <entry>
+                    <string>sql</string>
+                    <string>SELECT DISTINCT system_name|| &apos;-&apos; ||volume_name host_key, system_name|| &apos;-&apos; ||volume_name host_value FROM aps_v_nap_volume ORDER BY 1</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NetApp Volume Available Capacity POP Forecast</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 05/22/2014
+--Computes the future capacity of an Data Domain based on 
+--a Period over Period forecasting method
+--SELECT DISTINCT system_name|| &apos;-&apos; ||volume_name host_key, system_name|| &apos;-&apos; ||volume_name host_value FROM aps_v_nap_volume ORDER BY 1
+WITH 
+d0 AS (--Convert the human readable date selection to numeric values
+SELECT
+DECODE(&apos;${freeCombo1}&apos;,&apos;Day&apos;,1,&apos;Week&apos;,7,&apos;Month&apos;,31,&apos;Quarter&apos;,93,&apos;Year&apos;,365.24) nbr_of_days,
+to_number(&apos;${freeCombo2}&apos;) forecast_periods,
+DECODE(&apos;${freeCombo3}&apos;,
+&apos;KB&apos;,1,&apos;MB&apos;,(1024),&apos;GB&apos;,(1024*1024),&apos;TB&apos;,(1024*1024*1024),&apos;PB&apos;,(1024*1024*1024*1024)) div_by 
+FROM apt_v_dual
+),
+a0 AS (--Get all the capacity merics for each period
+SELECT 
+vl.nap_volume_id,
+TRUNC(vl.log_date,DECODE(&apos;${freeCombo1}&apos;,&apos;Day&apos;,&apos;DD&apos;,&apos;Week&apos;,&apos;WW&apos;,&apos;Month&apos;,&apos;MM&apos;,&apos;Quarter&apos;,&apos;Q&apos;,&apos;Year&apos;,&apos;YY&apos;)) log_date,
+ROW_NUMBER() OVER (PARTITION BY vl.nap_volume_id ORDER BY vl.nap_volume_id) row_number,
+ROUND(MAX((vl.total_size_kb - vl.used_size_kb)/div_by),2) available
+FROM aps_v_nap_volume_log vl, aps_v_nap_volume_log v, d0 
+WHERE vl.log_date BETWEEN ${startDate} AND ${endDate}
+AND vl.nap_volume_id = v.nap_volume_id
+AND v.system_name|| &apos;-&apos; ||v.volume_name = &apos;${queryCombo1}&apos;
+GROUP BY vl.nap_volume_id,trunc(vl.log_date,DECODE(&apos;${freeCombo1}&apos;,&apos;Day&apos;,&apos;DD&apos;,&apos;Week&apos;,&apos;WW&apos;,&apos;Month&apos;,&apos;MM&apos;,&apos;Quarter&apos;,&apos;Q&apos;,&apos;Year&apos;,&apos;YY&apos;))
+),
+a1 AS (
+SELECT 
+nap_volume_id,
+log_date,
+row_number,
+ROUND(SUM(available),2) available
+FROM a0
+GROUP BY nap_volume_id,log_date,row_number
+),
+p0 AS (--Get the first and last period number for each array &amp; pool 
+SELECT
+nap_volume_id,
+MIN(row_number) first_period_number, --First period will always be 1
+MAX(row_number) last_period_number, --Last period is the current period or last time data was collected
+min(log_date) first_period_date,
+MAX(log_date) last_period_date,
+COUNT(log_date) period_count
+FROM a1
+GROUP BY 
+nap_volume_id
+),
+pop1 AS (--Get the first and last period metrics based on the row number of the periods
+SELECT
+a1.nap_volume_id, 
+MAX(last_period_number) nbr_of_periods,
+SUM(DECODE(a1.row_number,first_period_number,a1.available,0)) first_available,
+SUM(DECODE(a1.row_number,last_period_number,a1.available,0)) last_available
+FROM a1,p0
+WHERE a1.nap_volume_id = p0.nap_volume_id
+GROUP BY a1.nap_volume_id
+),
+pop2 AS (--Calculate the Period Over Period Changes
+SELECT
+nap_volume_id, 
+first_available,
+last_available,
+ROUND((last_available - first_available),2) pop_available_delta,
+ROUND((last_available - first_available) / DECODE(nbr_of_periods,0,null,nbr_of_periods),2) pop_available_trend
+FROM pop1
+) 
+SELECT --Plot the prior history
+a1.log_date, 
+a1.available,
+0 future_available,
+pop2.last_available - (pop2.pop_available_trend*(period_count-ROWNUM)) available_trend_line
+FROM a1, p0, pop2
+WHERE a1.nap_volume_id = pop2.nap_volume_id
+AND a1.nap_volume_id = p0.nap_volume_id
+UNION ALL --Future values
+SELECT 
+trunc(the_date,DECODE(&apos;${freeCombo1}&apos;,&apos;Day&apos;,&apos;DD&apos;,&apos;Week&apos;,&apos;WW&apos;,&apos;Month&apos;,&apos;MM&apos;,&apos;Quarter&apos;,&apos;Q&apos;,&apos;Year&apos;,&apos;YY&apos;)) log_date,
+0 available,
+pop2.last_available + (pop2.pop_available_trend * ROWNUM) future_available,
+pop2.last_available + (pop2.pop_available_trend * ROWNUM) available_trend_line
+FROM a1, pop2, d0, p0, TABLE(rtd.APTlistOfDates(p0.last_period_date + d0.nbr_of_days,p0.last_period_date + (d0.forecast_periods*d0.nbr_of_days),DECODE(&apos;${freeCombo1}&apos;,&apos;Day&apos;,11,&apos;Week&apos;,12,&apos;Month&apos;,13,&apos;Quarter&apos;,14,&apos;Year&apos;,15))) the_dates
+WHERE a1.nap_volume_id = pop2.nap_volume_id
+AND a1.nap_volume_id = p0.nap_volume_id
+AND a1.row_number = p0.period_count --Only need the last row
+ORDER BY 1</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100966</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>*All values in (${freeCombo3})</string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;log_date&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;available&quot;,&quot;label&quot;:&quot;Available&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;#C79900&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;${row[&apos;available&apos;].data}&quot;,&quot;additionalDetail&quot;:&quot;${row[&apos;available&apos;].data}&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;future_available&quot;,&quot;label&quot;:&quot;Future Available&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;#BFC2C9&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;${row[&apos;future_available&apos;].data}&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;available_trend_line&quot;,&quot;label&quot;:&quot;Trend&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;#983222&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NetApp Volume Available Capacity POP Forecast</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedBarChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Date</caption>
+                    <name>log_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Available</caption>
+                    <name>available</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#C79900</color>
+                    <secondaryColor>#C79900</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&apos;available&apos;].data}</additionalDetail>
+                    <drillDown>${row[&apos;available&apos;].data}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Future Available</caption>
+                    <name>future_available</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#BFC2C9</color>
+                    <secondaryColor>#BFC2C9</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&apos;future_available&apos;].data}</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Trend</caption>
+                    <name>available_trend_line</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#983222</color>
+                    <secondaryColor>#983222</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>NetApp Volume: ${queryCombo1}  available capacity based on a Period-Over-Period forecasting algorithm</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.fqLCE3hU3QPRMhTGtJsgo+neESXRxLOsowwlAzfANYI=

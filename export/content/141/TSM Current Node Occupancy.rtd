@@ -1,0 +1,259 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>1</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>WITH 
+f1 AS (
+SELECT n.node_id, n.client_id, f.filespace_id
+    FROM apt_v_tsm_node n,
+         apt_v_tsm_filespace f
+    WHERE n.client_id IN (${hosts})
+      AND n.node_id    = f.node_id
+),
+sp AS (
+SELECT f1.client_id, f1.node_id, SUM(p.stg_pool_phy_kbytes) sum_kbytes
+    FROM f1, apt_v_tsm_stgpool_contents p
+    WHERE f1.client_id    = p.client_id
+      AND f1.filespace_id = p.filespace_id
+    GROUP BY f1.client_id, f1.node_id
+),
+vo AS (
+SELECT f1.client_id, f1.node_id, COUNT(UNIQUE v.volume_id) count_volumes
+    FROM f1, apt_v_tsm_volume_contents v
+    WHERE f1.client_id    = v.client_id
+      AND f1.filespace_id = v.filespace_id
+      AND v.volume_type   = &#039;T&#039;
+    GROUP BY f1.client_id, f1.node_id         
+)    
+SELECT i.instance_name, s.hostname tcp_name, n.node_name, 
+       sp.sum_kbytes/1024/1024 sum_GB, vo.count_volumes
+    FROM sp, vo,
+         apt_v_tsm_node n,
+         apt_v_server s,
+         apt_v_server_instance i
+    WHERE sp.client_id  = s.server_id
+      AND sp.client_id  = vo.client_id
+      AND sp.node_id    = vo.node_id
+      AND sp.node_id    = n.node_id
+      AND n.server_instance_id = i.server_instance_id
+    ORDER BY Upper(i.instance_name), Upper(s.hostname), Upper(n.node_name)</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>TSM Current Node Occupancy</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDecorator</className>
+        <data>
+          <entry>
+            <string>headers</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>spanningCaptions</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>columns</string>
+            <list>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Instance</caption>
+                <fieldName>instance_name</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Client TCP Name</caption>
+                <fieldName>tcp_name</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Node</caption>
+                <fieldName>node_name</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Occupancy(GB)</caption>
+                <fieldName>sum_gb</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Tape Count</caption>
+                <fieldName>count_volumes</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>TSM Current Node Occupancy</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>numberOfGridColumns</string>
+            <int>3</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Instance&quot;,&quot;name&quot;:&quot;instance_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Client TCP Name&quot;,&quot;name&quot;:&quot;tcp_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Node&quot;,&quot;name&quot;:&quot;node_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Occupancy(GB)&quot;,&quot;name&quot;:&quot;sum_gb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Tape Count&quot;,&quot;name&quot;:&quot;count_volumes&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>TSM Current Node Occupancy</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

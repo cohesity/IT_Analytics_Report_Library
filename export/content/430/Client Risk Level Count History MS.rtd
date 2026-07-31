@@ -1,0 +1,611 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>*NOTE: CL means it accepts individual clients or host groups of clients. To report on all the clients associated with a backup server or multiple backup servers, use the report Client Overall Status History MS</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>2</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>d3523ccf-2f3c-4ae0-8696-78aadb330fba</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>10</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*09/17/2018 Bar chart of the daily number of clients at their various risk levels</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Client Risk Level Count History MS</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>defaultTimePeriod</string>
+                    <string>1014</string>
+                  </entry>
+                  <entry>
+                    <string>showTime</string>
+                    <string>true</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                  <entry>
+                    <string>hideCascade</string>
+                    <string>false</string>
+                  </entry>
+                  <entry>
+                    <string>cascade</string>
+                    <string>true</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeText</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeText1</string>
+                    <string>Client Name Like:</string>
+                  </entry>
+                  <entry>
+                    <string>freeTextDefaultValue1</string>
+                    <string>*</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Risk Level:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>High,Med,High &amp; Med,High &amp; Med &amp; Low,Med &amp; Low,Low,No,All</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>All</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Client Risk Level Count History MS</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 09/17/2018
+WITH 
+ss AS (--Count up the various summary status
+SELECT					
+TRUNC(start_date) the_start_date,
+product_type_name,
+server_id,					
+server_name,
+client_id,
+client_name,
+COUNT(*) job_count,
+SUM(DECODE(summary_status,0,1,0)) s_count,					
+SUM(DECODE(summary_status,1,1,0)) w_count,					
+SUM(DECODE(summary_status,2,1,0)) f_count,					
+SUM(DECODE(summary_status,NULL,1,0)) i_count,
+SUM(CASE WHEN duration_secs/60/60 &gt; 24 THEN 1 ELSE 0 END) over_24_count,
+--Normally a NULL summary_status would indicate a job is still running past cuttoff
+--but for historical reporting I will assume a job running for &gt; 24 hrs to be incomplete relative
+--to it&#039;s start date
+MIN(start_date) min_start_date,
+MAX(start_date) max_start_date,
+MIN(finish_date) min_finish_date,
+MAX(finish_date) max_finish_date,
+aptStringConcat(DISTINCT job_type_name) job_types,
+aptStringConcat(DISTINCT vendor_status) status_states,
+SUM(kilobytes/1024/1024)  job_size_gb					
+FROM apt_v_job				
+WHERE 
+TRUNC(start_date) BETWEEN TRUNC(${startDate}) AND TRUNC(${endDate})
+AND server_id IN (${hosts})
+AND REGEXP_LIKE(client_name,&#039;${freeText1}&#039;)					
+GROUP BY
+TRUNC(start_date),
+product_type_name,
+server_id,					
+server_name,
+client_id,					
+client_name
+),
+sc AS (--Assign the Secret Code
+SELECT
+the_start_date,
+min_start_date,
+max_start_date,
+min_finish_date,
+max_finish_date,
+product_type_name,
+server_id,					
+server_name,
+client_id,					
+client_name,
+job_count,
+--If the have any status 0,1,2 or NULL assign an exponential number to represent it
+CASE WHEN s_count &gt; 0 THEN 1 ELSE 0 END s_code,					
+CASE WHEN w_count &gt; 0 THEN 2 ELSE 0 END w_code,					
+CASE WHEN f_count &gt; 0 THEN 4 ELSE 0 END f_code,					
+CASE WHEN (NVL(i_count,0) + over_24_count) &gt; 0 THEN 8 ELSE 0 END i_code,
+--The secret code is the sum of the individual exponential numbers (every combination will be unique)
+CASE WHEN s_count &gt; 0 THEN 1 ELSE 0 END +					
+CASE WHEN w_count &gt; 0 THEN 2 ELSE 0 END +					
+CASE WHEN f_count &gt; 0 THEN 4 ELSE 0 END +					
+CASE WHEN (NVL(i_count,0) + over_24_count) &gt; 0 THEN 8 ELSE 0 END secret_code,				
+--The counts will represent how many actual successes vs failures 
+s_count,
+w_count,
+f_count,
+(NVL(i_count,0) + over_24_count) i_count,
+job_types,
+status_states,
+job_size_gb
+FROM ss
+),
+t1 AS (
+--Decode the secret_code and display the overall client status 
+SELECT 
+the_start_date,
+TO_CHAR(the_start_date,&#039;MM/DD&#039;) start_month_day_char,
+TO_CHAR(the_start_date,&#039;MM/DD/YYYY&#039;) start_date_char,
+min_start_date,
+max_start_date,
+min_finish_date,
+max_finish_date,
+product_type_name,
+server_id,
+server_name,
+client_id,
+client_name,
+server_name||&#039; - &#039;||client_name server_client,
+secret_code,
+job_count,
+DECODE(secret_code,				
+ 1 , &#039;Successful&#039;,--No 				
+ 2 , &#039;Warnings&#039;,--Low 				
+ 3 , &#039;Successful &amp; Warnings&#039;,--Low 				
+ 4 , &#039;Failed&#039;,--High 				
+ 5 , &#039;Successful &amp; Failed&#039;,--Med 				
+ 6 , &#039;Warnings &amp; Failed&#039;,--Med 				
+ 7 , &#039;Successful &amp; Warnings &amp; Failed&#039;,--Med 				
+ 8 , &#039;Incomplete&#039;,--High 				
+ 9 , &#039;Successful &amp; Incomplete&#039;,--Med 				
+10 , &#039;Warnings &amp; Incomplete&#039;,--Med 				
+11 , &#039;Successful &amp; Warnings &amp; Incomplete&#039;,--Med 				
+12 , &#039;Failed &amp; Incomplete&#039;,--High 				
+13 , &#039;Successful &amp; Failed &amp; Incomplete&#039;,--Med 				
+14 , &#039;Warnings &amp; Failed &amp; Incomplete&#039;,--Med 				
+15 , &#039;Successful &amp; Warnings &amp; Failed &amp; Incomplete&#039;,--Med 				
+&#039;Other&#039;) overall_client_status,
+DECODE(secret_code,				
+ 1 , &#039;&lt;img src=/images/ostatus01.gif&gt;&#039;, 				
+ 2 , &#039;&lt;img src=/images/ostatus02.gif&gt;&#039;, 				
+ 3 , &#039;&lt;img src=/images/ostatus03.gif&gt;&#039;, 				
+ 4 , &#039;&lt;img src=/images/ostatus04.gif&gt;&#039;, 				
+ 5 , &#039;&lt;img src=/images/ostatus05.gif&gt;&#039;, 				
+ 6 , &#039;&lt;img src=/images/ostatus06.gif&gt;&#039;, 				
+ 7 , &#039;&lt;img src=/images/ostatus07.gif&gt;&#039;, 				
+ 8 , &#039;&lt;img src=/images/ostatus08.gif&gt;&#039;, 				
+ 9 , &#039;&lt;img src=/images/ostatus09.gif&gt;&#039;, 				
+10 , &#039;&lt;img src=/images/ostatus10.gif&gt;&#039;, 				
+11 , &#039;&lt;img src=/images/ostatus11.gif&gt;&#039;, 				
+12 , &#039;&lt;img src=/images/ostatus12.gif&gt;&#039;, 				
+13 , &#039;&lt;img src=/images/ostatus13.gif&gt;&#039;, 				
+14 , &#039;&lt;img src=/images/ostatus14.gif&gt;&#039;, 				
+15 , &#039;&lt;img src=/images/ostatus15.gif&gt;&#039;, 				
+&#039;Other&#039;) ostatus_dot,
+DECODE(secret_code,				
+ 1 , &#039;No&#039;, 				
+ 2 , &#039;Low&#039;, 				
+ 3 , &#039;Low&#039;, 				
+ 4 , &#039;High&#039;, 				
+ 5 , &#039;Med&#039;, 				
+ 6 , &#039;Med&#039;, 				
+ 7 , &#039;Med&#039;, 				
+ 8 , &#039;High&#039;, 				
+ 9 , &#039;Med&#039;, 				
+10 , &#039;Med&#039;, 				
+11 , &#039;Med&#039;, 				
+12 , &#039;High&#039;, 				
+13 , &#039;Med&#039;, 				
+14 , &#039;Med&#039;, 				
+15 , &#039;Med&#039;, 				
+&#039;Other&#039;) client_risk_level,
+CASE WHEN s_count &gt; 0 THEN &#039;green&#039; ELSE null END s_dot,					
+CASE WHEN w_count &gt; 0 THEN &#039;yellow&#039; ELSE null END w_dot,					
+CASE WHEN f_count &gt; 0 THEN &#039;red&#039; ELSE null END f_dot,					
+CASE WHEN i_count &gt; 0 THEN &#039;white&#039; ELSE null END i_dot,
+s_count,
+w_count,
+f_count,
+i_count,
+job_types,
+status_states,
+job_size_gb
+FROM sc
+WHERE
+REGEXP_LIKE (secret_code, DECODE(&#039;${freeCombo1}&#039;,
+&#039;High&#039;,&#039;^4|^8|^12&#039;,
+&#039;Med&#039;,&#039;^5|^6|^7|^9|^10|^11|^13|^14|^15&#039;,
+&#039;High &amp; Med&#039;,&#039;^4|^8|^12|^5|^6|^7|^9|^10|^11|^13|^14|^15&#039;,
+&#039;High &amp; Med &amp; Low&#039;,&#039;^2|^3|^4|^8|^12|^5|^6|^7|^9|^10|^11|^13|^14|^15&#039;,
+&#039;Med &amp; Low&#039;,&#039;^2|^3|^5|^6|^7|^9|^10|^11|^13|^14|^15&#039;,
+&#039;Low&#039;,&#039;^2|^3&#039;,
+&#039;No&#039;,&#039;?1&#039;,
+&#039;All&#039;,&#039;^1|^2|^3|^4|^5|^6|^7|^8|^9|^10|^11|^12|^13|^14|^15&#039;))
+ORDER BY the_start_date DESC, UPPER(client_name)
+)
+SELECT
+start_month_day_char,
+start_date_char,
+SUM(DECODE(client_risk_level,&#039;High&#039;,1,0)) high_risk,
+SUM(DECODE(client_risk_level,&#039;Med&#039;,1,0)) med_risk,
+SUM(DECODE(client_risk_level,&#039;Low&#039;,1,0)) low_risk,
+SUM(DECODE(client_risk_level,&#039;No&#039;,1,0)) no_risk,
+COUNT(client_id) client_count
+FROM t1
+GROUP BY
+start_month_day_char,
+start_date_char
+ORDER BY start_date_char</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>110808</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;start_month_day_char&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;start_date_char&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;start_date_char&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;high_risk&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;High Risk&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;colour&quot;:&quot;#AA000A&quot;,&quot;drilldown&quot;:&quot;templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=High&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All&quot;,&quot;additionalDetail&quot;:&quot;${row[&#039;high_risk&#039;].data} clients at high risk&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;med_risk&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Medium Risk&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;colour&quot;:&quot;#E8AE41&quot;,&quot;drilldown&quot;:&quot;templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=Med&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All&quot;,&quot;additionalDetail&quot;:&quot;${row[&#039;med_risk&#039;].data} clients at medium risk&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;low_risk&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Low Risk&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;colour&quot;:&quot;#6E8E42&quot;,&quot;drilldown&quot;:&quot;templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=Low&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All&quot;,&quot;additionalDetail&quot;:&quot;${row[&#039;low_risk&#039;].data} clients at low risk&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;no_risk&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;No Risk&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;colour&quot;:&quot;#0065A1&quot;,&quot;drilldown&quot;:&quot;templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=No&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All&quot;,&quot;additionalDetail&quot;:&quot;${row[&#039;no_risk&#039;].data} clients at no risk&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;client_count&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Client Count&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#000000&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;${row[&#039;client_count&#039;].data} Clients backed up&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Client Risk Level Count History MS</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedBarChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Date</caption>
+                    <name>start_month_day_char</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>start_date_char</caption>
+                    <name>start_date_char</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>High Risk</caption>
+                    <name>high_risk</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#AA000A</color>
+                    <secondaryColor>#AA000A</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&#039;high_risk&#039;].data} clients at high risk</additionalDetail>
+                    <drillDown>templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=High&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Medium Risk</caption>
+                    <name>med_risk</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#E8AE41</color>
+                    <secondaryColor>#E8AE41</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&#039;med_risk&#039;].data} clients at medium risk</additionalDetail>
+                    <drillDown>templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=Med&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Low Risk</caption>
+                    <name>low_risk</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#6E8E42</color>
+                    <secondaryColor>#6E8E42</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&#039;low_risk&#039;].data} clients at low risk</additionalDetail>
+                    <drillDown>templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=Low&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>No Risk</caption>
+                    <name>no_risk</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#0065A1</color>
+                    <secondaryColor>#0065A1</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&#039;no_risk&#039;].data} clients at no risk</additionalDetail>
+                    <drillDown>templateName=DailyOverallClientStatusDetail.D&amp;the_risk_level=No&amp;the_start_date_char=${row[&#039;start_date_char&#039;].data}&amp;the_client_id=All</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Client Count</caption>
+                    <name>client_count</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#000000</color>
+                    <secondaryColor>#000000</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail>${row[&#039;client_count&#039;].data} Clients backed up</additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

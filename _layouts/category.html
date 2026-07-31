@@ -1,0 +1,12 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+{% assign matching = site.reports | where_exp: "r", "r.category_slugs contains page.slug" | sort: "title" %}
+<p>{{ matching.size }} report{% unless matching.size == 1 %}s{% endunless %}</p>
+<ul class="report-list">
+  {% for r in matching %}
+  <li><a href="{{ r.url | relative_url }}">{{ r.title }}</a></li>
+  {% endfor %}
+</ul>

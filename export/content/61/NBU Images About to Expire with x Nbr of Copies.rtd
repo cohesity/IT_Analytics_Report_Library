@@ -1,0 +1,462 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Images About to Expire with x Nbr of Copies</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 11/06/2015
+WITH t1 as (
+SELECT 
+j.backup_id,
+count(j.job_id) num_copies
+FROM apt_v_nbu_job j
+WHERE j.client_id IN (${hosts})
+AND j.backup_id is not null
+AND &#039;${freeCombo1}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo1}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN j.expiration_date IS NULL THEN  &#039;Null&#039;
+        WHEN j.expiration_date &lt; sysdate THEN  &#039;Expired&#039;
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+1 THEN  &#039;1 Day&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+2 THEN  &#039;2 Days&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+3 THEN  &#039;3 Days&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+7 THEN  &#039;7 Days&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+31 THEN  &#039;1 Month&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+93 THEN  &#039;3 Months&#039;
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+186 THEN &#039;6 Months&#039;
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+365.25 THEN &#039;1 Yr&#039;
+        WHEN j.expiration_date &gt; sysdate+365.25 THEN &#039;Over 1 Yr&#039;
+      END
+   ELSE &#039;All&#039;
+ END
+GROUP BY j.backup_id
+HAVING count(j.job_id) &gt; 1
+),
+t2 as (
+SELECT 
+j.backup_id,
+count(j.job_id) num_copies
+FROM apt_v_nbu_job j
+WHERE j.client_id IN (${hosts})
+AND j.backup_id is not null
+AND &#039;${freeCombo1}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo1}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN j.expiration_date IS NULL THEN  &#039;Null&#039;
+        WHEN j.expiration_date &lt; sysdate THEN  &#039;Expired&#039;
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+1 THEN  &#039;1 Day&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+2 THEN  &#039;2 Days&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+3 THEN  &#039;3 Days&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+7 THEN  &#039;7 Days&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+31 THEN  &#039;1 Month&#039; 
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+93 THEN  &#039;3 Months&#039;
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+186 THEN &#039;6 Months&#039;
+        WHEN j.expiration_date BETWEEN sysdate AND sysdate+365.25 THEN &#039;1 Yr&#039;
+        WHEN j.expiration_date &gt; sysdate+365.25 THEN &#039;Over 1 Yr&#039;
+      END
+   ELSE &#039;All&#039;
+ END
+GROUP BY j.backup_id
+HAVING count(j.job_id) = 1
+),
+t3 as (
+SELECT
+j.client_id, 
+j.backup_id, 
+j.client_host_name,
+j.expiration_date,
+t1.num_copies,
+j.expiration_date-sysdate expire_days,
+j.finish_date
+FROM apt_v_nbu_job j,t1
+WHERE j.backup_id = t1.backup_id
+UNION ALL
+SELECT
+DISTINCT
+j.client_id, 
+j.backup_id, 
+j.client_host_name,
+j.expiration_date,
+t2.num_copies,
+j.expiration_date-sysdate expire_days,
+j.finish_date
+FROM apt_v_nbu_job j,t2
+WHERE j.backup_id = t2.backup_id
+),
+t4 as (
+SELECT DISTINCT
+client_id, 
+backup_id, 
+client_host_name,
+finish_date,
+expiration_date,
+num_copies,
+expire_days
+FROM t3
+WHERE &#039;${freeCombo2}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo2}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN num_copies = 1  THEN &#039;1 Copy&#039;
+        WHEN num_copies &gt; 1  THEN &#039;2 or More Copies&#039;
+      END
+   ELSE &#039;All&#039;
+ END
+)
+SELECT 
+client_id, 
+backup_id, 
+client_host_name,
+finish_date,
+expiration_date,
+num_copies,
+expire_days
+FROM t4</string>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>1 Day,2 Days,3 Days,7 Days,1 Month,3 Months,6 Months,1 Yr,Over 1 Yr</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>1 Copy,2 or More Copies,All</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Images Expiring In Next...</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>With...</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>a849bed2-1a74-4817-9296-27d82cab8bea</string>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>NBU Images About to Expire with x Nbr of Copies</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Images Expiring in the next ${freeCombo1} with ${freeCombo2}</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Images About to Expire with x Nbr of Copies</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>client_id</caption>
+                    <name>client_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Image ID</caption>
+                    <name>backup_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client</caption>
+                    <name>client_host_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=displayServerDetail&amp;serverId=${row[&#039;client_id&#039;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Creation Date</caption>
+                    <name>finish_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Expiration Date</caption>
+                    <name>expiration_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Nbr of  Copies</caption>
+                    <name>num_copies</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Days Until Expiration</caption>
+                    <name>expire_days</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;client_id&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;client_id&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;backup_id&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Image ID&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;client_host_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Client&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=displayServerDetail&amp;serverId=${row[&#039;client_id&#039;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;finish_date&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;label&quot;:&quot;Creation Date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;expiration_date&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;label&quot;:&quot;Expiration Date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;num_copies&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Nbr of  Copies&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;expire_days&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Days Until Expiration&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Images About to Expire with x Nbr of Copies</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

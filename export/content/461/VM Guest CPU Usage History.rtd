@@ -1,0 +1,407 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>4e8b1107-a8ca-483b-88a7-bc087bff2b8a</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*03/26/2020</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>VM Guest CPU Usage History</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>defaultTimePeriod</string>
+                    <string>1007</string>
+                  </entry>
+                  <entry>
+                    <string>showTime</string>
+                    <string>true</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>VM_GUESTS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Group by:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>Minutes,Hours,Days,Weeks,Months,Quarters,Years</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Report on:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>CPU Usage (GHz),CPU Usage%,CPU Wait (ms),CPU Ready (ms)</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>CPU Usage%</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue2</string>
+                    <string>Hours</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>VM Guest CPU Usage History</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@veritas.com
+--Last Modified: 03/26/2020
+WITH 
+var AS (
+SELECT 
+  DECODE(&apos;${freeCombo2}&apos;,&apos;Minutes&apos;,1,&apos;Hours&apos;,1,&apos;Days&apos;,1,&apos;Weeks&apos;,7,&apos;Months&apos;,31,&apos;Quarters&apos;,93,&apos;Years&apos;,365.25) AS the_multiplier,
+  TO_NUMBER(&apos;${freeCombo3}&apos;) AS forecast_periods
+FROM dual
+), 
+c1 AS (
+SELECT
+  TRUNC(l.end_log_date,DECODE(&apos;${freeCombo2}&apos;,&apos;Minutes&apos;,&apos;MI&apos;,&apos;Hours&apos;,&apos;HH24&apos;,&apos;Days&apos;,&apos;DD&apos;,&apos;Weeks&apos;,&apos;WW&apos;,&apos;Months&apos;,&apos;MM&apos;,&apos;Quarters&apos;,&apos;Q&apos;,&apos;Years&apos;)) AS the_date,
+  p.partition_id, 
+  p.partition_name, 
+  ROUND(AVG(NVL(l.avg_cpu_usage_mhz,0)/1000),2) avg_cpu_usage_ghz, --MHz converted to GHz
+  ROUND(AVG(NVL(l.avg_cpu_usage_pct,0)),2) avg_cpu_usage_pct,
+  ROUND(AVG(NVL(l.avg_cpu_wait_ms,0)),2) avg_cpu_wait_ms,
+  ROUND(AVG(NVL(l.avg_cpu_ready_ms,0)),2) avg_cpu_ready_ms,
+  ROUND(MAX(NVL(l.avg_cpu_usage_mhz,0)/1000),2) max_cpu_usage_ghz, --MHz converted to GHz
+  ROUND(MAX(NVL(l.avg_cpu_usage_pct,0)),2) max_cpu_usage_pct,
+  ROUND(MAX(NVL(l.avg_cpu_wait_ms,0)),2) max_cpu_wait_ms,
+  ROUND(MAX(NVL(l.avg_cpu_ready_ms,0)),2) max_cpu_ready_ms
+FROM 
+  apt_v_vmw_perform_cpu_log l, apt_v_partition p
+WHERE 
+  p.partition_id IN (${vmGuests})
+  AND p.partition_id = l.partition_id
+  AND l.end_log_date  BETWEEN ${startDate} AND ${endDate}
+  AND p.collection_status != 3
+  AND p.partition_type = &apos;VM&apos;
+GROUP BY 
+  TRUNC(l.end_log_date,DECODE(&apos;${freeCombo2}&apos;,&apos;Minutes&apos;,&apos;MI&apos;,&apos;Hours&apos;,&apos;HH24&apos;,&apos;Days&apos;,&apos;DD&apos;,&apos;Weeks&apos;,&apos;WW&apos;,&apos;Months&apos;,&apos;MM&apos;,&apos;Quarters&apos;,&apos;Q&apos;,&apos;Years&apos;)),
+  p.partition_id, 
+  p.partition_name 
+)
+SELECT
+  TO_CHAR(the_date,&apos;YYYY/MM/DD HH24:MI&apos;) the_date,
+  DECODE(&apos;${freeCombo1}&apos;,
+    &apos;CPU Usage (GHz)&apos;,AVG(avg_cpu_usage_ghz),
+    &apos;CPU Usage%&apos;,AVG(avg_cpu_usage_pct),
+    &apos;CPU Wait (ms)&apos;,AVG(avg_cpu_wait_ms),
+    &apos;CPU Ready (ms)&apos;,AVG(avg_cpu_ready_ms)
+  ) AS avg_the_metric,
+  DECODE(&apos;${freeCombo1}&apos;,
+    &apos;CPU Usage (GHz)&apos;,MAX(max_cpu_usage_ghz),
+    &apos;CPU Usage%&apos;,MAX(max_cpu_usage_pct),
+    &apos;CPU Wait (ms)&apos;,MAX(max_cpu_wait_ms),
+    &apos;CPU Ready (ms)&apos;,MAX(max_cpu_ready_ms)
+  ) AS max_the_metric
+FROM 
+  c1
+GROUP BY
+  TO_CHAR(the_date,&apos;YYYY/MM/DD HH24:MI&apos;)
+ORDER BY 
+  the_date</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100230</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>105022</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>Reporting on: ${freeCombo1}, Group by: ${freeCombo2}</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_date&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;MMM d, yyyy h:mm:ss a&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;avg_the_metric&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Avg&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#0096B1&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;max_the_metric&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Max&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#AA000A&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>VM Guest CPU Usage History</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedAreaChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM d, yyyy h:mm:ss a</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>area</type>
+                    <caption>Avg</caption>
+                    <name>avg_the_metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#0096B1</color>
+                    <secondaryColor>#0096B1</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>area</type>
+                    <caption>Max</caption>
+                    <name>max_the_metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#AA000A</color>
+                    <secondaryColor>#AA000A</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

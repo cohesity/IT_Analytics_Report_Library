@@ -1,0 +1,463 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>Report on Cache,Capacity,Allocated,Available,Largest Free Space,Raw Capacity,Raw Allocated,Raw Available,Virtual Capacity,Known Virtual Capacity,License Capacity,Usable Internal Capacity,Usable External Capacity,Virtualized Capacity,Virtualized Capacity Thin,Usable Used Capacity,Usable Free Capacity,LUN Capacity,LUN Allocated,LUN Unallocated,Thin Pool Capacity,Thin Pool Allocated,Thin Pool Available or Thin Pool Subscribed</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>1</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>421ddf8f-4451-4f6c-b036-ce6e18d74cd5</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>2</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*10/24/2018 </string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Array Ad Hoc Size over Time</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>defaultTimePeriod</string>
+                    <string>1180</string>
+                  </entry>
+                  <entry>
+                    <string>showTime</string>
+                    <string>true</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>ARRAYS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Group by:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>Day,Week,Month,Quarter,Year</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>Report on:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>Cache,Capacity,Allocated,Available,Largest Free Space,Raw Capacity,Raw Allocated,Raw Available,Virtual Capacity,Known Virtual Capacity,License Capacity,Usable Internal Capacity,Usable External Capacity,Virtualized Capacity,Virtualized Capacity Thin,Usable Used Capacity,Usable Free Capacity,LUN Capacity,LUN Allocated,LUN Unallocated,Thin Pool Capacity,Thin Pool Allocated,Thin Pool Available,Thin Pool Subscribed</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>TB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue3</string>
+                    <string>Allocated</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue2</string>
+                    <string>Week</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Array Ad Hoc Size over Time</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 10/24/2018
+WITH 
+VAR AS (
+SELECT
+&apos;${freeCombo1}&apos; unit,
+DECODE(&apos;${freeCombo1}&apos;,&apos;GB&apos;,1,&apos;TB&apos;,1024,&apos;PB&apos;,1024*1024) div_by
+FROM apt_v_dual
+),
+t1 AS (--get one entry per day per array
+SELECT 
+TRUNC(log_date,DECODE(&apos;${freeCombo2}&apos;,&apos;Day&apos;,&apos;DD&apos;,&apos;Week&apos;,&apos;WW&apos;,&apos;Month&apos;,&apos;MM&apos;,&apos;Quarter&apos;,&apos;Q&apos;,&apos;Year&apos;,&apos;YY&apos;)) log_date,
+storage_array_id,
+MAX(
+DECODE(&apos;${freeCombo3}&apos;,
+&apos;Cache&apos;,Cache_GB,
+&apos;Capacity&apos;,Capacity_GB,
+&apos;Allocated&apos;,Allocated_GB,
+&apos;Available&apos;,Available_GB,
+&apos;Largest Free Space&apos;,Largest_Free_Space_GB,
+&apos;Raw Capacity&apos;,Raw_Capacity_GB,
+&apos;Raw Allocated&apos;,Raw_Allocated_GB,
+&apos;Raw Available&apos;,Raw_Available_GB,
+&apos;Virtual Capacity&apos;, Virtual_Capacity_GB,
+&apos;Known Virtual Capacity&apos;,Known_Virtual_Capacity_GB,
+&apos;License Capacity&apos;, License_Capacity_GB,
+&apos;Usable Internal Capacity&apos;,Usable_Internal_Capacity_GB,
+&apos;Usable External Capacity&apos;,Usable_External_Capacity_GB,
+&apos;Virtualized Capacity&apos;,Virtualized_Capacity_GB,
+&apos;Virtualized Capacity Thin&apos;,Virtualized_Capacity_Thin_GB,
+&apos;Usable Used Capacity&apos;,Usable_Used_Capacity_GB,
+&apos;Usable Free Capacity&apos;,Usable_Free_Capacity_GB,
+&apos;LUN Capacity&apos;,LUN_Capacity_GB,
+&apos;LUN Allocated&apos;,LUN_Allocated_GB,
+&apos;LUN Unallocated&apos;,LUN_Unallocated_GB,
+&apos;Thin Pool Capacity&apos;,Thin_Pool_Capacity_GB,
+&apos;Thin Pool Allocated&apos;,Thin_Pool_Allocated_GB,
+&apos;Thin Pool Available&apos;,Thin_Pool_Available_GB,
+&apos;Thin Pool Subscribed&apos;,Thin_Pool_Subscribed_GB)
+) the_max_value,
+AVG(
+DECODE(&apos;${freeCombo3}&apos;,
+&apos;Cache&apos;,Cache_GB,
+&apos;Capacity&apos;,Capacity_GB,
+&apos;Allocated&apos;,Allocated_GB,
+&apos;Available&apos;,Available_GB,
+&apos;Largest Free Space&apos;,Largest_Free_Space_GB,
+&apos;Raw Capacity&apos;,Raw_Capacity_GB,
+&apos;Raw Allocated&apos;,Raw_Allocated_GB,
+&apos;Raw Available&apos;,Raw_Available_GB,
+&apos;Virtual Capacity&apos;, Virtual_Capacity_GB,
+&apos;Known Virtual Capacity&apos;,Known_Virtual_Capacity_GB,
+&apos;License Capacity&apos;, License_Capacity_GB,
+&apos;Usable Internal Capacity&apos;,Usable_Internal_Capacity_GB,
+&apos;Usable External Capacity&apos;,Usable_External_Capacity_GB,
+&apos;Virtualized Capacity&apos;,Virtualized_Capacity_GB,
+&apos;Virtualized Capacity Thin&apos;,Virtualized_Capacity_Thin_GB,
+&apos;Usable Used Capacity&apos;,Usable_Used_Capacity_GB,
+&apos;Usable Free Capacity&apos;,Usable_Free_Capacity_GB,
+&apos;LUN Capacity&apos;,LUN_Capacity_GB,
+&apos;LUN Allocated&apos;,LUN_Allocated_GB,
+&apos;LUN Unallocated&apos;,LUN_Unallocated_GB,
+&apos;Thin Pool Capacity&apos;,Thin_Pool_Capacity_GB,
+&apos;Thin Pool Allocated&apos;,Thin_Pool_Allocated_GB,
+&apos;Thin Pool Available&apos;,Thin_Pool_Available_GB,
+&apos;Thin Pool Subscribed&apos;,Thin_Pool_Subscribed_GB)
+) the_avg_value
+FROM aps_v_storage_array_log
+WHERE
+log_date BETWEEN ${startDate} AND ${endDate}
+AND storage_array_id IN (${arrays})
+GROUP BY
+TRUNC(log_date,DECODE(&apos;${freeCombo2}&apos;,&apos;Day&apos;,&apos;DD&apos;,&apos;Week&apos;,&apos;WW&apos;,&apos;Month&apos;,&apos;MM&apos;,&apos;Quarter&apos;,&apos;Q&apos;,&apos;Year&apos;,&apos;YY&apos;)),
+storage_array_id
+)
+SELECT
+log_date,
+ROUND(SUM(the_max_value/div_by),2) the_max_value,
+ROUND(SUM(the_avg_value/div_by),2) the_avg_value
+FROM t1, var
+GROUP BY 
+log_date
+ORDER BY 1</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100701</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;log_date&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;MMM d, yyyy h:mm:ss a&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_max_value&quot;,&quot;label&quot;:&quot;Max&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;#AA000A&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_avg_value&quot;,&quot;label&quot;:&quot;Avg&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;#0065A1&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Array Ad Hoc Size over Time</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>barChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Date</caption>
+                    <name>log_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM d, yyyy h:mm:ss a</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Max</caption>
+                    <name>the_max_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#AA000A</color>
+                    <secondaryColor>#AA000A</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Avg</caption>
+                    <name>the_avg_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#0065A1</color>
+                    <secondaryColor>#0065A1</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Values in: ${freeCombo1} Group by: ${freeCombo2} Reporting on: ${freeCombo3}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.I8Oy1E8u/u37LGPbL/SayQFqUztA4CxRkr+OCpkU1dc=

@@ -1,0 +1,373 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Updated: 12/11/2012
+--Daily Client Final Status by Day,Week,Month,Quarter,Year
+--This report helps to see if how the overall client status is doing over time.
+--This report determines the final client status based on a user defined cutoff time
+--Then it aggregates that count by Day, Week, Month, or Year
+--If the all the clients jobs failed the client is flagged as failed
+--If all the client&#039;s jobs were successful then the client is flagged as successful
+--If all the client&#039;s jobs were partially successful then the client is flagged as partial
+--If there is any combination of the above then the client is flagged as mixed 
+--NOTE: Successful and Partials are hidden by default to help focus on the problems
+--they can be enabled by editing the Report Template and checking the columns in the 
+--Formatting tab.
+WITH
+d0 AS (
+SELECT
+DECODE(&#039;${freeCombo2}&#039;,&#039;Midnight&#039;,&#039;1am&#039;,1,&#039;2am&#039;,2,&#039;3am&#039;,3,&#039;4am&#039;,4,&#039;5am&#039;,5,&#039;6am&#039;,6,&#039;7am&#039;,7,&#039;8am&#039;,8,&#039;9am&#039;,9,&#039;10am&#039;,10,&#039;11am&#039;,11,&#039;12pm&#039;,12) cutoff_time
+FROM dual
+),
+t1 AS (
+SELECT
+TRUNC(start_date)+(d0.cutoff_time/24) cutoff_date_time,
+j.client_name,
+COUNT(job_id) job_count,
+MIN(summary_status) min_summary_status,
+MAX(summary_status) max_summary_status,
+SUM(DECODE(summary_status,0,1,0)) status_0_count,
+SUM(DECODE(summary_status,1,1,0)) status_1_count,
+SUM(DECODE(summary_status,2,1,0)) status_2_count
+FROM apt_v_job j,d0
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate}
+GROUP BY
+TRUNC(start_date)+(d0.cutoff_time/24),
+j.client_name
+),
+t2 AS (
+SELECT
+cutoff_date_time,
+SUM(DECODE(min_summary_status,2,1,0)) failed_clients,
+SUM(DECODE(min_summary_status,1,1,0)) partial_clients,
+SUM(DECODE(max_summary_status,0,1,0)) successful_clients,
+SUM(CASE WHEN min_summary_status &lt; 2 AND max_summary_status = 2 THEN 1 ELSE 0 END) success_and_failed_clients
+FROM t1
+GROUP BY cutoff_date_time
+)
+SELECT
+TO_CHAR(TRUNC(cutoff_date_time,DECODE(&#039;${freeCombo1}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)),&#039;YYYY/MM/DD&#039;) the_date,
+SUM(successful_clients) successful_clients,
+SUM(partial_clients) partial_clients,
+SUM(success_and_failed_clients) success_and_failed_clients,
+SUM(failed_clients) failed_clients
+FROM t2
+GROUP BY TO_CHAR(TRUNC(cutoff_date_time,DECODE(&#039;${freeCombo1}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)),&#039;YYYY/MM/DD&#039;)</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Client Final Status Count by Day,Week,Month,Qtr,Yr</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>Day,Week,Month,Quarter,Year</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>Midnight,1am,2am,3am,4am,5am,6am,7am,8am,9am,10am,11am,12pm</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Group by:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Cutoff Time:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>101461</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedBarChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Client Final Status Count by Day,Week,Month,Qtr,Yr</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>the_date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Successful</caption>
+                    <name>successful_clients</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#56BF58</color>
+                    <secondaryColor>#56BF58</secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;successful_clients&#039;].data} Clients had all of their backups run successfully!</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Partial</caption>
+                    <name>partial_clients</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#DBD611</color>
+                    <secondaryColor>#DBD611</secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;partial_clients&#039;].data} Clients had all of backups partially failed (usually due to skipped open files)</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Had Mixed Success &amp; Failures</caption>
+                    <name>success_and_failed_clients</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#AEA1D3</color>
+                    <secondaryColor>#AEA1D3</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;success_and_failed_clients&#039;].data} Clients had a mixture of successful and failed backups</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Failed</caption>
+                    <name>failed_clients</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#B30505</color>
+                    <secondaryColor>#B30505</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;failed_clients&#039;].data} Clients had all of their backups fail</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;the_date&quot;,&quot;name&quot;:&quot;the_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;successful_clients&#039;].data} Clients had all of their backups run successfully!&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#56BF58&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Successful&quot;,&quot;name&quot;:&quot;successful_clients&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;partial_clients&#039;].data} Clients had all of backups partially failed (usually due to skipped open files)&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#DBD611&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Partial&quot;,&quot;name&quot;:&quot;partial_clients&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;success_and_failed_clients&#039;].data} Clients had a mixture of successful and failed backups&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#AEA1D3&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Had Mixed Success &amp; Failures&quot;,&quot;name&quot;:&quot;success_and_failed_clients&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;failed_clients&#039;].data} Clients had all of their backups fail&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#B30505&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Failed&quot;,&quot;name&quot;:&quot;failed_clients&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Client final status count group by: ${freeCombo1} based on a cutoff time of: ${freeCombo2}</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Client Final Status Count by Day,Week,Month,Qtr,Yr</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

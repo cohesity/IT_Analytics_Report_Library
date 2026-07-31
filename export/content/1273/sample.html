@@ -1,0 +1,2083 @@
+<!DOCTYPE html><head><meta charset="utf-8"><style type="text/css">@page { size: 11in 8.5in; }
+/*Donot modify or change the position of above page tag*/
+/*Styles that are applicable to just reports, and should be included in HTML emailed reports.*/
+html {
+    height: 100%;
+    max-height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 8pt;
+}
+body {
+    height: 100%;
+    max-height:100%;
+    padding:0;
+    margin:0;
+    border:0;
+}
+td {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 8pt;
+}
+a {
+    text-decoration: none;
+    color: #005699;
+}
+a:hover {
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+/******************The header and footer of the report******************/
+
+.header {
+    margin-top: 5px;
+}
+.footer {
+    color: #666666;
+    margin-top: 5px;
+}
+
+/***************REPORT CONTENT***************/
+.contentContainer {
+    max-height: 100%;
+    z-index: 1;
+    font-size: 8pt;
+    padding-left: 8px;
+    margin-top: 5px;
+    margin-bottom: 150px;
+    width: 100%;
+}
+.content {
+    margin-right: 16px;
+}
+.reportBuilderContainer {
+    padding: 10px;
+}
+.reportBuilderContainer hr {
+    height: 0;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+.reportBuilderScrollingContent {
+    overflow-y: scroll;
+    overflow-x: auto;
+    padding-right: 14px;
+}
+.reportBuilderScrollingTable {
+    overflow-y: auto;
+    padding-left: 5px;
+}
+
+table.reportBuilderTable {
+    border: 1px solid #ddd;
+}
+
+.reportBuilderTable {
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+.reportBuilderTable tr {
+    font: 11px arial,helvetica,sans-serif;
+    color: #333333;
+}
+
+.reportBuilderTable td {
+    font: 11px arial,helvetica,sans-serif;
+    vertical-align: top;
+    padding: 6px;
+    white-space: normal;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow {
+    cursor: default;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow td {
+    padding: 8px 6px;
+    vertical-align: middle;
+}
+
+.reportBuilderHeaderRow td {
+    font: 11px arial,helvetica,sans-serif;
+    white-space: nowrap;
+    border-top: none;
+    font-weight: bold !important;
+    vertical-align: top;
+    background: #ECF2F9;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow:first-child td:first-child {
+    border-top: none;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow:first-child td:last-child {
+    bottom: none;
+}
+
+
+
+.reportBuilderTable td {
+    box-sizing: content-box;
+}
+
+.reportBuilderTable tbody tr {
+    background-color: #fff;
+}
+
+.reportBuilderTable tbody td {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.reportBuilderTable .aggregate td {
+    font-weight: bold;
+    color: #478547;
+    white-space: nowrap;
+    background-color: #fafafa;
+}
+
+.reportBuilderTable tfoot .aggregate td {
+    border-top: 1px solid #eaeaea;
+}
+
+.reportBuilderContainer .reportBuilderHeaderRow:last-child td {
+    border-bottom: 1px solid #ddd;
+}
+
+.reportBuilderTable .groupHeader {
+    border-left: 1px solid #dddddd;
+    color: #4080BF;
+    padding-bottom: 0 !important;
+}
+
+.reportBuilderTable .groupHeaderFirstChild {
+    border-left: 1px solid #dddddd;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow td:first-child {
+    border-left: none;
+}
+
+.reportBuilderTable .reportBuilderHeaderRow td:last-child {
+    border-right: none;
+}
+
+.reportBuilderTable tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.reportBuilderHeaderRow span {
+    vertical-align: middle;
+}
+
+.export .reportSection {
+    font: bold 11px/1 arial, helvetica, sans-serif;
+    display: block;
+    padding: 5px;
+    background: #ddd;
+    margin: 10px -8px;
+}
+
+/************ The Header of the Report ************/
+
+/*The header of the report*/
+.reportBuilderHeader {
+    margin-bottom: 5px;
+    width: 100%;
+    padding: 6px 3px 3px 5px;
+}
+.reportBuilderTitle {
+    cursor: default;
+    color: #166094;
+    font: 18px/40px arial, sans-serif;
+    margin-left: 8px;
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.export .reportBuilderTitle {
+    margin: 0;
+    display: inline-block;
+}
+
+.reportBuilderAction {
+    text-align: right;
+}
+
+.reportBuilderPortletHeaderPanel {
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid #bbb;
+    background-color: #eee;
+
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.reportBuilderPortletHeaderPanel > div {
+    height: 100%;
+}
+
+.dashboardPortlet {
+    min-width: 300px;
+    min-height: 200px;
+    border: 1px #808080 solid;
+    padding-bottom: 2px; /* border + padding = drop zone border */
+    border: 1px solid #bbb;
+
+    -moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.reportHeader {
+    font: 11px arial;
+    padding: 0 0 10px 10px;
+}
+
+.reportHeader img {
+    vertical-align: text-top;
+}
+
+/************ The Table Data ************/
+
+.hoverHeader {
+    cursor: pointer;
+}
+.hoverHeader:hover {
+    text-decoration: underline;
+}
+.reportBuilderRowOdd {
+    background-color: #D3DEDF !important;
+}
+.reportBuilderGridCaption {
+    font-weight: bold;
+    white-space: nowrap;
+    vertical-align: top;
+    cursor: default;
+}
+.reportBuilderFooterRow {
+    background-color: transparent !important;
+}
+.reportBuilderFooterRow td {
+    white-space: nowrap;
+}
+
+/************ Error Colours ************/
+
+.reportBuilderFieldError {
+    color: red;
+}
+.redBackground {
+    background-color: #B30505 !important;
+    color: white
+}
+.yellowBackground {
+    background-color: #DBD611 !important;
+}
+.blueBackground {
+    background-color: #003478 !important;
+    color: white
+}
+.redForeground {
+    color: #B30505;
+}
+.redForeground a {
+    color: #B30505;
+}
+
+.whiteBackground {
+    background-color: #FFFFFF ;
+}
+
+.bold {
+    font-weight:bold
+}
+
+.red {
+    color:#B30505;
+}
+
+.yellow {
+    color:#F7D577;
+}
+
+#colourTable td {
+    width: 15px;
+    height: 10px;
+}
+.chartColoursDrag {
+    width: 20px;
+    height: 20px;
+    display: none;
+    border: 1px solid #000000;
+    position: absolute;
+    top: 0;
+}
+
+.noDataAvailable {
+    padding: 10px !important;
+    font-style: italic !important;
+}
+
+/************ Percentage Bars ************/
+
+.percentageBarContainer,
+.percentageBarLevel1,
+.percentageBarLevel2,
+.percentageBarLevel3 {
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+}
+
+.percentageBarContainer,
+.reportBuilderGridTable .percentageBarContainer {
+    border: none;
+    height: 12px;
+    padding: 0;
+    font-size: 8px;
+
+    background: #f5f5f5 !important;
+    background: url(https://wow.aptare.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1ZjVmNSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmOWY5ZjkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+) !important;
+    background: -ms-linear-gradient(top, #f5f5f5 0%,#f9f9f9 100%) !important; /* IE10+ */
+    background: linear-gradient(to bottom, #f5f5f5 0%,#f9f9f9 100%) !important; /* W3C */
+
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.export .reportBuilderTable .percentageBarContainer,
+.export .reportBuilderGridTable .percentageBarContainer {
+    background: #f9f9f9 !important;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+/*.percentageBarContainer:after {
+    content: "";
+    display: table;
+    clear: both;
+}*/
+
+.percentageBarContainer .percentageBarLevel1,
+.reportBuilderGridTable .percentageBarContainer .percentageBarLevel1 {
+    height: 100%;
+    border: none;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    font-size: 8px;
+
+    background: #56bf58; /* Old browsers */
+    background: url(https://wow.aptare.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU2YmY1OCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM0Mzk2NDUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -ms-linear-gradient(top, #56bf58 0%,#439645 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #56bf58 0%,#439645 100%); /* W3C */
+}
+
+.export .reportBuilderTable .percentageBarContainer .percentageBarLevel1,
+.export .reportBuilderGridTable .percentageBarContainer .percentageBarLevel1 {
+    background: #56bf58;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.percentageBarContainer .percentageBarLevel2,
+.reportBuilderGridTable .percentageBarContainer .percentageBarLevel2 {
+    height: 100%;
+    border: none;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    font-size: 8px;
+
+    background: #f7d577; /* Old browsers */
+    background: url(https://wow.aptare.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y3ZDU3NyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkMWE5M2MiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -ms-linear-gradient(top, #f7d577 0%,#d1a93c 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #f7d577 0%,#d1a93c 100%); /* W3C */
+}
+.export .reportBuilderTable .percentageBarContainer .percentageBarLevel2,
+.export .reportBuilderGridTable .percentageBarContainer .percentageBarLevel2 {
+    background: #f7d577;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.percentageBarContainer .percentageBarLevel3,
+.reportBuilderGridTable .percentageBarContainer .percentageBarLevel3 {
+    height: 100%;
+    border: none;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    font-size: 8px;
+
+    background: #d67167; /* Old browsers */
+    background: url(https://wow.aptare.com/skins/aptare/data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q2NzE2NyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM5OTU0NGUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -ms-linear-gradient(top, #d67167 0%,#99544e 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #d67167 0%,#99544e 100%); /* W3C */
+}
+
+.export .reportBuilderTable .percentageBarContainer .percentageBarLevel3,
+.export .reportBuilderGridTable .percentageBarContainer .percentageBarLevel3 {
+    background: #d67167;
+    box-shadow: none;
+    border-radius: 0;
+}
+/************ Status ************/
+
+.status {
+    background: no-repeat center;
+}
+.statusWhite {
+    background-image: url(images/statusWhite.gif);
+}
+.statusBlue {
+    background-image: url(images/statusBlue.gif);
+}
+.statusYellow {
+    background-image: url(images/statusYellow.gif);
+}
+.statusRed {
+    background-image: url(images/statusRed.gif);
+}
+
+/************ Specalized Reports ************/
+
+.tapeLibrary {
+    background: url(https://wow.aptare.com/skins/aptare/tapeLibrary.gif) no-repeat;
+    padding-left: 32px;
+    min-height: 55px;
+}
+.fileSystem {
+    background: url(https://wow.aptare.com/skins/aptare/fileSystem.gif) no-repeat 0 4px;
+    padding-left: 43px;
+    padding-top: 2px;
+}
+
+
+.piechart_legend td {
+    font: normal 11px/100% arial,sans-serif;
+}
+
+/*************** Topology Charts **************/
+#mynetwork {
+    width: 100%;
+    height: 100%;
+    border: 0px solid lightgray;
+    margin:0;
+}
+
+#wrapper {
+    position: relative;
+    /*width: 700px;
+    height: 126px;*/
+}
+
+#text {
+   display: none;
+}
+
+#border {
+    display:none;
+}
+
+#bar {
+   display: none;
+}
+
+div.outerBorder {
+    display:none;
+}
+
+div.topology {
+   /* height: 200px;*/
+}
+
+.dbviews-title {
+    font: bold 20pt/100% arial;
+    text-align: center;
+    padding: 5px;
+}
+
+.dbviews-title.small {
+    font-size: 18px;
+}
+
+.dbviews-index {
+    font: 11px arial;
+    color: #333333;
+}
+
+.export .dbviews-index {
+    font: 14pt arial;
+    color: #333333;
+    page-break-after: always;
+}
+
+.dbviews-index-aptare-product {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+.export .dbviews-index-aptare-product {
+    font-size: 14pt;
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+.dbviews-index-aptare-product a {
+    text-decoration: underline;
+    font-size: 14px;
+    color: #005699;
+}
+
+.dbviews-index-aptare-product a.arrow {
+    color: #000000;
+    font-size:10px;
+    text-decoration:none;
+}
+
+.dbviews-index-portal-title{
+    font-sizex:14px;
+    text-decorationx:underline;
+    colorx:#005699;
+    margin-left:13px;
+}
+
+.export .dbviews-index-aptare-product a {
+    font-size: 16pt;
+    color: navy;
+}
+
+.dbviews-index-product-column {
+    display:inline-block;
+    vertical-align:top;
+}
+
+.dbviews-index-product-column a {
+    display:block;
+    padding: 2px 0 2px 13px;
+    vertical-align:top;
+    text-decoration: underline;
+}
+
+.export .dbviews-index-product-column a {
+    text-decoration: none;
+}
+
+.export .dbviews-detail {
+
+}
+
+.export .dbviews-detail-toc {
+    padding-top: 10px;
+}
+
+.dbviews-detail-toc-category {
+    font: bold 14px arial;
+    padding: 5px 0;
+}
+
+.dbviews-detail-toc-category a,
+.dbviews-detail-toc-category a:hover {
+    color: #000000 !important;
+    font: 11px arial;
+    text-decoration: none;
+}
+
+.dbviews-detail-toc-category a.category {
+    text-decoration: underline;
+    color: navy !important;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.export .dbviews-detail-toc-category a.category {
+    font-size: 12pt;
+    text-decoration: none;
+}
+
+.export .dbviews-detail-toc-category {
+    font: bold 12pt arial;
+}
+
+.dbviews-detail-toc-views {
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.dbviews-detail-toc-views-column {
+    display: inline-block;
+    vertical-align: top;
+    width: 180px;
+}
+
+.export .dbviews-detail-toc-views-column {
+    width: 30%;
+}
+
+.dbviews-detail-toc-views-column a {
+    display: block;
+    text-decoration: underline;
+    font: 11px arial;
+    padding: 0 10px 5px 0;
+    vertical-align: top;
+}
+
+.export .dbviews-detail-toc-views-column a {
+    font-size: 11pt;
+    text-decoration: none;
+}
+
+.dbviews-detail-tables-category-title {
+    font: bold 14px arial, helvetica, sans-serif;
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 0;
+    text-align: center;
+}
+
+.export .dbviews-detail-tables-category-title {
+    font-size: 16pt;
+}
+
+.dbviews-detail-tables-category {
+    font:bold 14px arial;
+    padding-top: 10px;
+}
+
+.export .dbviews-detail-tables-category {
+    font:bold 12pt arial;
+}
+
+.dbviews-detail-table-view-name {
+    font: bold 12px arial;
+    padding: 10px 0;
+}
+
+.dbviews-detail-table-view-name span {
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.export .dbviews-detail-table-view-name span {
+    text-decoration: none;
+}
+
+.export .dbviews-detail-table-view-title {
+    page-break-inside: avoid;
+}
+
+.export .dbviews-detail-table-view-name {
+    font: bold 12pt arial;
+}
+
+.dbviews-detail-table-view-desc {
+    font:11px arial;
+    padding-bottom: 10px;
+}
+
+.export .dbviews-detail-table-view-desc {
+    font:11pt arial;
+}
+
+.dbviews-detail-table {
+    border:1px solid #dddddd;
+    font:11px arial;
+    border-collapse:collapse;
+    padding-bottom: 10px;
+}
+
+.export .dbviews-detail-table tr {
+    page-break-inside: avoid;
+}
+
+.dbviews-detail-table th {
+    font-weight:bold;
+    background:#eee;
+    padding:5px;
+    border:1px solid #ddd;
+    white-space:nowrap;
+}
+
+.dbviews-detail-table td {
+    padding:5px;
+    border:1px solid #ddd;
+    font:11px arial;
+}
+
+
+.vtable{
+    background-color: transparent;
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+/*    margin-bottom: 20px;*/
+    height: 50px;
+    padding-top: 0px;
+    padding-bottom: 0px
+}
+
+.vrow {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+
+.vcell {
+    padding: 0 5px;
+/*    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;*/
+    display: table-cell;
+    vertical-align: inherit;
+    font-size: 10px !important;
+}
+
+td.vcell:first-child {
+    text-align: right;
+}
+
+.panel {
+/*    margin-bottom: 20px;*/
+    background-color: #fff;
+    /*border: 1px solid transparent;*/
+    border-radius: 4px;
+    -webkit-tox-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.panel-body {
+    padding: 2px;
+}
+
+.panel-title{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.panel-success {
+    border-color: darkblue;
+    margin-bottom:0px;
+}
+
+.panel-heading {
+    padding: 3px 10px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.panel-success>.panel-heading {
+    color:#333;
+    background-color: #ddd;
+   /* border-color: darkblue;*/
+}
+</style>
+</head><body><div class="reportBuilderContainer export" id="portlet" guid=""> 
+ <table cellpadding="0" cellspacing="0" class="reportBuilderHeader"> 
+  <tbody>
+   <tr> 
+    <td valign="top" width="100%"> 
+     <div class="reportBuilderTitle">
+      VM Guest Snapshot Summary
+     </div> <input type="hidden" name="name"> <input type="hidden" name="reportId" value=""> <input type="hidden" name="templateId" value="110257"> <input type="hidden" name="systemName" value=""> <input type="hidden" name="templateInstanceId" value=""> <input type="hidden" name="productType" value="all"> <input type="hidden" name="dataSource" value="rtdTemplate"> <input type="hidden" name="hasTimePeriodScope" value="false"> <span class="reportBuilderSubtitle"> Host Group=APTARE <br> May 11, 2010 12:00:00 AM - May 11, 2020 8:21:19 AM </span> </td> 
+    <td valign="top"> </td> 
+   </tr> 
+  </tbody>
+ </table> 
+ <div class="reportHeader">
+  Values in: GB
+ </div> 
+ <div class="reportBuilderScrollingTable"> 
+  <script type="json">
+    </script> 
+  <div class="reportBuilderTableInfo"> 
+   <div class="reportBuilderTotalRowTitle">
+     Total Rows:113
+   </div> 
+  </div> 
+  <div id="grid-panel" class="grid-panel"> 
+   <table id="the-table861" class="reportBuilderTable" cellpadding="6" cellspacing="0"> 
+    <thead> 
+     <tr class="reportBuilderHeaderRow"> 
+      <td class=" groupHeaderFirstChild"> ESX Server </td> 
+      <td class=""> VM Name </td> 
+      <td class=""> Hostname </td> 
+      <td class=""> Datastore </td> 
+      <td class=""> Files </td> 
+      <td class=""> Snapshot Name </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###.00" class=""> Size </td> 
+      <td formatter="DateFormatter" class=""> Created on </td> 
+      <td align="right" formatter="CustomNumberFormatter" formatpattern="###,###,##0 'Days'" class=""> Age </td> 
+     </tr> 
+    </thead> 
+    <tbody>
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> aptapp01 </td> 
+      <td name="1"> aptapp01 </td> 
+      <td name="1"> aptexs04_local_R1 </td> 
+      <td name="1"> aptapp01-Snapshot1.vmsn<br>aptapp01.vmdk </td> 
+      <td name="1"> snapshot-1165 (Temp snapshot) </td> 
+      <td name="1" align="right"> 70.00 </td> 
+      <td name="1"> Jan 19, 2015 5:46:06 PM </td> 
+      <td name="1" align="right"> 1,939 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> aptdc01 </td> 
+      <td name="1"> aptdc01 </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> qaportal01-000001.vmdk<br>qaportal01.vmdk<br>qaportal01-Snapshot4.vmsn </td> 
+      <td name="1" style="white-space: normal"> snapshot-9387 (Restore Point 5-30-2018 10:12:13 PM) </td> 
+      <td name="1" align="right"> 95.23 </td> 
+      <td name="1"> May 31, 2018 5:15:12 AM </td> 
+      <td name="1" align="right"> 711 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> aptdc01 </td> 
+      <td name="1"> aptdc01 </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1"> qaportal01-Snapshot2.vmsn<br>qaportal01.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-9386 (Restore Point 5-29-2018 10:22:54 PM) </td> 
+      <td name="1" align="right"> 93.95 </td> 
+      <td name="1"> May 30, 2018 7:45:32 AM </td> 
+      <td name="1" align="right"> 712 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> aptdc02 </td> 
+      <td name="1"> sc90legoportal-rev </td> 
+      <td name="1"> aptareesx_lun1 </td> 
+      <td name="1" style="white-space: normal"> aptdc02-000002.vmdk<br>aptdc02.vmdk<br>aptdc02-Snapshot3.vmsn </td> 
+      <td name="1"> snapshot-12594 (10201 P7) </td> 
+      <td name="1" align="right"> 93.52 </td> 
+      <td name="1"> Jan 30, 2019 7:15:49 PM </td> 
+      <td name="1" align="right"> 467 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> aptdc02 </td> 
+      <td name="1"> sc90legoportal-rev </td> 
+      <td name="1"> aptareesx_lun1 </td> 
+      <td name="1"> aptdc02-Snapshot2.vmsn<br>aptdc02.vmdk </td> 
+      <td name="1"> snapshot-2267 (10.1GA Snapshot) </td> 
+      <td name="1" align="right"> 63.80 </td> 
+      <td name="1"> May 15, 2017 8:40:55 PM </td> 
+      <td name="1" align="right"> 1,091 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> Avamar VE 7 </td> 
+      <td name="1"> avamar2 </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> Avamar VE 7-Snapshot1.vmsn<br>Avamar VE 7_3.vmdk<br>Avamar VE 7_2.vmdk<br>Avamar VE 7_1.vmdk<br>Avamar VE 7.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-1874 (snapshot prior to upgrade to latest release) </td> 
+      <td name="1" align="right"> 250.00 </td> 
+      <td name="1"> Sep 16, 2016 4:09:25 AM </td> 
+      <td name="1" align="right"> 1,333 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> AvamarVE74 </td> 
+      <td name="1"> avamarve74 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> AvamarVE74-Snapshot2.vmsn<br>AvamarVE74_6.vmdk<br>AvamarVE74_5.vmdk<br>AvamarVE74_4.vmdk<br>AvamarVE74.vmdk </td> 
+      <td name="1"> snapshot-2286 (pre-poweron) </td> 
+      <td name="1" align="right"> 194.80 </td> 
+      <td name="1"> May 25, 2017 8:58:51 PM </td> 
+      <td name="1" align="right"> 1,081 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> BUE </td> 
+      <td name="1"> BUE.aptare.net </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1"> BUE-Snapshot4.vmsn<br>BUE.vmdk </td> 
+      <td name="1"> snapshot-2413 (Pre BUE15 upgrade) </td> 
+      <td name="1" align="right"> 58.92 </td> 
+      <td name="1"> Jul 9, 2016 12:35:33 AM </td> 
+      <td name="1" align="right"> 1,402 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> BUE15 </td> 
+      <td name="1"> bue15.aptare.net </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> BUE15-000001.vmdk<br>BUE15.vmdk<br>BUE15-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-2403 (20160721) </td> 
+      <td name="1" align="right"> 98.34 </td> 
+      <td name="1"> Jul 21, 2016 4:44:05 AM </td> 
+      <td name="1" align="right"> 1,390 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> BUE15 </td> 
+      <td name="1"> bue15.aptare.net </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1"> BUE15-Snapshot1.vmsn<br>BUE15.vmdk </td> 
+      <td name="1"> snapshot-2402 (before adding to domain) </td> 
+      <td name="1" align="right"> 78.46 </td> 
+      <td name="1"> Jul 19, 2016 5:47:52 PM </td> 
+      <td name="1" align="right"> 1,392 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> build_apache </td> 
+      <td name="1"> buildapache </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1"> build_apache-Snapshot3.vmsn<br>build_apache.vmdk </td> 
+      <td name="1"> snapshot-7028 (Build environment for 2.4.25) </td> 
+      <td name="1" align="right"> 13.38 </td> 
+      <td name="1"> Mar 28, 2018 5:54:46 PM </td> 
+      <td name="1" align="right"> 775 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> centos6openstack </td> 
+      <td name="1"> centos6openstack.aptare.net </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1" style="white-space: normal"> centos6openstack-000001.vmdk<br>centos6openstack_9.vmdk<br>centos6openstack_2.vmdk<br>centos6openstack_1.vmdk<br>centos6openstack.vmdk<br>centos6openstack-Snapshot5.vmsn<br>centos6openstack-000002.vmdk </td> 
+      <td name="1"> snapshot-7949 (Snapsot4) </td> 
+      <td name="1" align="right"> 17.43 </td> 
+      <td name="1"> Jul 22, 2015 5:30:22 PM </td> 
+      <td name="1" align="right"> 1,755 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> centos6openstack </td> 
+      <td name="1"> centos6openstack.aptare.net </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1" style="white-space: normal"> centos6openstack-Snapshot1.vmsn<br>centos6openstack.vmdk </td> 
+      <td name="1"> snapshot-7947 (before swiftstack install) </td> 
+      <td name="1" align="right"> 8.55 </td> 
+      <td name="1"> Mar 13, 2015 10:43:41 PM </td> 
+      <td name="1" align="right"> 1,885 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> centos6openstack </td> 
+      <td name="1"> centos6openstack.aptare.net </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1" style="white-space: normal"> centos6openstack-000002.vmdk<br>centos6openstack.vmdk<br>centos6openstack-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-7948 (after swiftstack install) </td> 
+      <td name="1" align="right"> 10.33 </td> 
+      <td name="1"> Mar 24, 2015 6:47:40 PM </td> 
+      <td name="1" align="right"> 1,875 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> DC-Cent55-1 </td> 
+      <td name="1"> dc-cent55-1.corp </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1"> DC-Cent55-1-Snapshot1.vmsn<br>DC-Cent55-1.vmdk </td> 
+      <td name="1"> snapshot-1865 (Clean State) </td> 
+      <td name="1" align="right"> 7.29 </td> 
+      <td name="1"> Feb 12, 2013 12:05:25 AM </td> 
+      <td name="1" align="right"> 2,645 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> DC-CentOS-2 </td> 
+      <td name="1"> DC-Centos-2 </td> 
+      <td name="1"> aptareesx_lun1 </td> 
+      <td name="1"> DC-CentOS-2-Snapshot1.vmsn<br>DC-CentOS-2.vmdk </td> 
+      <td name="1"> snapshot-281 (Clean) </td> 
+      <td name="1" align="right"> 60.00 </td> 
+      <td name="1"> Jun 6, 2013 5:51:27 PM </td> 
+      <td name="1" align="right"> 2,531 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> DC-Win2012-1 </td> 
+      <td name="1"> DC-Win2012-1 </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1"> DC-Win2012-1-Snapshot3.vmsn<br>DC-Win2012-1.vmdk </td> 
+      <td name="1"> snapshot-12699 (clean) </td> 
+      <td name="1" align="right"> 10.25 </td> 
+      <td name="1"> Mar 16, 2019 12:32:18 AM </td> 
+      <td name="1" align="right"> 422 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> DC-Win2K8-1 </td> 
+      <td name="1"> DC-Win2K8-1 </td> 
+      <td name="1"> aptesx04_local </td> 
+      <td name="1"> DC-Win2K8-1-Snapshot3.vmsn<br>DC-Win2K8-1.vmdk </td> 
+      <td name="1"> snapshot-1203 (Clean) </td> 
+      <td name="1" align="right"> 40.00 </td> 
+      <td name="1"> Nov 11, 2015 7:51:22 PM </td> 
+      <td name="1" align="right"> 1,643 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> DC-Win2K8-5 </td> 
+      <td name="1"> DC-Win2K8-5 </td> 
+      <td name="1"> aptesx06_local </td> 
+      <td name="1" style="white-space: normal"> DC-Win2K8-5-Snapshot3.vmsn<br>DC-Win2K8-5_2.vmdk<br>DC-Win2K8-5_1.vmdk </td> 
+      <td name="1"> snapshot-507 (Clean 03242015) </td> 
+      <td name="1" align="right"> 9.33 </td> 
+      <td name="1"> Mar 24, 2015 5:50:31 PM </td> 
+      <td name="1" align="right"> 1,875 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> dctestlab </td> 
+      <td name="1"> dctestlab </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1"> dctestlab-Snapshot5.vmsn<br>dctestlab.vmdk </td> 
+      <td name="1"> snapshot-1168 (before DC installation) </td> 
+      <td name="1" align="right"> 25.45 </td> 
+      <td name="1"> Dec 20, 2011 4:22:22 PM </td> 
+      <td name="1" align="right"> 3,065 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> dellemcecs </td> 
+      <td name="1"> luna.local </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1" style="white-space: normal"> dellemcecs-Snapshot2.vmsn<br>dellemcecs_1.vmdk<br>dellemcecs.vmdk </td> 
+      <td name="1"> snapshot-5516 (After BASE ECS and confefe) </td> 
+      <td name="1" align="right"> 10.08 </td> 
+      <td name="1"> Mar 8, 2018 8:40:12 PM </td> 
+      <td name="1" align="right"> 794 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> etchdevwin </td> 
+      <td name="1"> etchdevwin </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> etchdevwin-Snapshot42.vmsn<br>etchdevwin_3.vmdk<br>etchdevwin.vmdk </td> 
+      <td name="1"> snapshot-10319 (Snapshot of SC10.2.01_rel) </td> 
+      <td name="1" align="right"> 147.30 </td> 
+      <td name="1"> Jun 25, 2018 5:04:28 PM </td> 
+      <td name="1" align="right"> 686 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> FA-COLLECTOR-WIN2K8 </td> 
+      <td name="1"> FA-COLLECTOR-WI </td> 
+      <td name="1"> aptesx06_local </td> 
+      <td name="1" style="white-space: normal"> FA-COLLECTOR-WIN2K8-000001.vmdk<br>FA-COLLECTOR-WIN2K8.vmdk<br>FA-COLLECTOR-WIN2K8-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-208 (Snapshot1_with9.2) </td> 
+      <td name="1" align="right"> 58.75 </td> 
+      <td name="1"> Jan 16, 2015 11:32:16 PM </td> 
+      <td name="1" align="right"> 1,941 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> FA-COLLECTOR-WIN2K8 </td> 
+      <td name="1"> FA-COLLECTOR-WI </td> 
+      <td name="1"> aptesx06_local </td> 
+      <td name="1" style="white-space: normal"> FA-COLLECTOR-WIN2K8-Snapshot1.vmsn<br>FA-COLLECTOR-WIN2K8.vmdk </td> 
+      <td name="1"> snapshot-207 (Clean 01162015) </td> 
+      <td name="1" align="right"> 21.15 </td> 
+      <td name="1"> Jan 16, 2015 6:16:47 PM </td> 
+      <td name="1" align="right"> 1,942 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> HCPVM </td> 
+      <td name="1"> hcp-node-070.hcpvm.aptare.net </td> 
+      <td name="1"> Netapp7_Prod2 </td> 
+      <td name="1" style="white-space: normal"> HCPVM-000001.vmdk<br>HCPVM_5.vmdk<br>HCPVM_5-000001.vmdk<br>HCPVM_4.vmdk<br>HCPVM_4-000001.vmdk<br>HCPVM.vmdk<br>HCPVM-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-2408 (bad snapshot 01202017) </td> 
+      <td name="1" align="right"> 9.88 </td> 
+      <td name="1"> Jan 20, 2017 11:06:16 PM </td> 
+      <td name="1" align="right"> 1,206 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> HCPVM </td> 
+      <td name="1"> hcp-node-070.hcpvm.aptare.net </td> 
+      <td name="1"> Netapp7_Prod2 </td> 
+      <td name="1" style="white-space: normal"> HCPVM-Snapshot1.vmsn<br>HCPVM_5.vmdk<br>HCPVM_4.vmdk<br>HCPVM.vmdk </td> 
+      <td name="1"> snapshot-2407 (Snapshot1) </td> 
+      <td name="1" align="right"> 6.48 </td> 
+      <td name="1"> May 11, 2016 8:45:10 PM </td> 
+      <td name="1" align="right"> 1,460 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallCent7 </td> 
+      <td name="1"> InstallCent7 </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> InstallCent7-000002.vmdk<br>InstallCent7.vmdk<br>InstallCent7-Snapshot20.vmsn </td> 
+      <td name="1"> snapshot-2231 (clean 04042017) </td> 
+      <td name="1" align="right"> 55.62 </td> 
+      <td name="1"> Apr 4, 2017 7:34:27 PM </td> 
+      <td name="1" align="right"> 1,133 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallCent7 </td> 
+      <td name="1"> InstallCent7 </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1"> InstallCent7-Snapshot19.vmsn<br>InstallCent7.vmdk </td> 
+      <td name="1"> snapshot-2230 (10.0.01P7) </td> 
+      <td name="1" align="right"> 55.23 </td> 
+      <td name="1"> Apr 4, 2017 5:58:52 PM </td> 
+      <td name="1" align="right"> 1,133 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallCent7 </td> 
+      <td name="1"> InstallCent7 </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> InstallCent7-000001.vmdk<br>InstallCent7.vmdk<br>InstallCent7-Snapshot25.vmsn<br>InstallCent7-000002.vmdk </td> 
+      <td name="1"> snapshot-2385 (12c DB) </td> 
+      <td name="1" align="right"> 76.53 </td> 
+      <td name="1"> Oct 4, 2017 1:45:33 AM </td> 
+      <td name="1" align="right"> 950 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> InstallRH6 </td> 
+      <td name="1"> InstallRH6 </td> 
+      <td name="1"> aptaresx05_local </td> 
+      <td name="1"> InstallRH6-Snapshot26.vmsn<br>InstallRH6.vmdk </td> 
+      <td name="1"> snapshot-2321 (10101 GA + 16GB + Oracle 12c) </td> 
+      <td name="1" align="right"> 49.98 </td> 
+      <td name="1"> Jul 11, 2017 9:30:44 PM </td> 
+      <td name="1" align="right"> 1,034 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> installrh6_clone </td> 
+      <td name="1"> InstallRH6 </td> 
+      <td name="1"> aptesx09_local </td> 
+      <td name="1" style="white-space: normal"> installrh6_clone-Snapshot1.vmsn<br>installrh6_clone.vmdk </td> 
+      <td name="1"> snapshot-9749 (temp before hack upgrade) </td> 
+      <td name="1" align="right"> 66.71 </td> 
+      <td name="1"> Jun 11, 2018 8:24:36 PM </td> 
+      <td name="1" align="right"> 699 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> InstallRH7 </td> 
+      <td name="1"> InstallRH7 </td> 
+      <td name="1"> aptaresx05_local </td> 
+      <td name="1" style="white-space: normal"> InstallRH7-000001.vmdk<br>InstallRH7.vmdk<br>InstallRH7-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-2095 (11g 10.1 12272016) </td> 
+      <td name="1" align="right"> 57.49 </td> 
+      <td name="1"> Dec 27, 2016 7:46:20 PM </td> 
+      <td name="1" align="right"> 1,231 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> InstallRH7 </td> 
+      <td name="1"> InstallRH7 </td> 
+      <td name="1"> aptaresx05_local </td> 
+      <td name="1"> InstallRH7-Snapshot1.vmsn<br>InstallRH7.vmdk </td> 
+      <td name="1"> snapshot-1952 (Clean) </td> 
+      <td name="1" align="right"> 11.94 </td> 
+      <td name="1"> Oct 19, 2016 9:39:42 PM </td> 
+      <td name="1" align="right"> 1,299 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallSuse11 </td> 
+      <td name="1"> InstallSuse11 </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1" style="white-space: normal"> InstallSusu11-000003.vmdk<br>InstallSusu11.vmdk<br>InstallSusu11-Snapshot25.vmsn </td> 
+      <td name="1"> snapshot-2257 (10.1.02, aptare, qaprod db) </td> 
+      <td name="1" align="right"> 137.91 </td> 
+      <td name="1"> May 11, 2017 9:58:39 PM </td> 
+      <td name="1" align="right"> 1,095 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallSuse11 </td> 
+      <td name="1"> InstallSuse11 </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1" style="white-space: normal"> InstallSusu11-Snapshot24.vmsn<br>InstallSusu11.vmdk </td> 
+      <td name="1"> snapshot-2250 (clean 8Gb STAF) </td> 
+      <td name="1" align="right"> 70.00 </td> 
+      <td name="1"> May 2, 2017 7:08:18 PM </td> 
+      <td name="1" align="right"> 1,105 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> InstallSUSE12 </td> 
+      <td name="1"> linux-q9z8 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1"> InstallSUSE12-Snapshot2.vmsn<br>InstallSUSE12.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-2071 (2016-12-13 - Oracle12C_SE - aptare 10.1 RC3) </td> 
+      <td name="1" align="right"> 73.70 </td> 
+      <td name="1"> Dec 13, 2016 9:52:53 PM </td> 
+      <td name="1" align="right"> 1,244 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallWin1 </td> 
+      <td name="1"> InstallWin1 </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> InstallWin1-000002.vmdk<br>InstallWin1.vmdk<br>InstallWin1-Snapshot35.vmsn </td> 
+      <td name="1"> snapshot-2417 (Clean) </td> 
+      <td name="1" align="right"> 8.12 </td> 
+      <td name="1"> Sep 5, 2012 5:38:33 PM </td> 
+      <td name="1" align="right"> 2,805 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallWin1 </td> 
+      <td name="1"> InstallWin1 </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> InstallWin1-000003.vmdk<br>InstallWin1.vmdk<br>InstallWin1-Snapshot39.vmsn<br>InstallWin1-000008.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-2416 (Both: Selenium AND SilkTest (stat ip, corp are added)) </td> 
+      <td name="1" align="right"> 25.65 </td> 
+      <td name="1"> Oct 17, 2012 3:49:06 PM </td> 
+      <td name="1" align="right"> 2,763 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> InstallWin1 </td> 
+      <td name="1"> InstallWin1 </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> InstallWin1-000008.vmdk<br>InstallWin1.vmdk<br>InstallWin1-Snapshot37.vmsn </td> 
+      <td name="1" style="white-space: normal"> snapshot-2415 (Selenium (stat ip and corp are added)) </td> 
+      <td name="1" align="right"> 17.37 </td> 
+      <td name="1"> Sep 5, 2012 6:07:03 PM </td> 
+      <td name="1" align="right"> 2,805 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> Installwin2 </td> 
+      <td name="1"> InstallWin2 </td> 
+      <td name="1"> aptesx08_local </td> 
+      <td name="1"> Installwin2-Snapshot31.vmsn<br>Installwin2.vmdk </td> 
+      <td name="1"> snapshot-11976 (10200 P7 ( 120GB space 09182018)) </td> 
+      <td name="1" align="right"> 98.02 </td> 
+      <td name="1"> Sep 18, 2018 11:47:19 PM </td> 
+      <td name="1" align="right"> 600 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> InstallWin2012 </td> 
+      <td name="1"> InstallWin2012 </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> InstallWin2012-Snapshot48.vmsn<br>InstallWin2012_1.vmdk<br>InstallWin2012.vmdk </td> 
+      <td name="1"> snapshot-12666 (10201_P8) </td> 
+      <td name="1" align="right"> 117.91 </td> 
+      <td name="1"> Mar 1, 2019 6:51:59 PM </td> 
+      <td name="1" align="right"> 437 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> InstallWin3 </td> 
+      <td name="1"> InstallWin3 </td> 
+      <td name="1"> aptareesx_lun1 </td> 
+      <td name="1"> InstallWin3-Snapshot42.vmsn<br>InstallWin3.vmdk </td> 
+      <td name="1"> snapshot-10366 (HSV10101) </td> 
+      <td name="1" align="right"> 74.01 </td> 
+      <td name="1"> Jun 26, 2018 5:16:30 PM </td> 
+      <td name="1" align="right"> 685 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> jira-prod_AWSmigrated </td> 
+      <td name="1"> jira </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1"> jira-prod-Snapshot56.vmsn<br>jira-prod.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-2317 (After AWS migration, prior to confluence install) </td> 
+      <td name="1" align="right"> 60.00 </td> 
+      <td name="1"> Jul 7, 2017 8:18:46 PM </td> 
+      <td name="1" align="right"> 1,039 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> mysc_clone </td> 
+      <td name="1"> mysc </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> mysc_clone-Snapshot7.vmsn<br>mysc_clone_2.vmdk<br>mysc_clone_1.vmdk<br>mysc_clone.vmdk </td> 
+      <td name="1"> snapshot-2111 (10.1.00 (1032016-0036)) </td> 
+      <td name="1" align="right"> 518.96 </td> 
+      <td name="1"> Jan 6, 2017 9:01:22 PM </td> 
+      <td name="1" align="right"> 1,220 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> mysc_clone </td> 
+      <td name="1"> mysc </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> mysc_clone-000001.vmdk<br>mysc_clone_2.vmdk<br>mysc_clone_2-000001.vmdk<br>mysc_clone_1.vmdk<br>mysc_clone_1-000001.vmdk<br>mysc_clone.vmdk<br>mysc_clone-Snapshot8.vmsn </td> 
+      <td name="1"> snapshot-2141 (mysc-db-clone) </td> 
+      <td name="1" align="right"> 547.34 </td> 
+      <td name="1"> Jan 31, 2017 9:42:56 PM </td> 
+      <td name="1" align="right"> 1,195 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> nbu77 </td> 
+      <td name="1"> nbu77.corp </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1"> nbu77-Snapshot1.vmsn<br>nbu77.vmdk </td> 
+      <td name="1"> snapshot-2216 (pre-773 upgrade) </td> 
+      <td name="1" align="right"> 40.93 </td> 
+      <td name="1"> Jun 28, 2016 11:06:15 PM </td> 
+      <td name="1" align="right"> 1,412 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> New_Cisco_DCNM_SMI </td> 
+      <td name="1"> aptare-dcnm </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> New_Cisco_DCNM_SMI-Snapshot5.vmsn<br>New_Cisco_DCNM_SMI.vmdk </td> 
+      <td name="1"> snapshot-2418 (SMI agent 9.5.2a) </td> 
+      <td name="1" align="right"> 9.47 </td> 
+      <td name="1"> Feb 28, 2012 7:40:01 PM </td> 
+      <td name="1" align="right"> 2,995 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> openstackrh7 </td> 
+      <td name="1"> openstackrh7.aptare.net </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1" style="white-space: normal"> openstackrh7-000002.vmdk<br>openstackrh7.vmdk<br>openstackrh7-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-1924 (Snapshot2) </td> 
+      <td name="1" align="right"> 55.80 </td> 
+      <td name="1"> Oct 10, 2016 8:39:28 PM </td> 
+      <td name="1" align="right"> 1,308 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> openstackrh7 </td> 
+      <td name="1"> openstackrh7.aptare.net </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1"> openstackrh7-Snapshot1.vmsn<br>openstackrh7.vmdk </td> 
+      <td name="1"> snapshot-664 (Snapshot1) </td> 
+      <td name="1" align="right"> 23.27 </td> 
+      <td name="1"> Jul 14, 2015 9:19:18 PM </td> 
+      <td name="1" align="right"> 1,762 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> openstackUbuntu1 </td> 
+      <td name="1"> openstackubuntu1.corp </td> 
+      <td name="1"> aptaresx05_local </td> 
+      <td name="1" style="white-space: normal"> openstackUbuntu1-000001.vmdk<br>openstackUbuntu1.vmdk<br>openstackUbuntu1-Snapshot3.vmsn<br>openstackUbuntu1-000002.vmdk </td> 
+      <td name="1"> snapshot-660 (Snapshot3) </td> 
+      <td name="1" align="right"> 11.53 </td> 
+      <td name="1"> Jul 22, 2015 5:29:53 PM </td> 
+      <td name="1" align="right"> 1,755 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> openstackUbuntu1 </td> 
+      <td name="1"> openstackubuntu1.corp </td> 
+      <td name="1"> aptaresx05_local </td> 
+      <td name="1" style="white-space: normal"> openstackUbuntu1-000001.vmdk<br>openstackUbuntu1.vmdk<br>openstackUbuntu1-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-659 (Snapshot2) </td> 
+      <td name="1" align="right"> 11.40 </td> 
+      <td name="1"> Jul 21, 2015 6:15:35 PM </td> 
+      <td name="1" align="right"> 1,756 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> openstackUbuntu1 </td> 
+      <td name="1"> openstackubuntu1.corp </td> 
+      <td name="1"> aptaresx05_local </td> 
+      <td name="1" style="white-space: normal"> openstackUbuntu1-Snapshot1.vmsn<br>openstackUbuntu1.vmdk </td> 
+      <td name="1"> snapshot-658 (Snapshot1) </td> 
+      <td name="1" align="right"> 8.12 </td> 
+      <td name="1"> Jul 17, 2015 8:38:13 PM </td> 
+      <td name="1" align="right"> 1,759 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> openstackUbuntu2 </td> 
+      <td name="1"> openstackUbuntu2 </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1" style="white-space: normal"> openstackUbuntu2-Snapshot1.vmsn<br>openstackUbuntu2.vmdk </td> 
+      <td name="1"> snapshot-673 (Snapshot1) </td> 
+      <td name="1" align="right"> 7.16 </td> 
+      <td name="1"> Jul 17, 2015 8:38:30 PM </td> 
+      <td name="1" align="right"> 1,759 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> Oracle12cEnt </td> 
+      <td name="1"> Oracle12cEnt </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1" style="white-space: normal"> Oracle12cEnt-000001.vmdk<br>Oracle12cEnt.vmdk<br>Oracle12cEnt-Snapshot4.vmsn </td> 
+      <td name="1"> snapshot-2234 (Clean with GUI) </td> 
+      <td name="1" align="right"> 12.03 </td> 
+      <td name="1"> Apr 6, 2017 6:44:32 PM </td> 
+      <td name="1" align="right"> 1,131 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> Oracle12cEnt </td> 
+      <td name="1"> Oracle12cEnt </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1" style="white-space: normal"> Oracle12cEnt-000002.vmdk<br>Oracle12cEnt.vmdk<br>Oracle12cEnt-Snapshot3.vmsn </td> 
+      <td name="1" style="white-space: normal"> snapshot-2209 (Oracle 11.2.0.2, portal 10.0.00_rel) </td> 
+      <td name="1" align="right"> 57.25 </td> 
+      <td name="1"> Jul 11, 2016 11:20:44 PM </td> 
+      <td name="1" align="right"> 1,399 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> Oracle12cEnt2 </td> 
+      <td name="1"> Oracle12cEnt2 </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1" style="white-space: normal"> Oracle12cEnt2-000001.vmdk<br>Oracle12cEnt2.vmdk<br>Oracle12cEnt2-Snapshot2.vmsn </td> 
+      <td name="1" style="white-space: normal"> snapshot-1083 (after yum and gui install, b4 oracle installation) </td> 
+      <td name="1" align="right"> 13.30 </td> 
+      <td name="1"> Mar 16, 2016 10:58:11 PM </td> 
+      <td name="1" align="right"> 1,516 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> Oracle12cEnt2 </td> 
+      <td name="1"> Oracle12cEnt2 </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1" style="white-space: normal"> Oracle12cEnt2-000001.vmdk<br>Oracle12cEnt2.vmdk<br>Oracle12cEnt2-Snapshot3.vmsn<br>Oracle12cEnt2-000002.vmdk </td> 
+      <td name="1"> snapshot-1107 (after installing oracle) </td> 
+      <td name="1" align="right"> 48.62 </td> 
+      <td name="1"> Mar 18, 2016 8:12:45 PM </td> 
+      <td name="1" align="right"> 1,515 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> Oracle12cEnt2 </td> 
+      <td name="1"> Oracle12cEnt2 </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1"> Oracle12cEnt2-Snapshot1.vmsn<br>Oracle12cEnt2.vmdk </td> 
+      <td name="1"> snapshot-1082 (Clean + copied all files) </td> 
+      <td name="1" align="right"> 11.16 </td> 
+      <td name="1"> Mar 16, 2016 9:49:26 PM </td> 
+      <td name="1" align="right"> 1,516 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> oracle12clinux </td> 
+      <td name="1"> oracle12clinux.corp </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> oracle12clinux-000001.vmdk<br>oracle12clinux.vmdk<br>oracle12clinux-Snapshot3.vmsn<br>oracle12clinux-000002.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-797 (Imported Demo portal and applied license.) </td> 
+      <td name="1" align="right"> 111.28 </td> 
+      <td name="1"> Nov 16, 2015 9:43:15 PM </td> 
+      <td name="1" align="right"> 1,637 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> oracle12clinux </td> 
+      <td name="1"> oracle12clinux.corp </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> oracle12clinux-000001.vmdk<br>oracle12clinux.vmdk<br>oracle12clinux-Snapshot2.vmsn </td> 
+      <td name="1" style="white-space: normal"> snapshot-789 (Installed 9201 and upgraded to 9201_p5) </td> 
+      <td name="1" align="right"> 96.39 </td> 
+      <td name="1"> Nov 14, 2015 12:25:36 AM </td> 
+      <td name="1" align="right"> 1,640 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> oracle12clinux </td> 
+      <td name="1"> oracle12clinux.corp </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> oracle12clinux-000003.vmdk<br>oracle12clinux.vmdk<br>oracle12clinux-Snapshot6.vmsn<br>oracle12clinux-000005.vmdk </td> 
+      <td name="1"> snapshot-870 (Ram 8gb,tmpfs 8gm, installed portal) </td> 
+      <td name="1" align="right"> 61.56 </td> 
+      <td name="1"> Jan 15, 2016 1:05:51 AM </td> 
+      <td name="1" align="right"> 1,578 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> oracle12clinux </td> 
+      <td name="1"> oracle12clinux.corp </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> oracle12clinux-Snapshot1.vmsn<br>oracle12clinux.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-788 (After Oracle 12c standard edition installation, before 'Post installation') </td> 
+      <td name="1" align="right"> 24.89 </td> 
+      <td name="1"> Nov 12, 2015 9:12:54 PM </td> 
+      <td name="1" align="right"> 1,641 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> oracle12clinux </td> 
+      <td name="1"> oracle12clinux.corp </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> oracle12clinux-000003.vmdk<br>oracle12clinux.vmdk<br>oracle12clinux-Snapshot10.vmsn<br>oracle12clinux-000006.vmdk<br>oracle12clinux-000005.vmdk<br>oracle12clinux-000004.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-895 (Before removing folders from Oracle folder) </td> 
+      <td name="1" align="right"> 109.75 </td> 
+      <td name="1"> Jan 22, 2016 7:06:17 PM </td> 
+      <td name="1" align="right"> 1,571 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> oracle12clinux </td> 
+      <td name="1"> oracle12clinux.corp </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> oracle12clinux-000003.vmdk<br>oracle12clinux.vmdk<br>oracle12clinux-Snapshot7.vmsn<br>oracle12clinux-000006.vmdk<br>oracle12clinux-000005.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-872 (8GB RAM, 8GB tmpfs , installed portal applied opatch and Patch 21359755) </td> 
+      <td name="1" align="right"> 66.75 </td> 
+      <td name="1"> Jan 15, 2016 7:10:13 PM </td> 
+      <td name="1" align="right"> 1,578 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> oracle12clinux </td> 
+      <td name="1"> oracle12clinux.corp </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> oracle12clinux-000003.vmdk<br>oracle12clinux.vmdk<br>oracle12clinux-Snapshot4.vmsn </td> 
+      <td name="1" style="white-space: normal"> snapshot-866 (After post installation(only oracle 12c, no patch) , before portal installation) </td> 
+      <td name="1" align="right"> 26.06 </td> 
+      <td name="1"> Jan 12, 2016 5:35:02 AM </td> 
+      <td name="1" align="right"> 1,581 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> Oracle12CWin </td> 
+      <td name="1"> SC90LEGODC-UPG </td> 
+      <td name="1"> aptesx08_local </td> 
+      <td name="1" style="white-space: normal"> Oracle12CWin-Snapshot10.vmsn<br>Oracle12CWin_2.vmdk<br>Oracle12CWin.vmdk </td> 
+      <td name="1"> snapshot-1476 (Created E drive) </td> 
+      <td name="1" align="right"> 20.11 </td> 
+      <td name="1"> May 24, 2016 8:02:37 PM </td> 
+      <td name="1" align="right"> 1,448 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> Oracle12CWin </td> 
+      <td name="1"> SC90LEGODC-UPG </td> 
+      <td name="1"> aptesx08_local </td> 
+      <td name="1" style="white-space: normal"> Oracle12CWin-000003.vmdk<br>Oracle12CWin_2.vmdk<br>Oracle12CWin_2-000004.vmdk<br>Oracle12CWin_2-000003.vmdk<br>Oracle12CWin.vmdk<br>Oracle12CWin-Snapshot50.vmsn<br>Oracle12CWin-000004.vmdk </td> 
+      <td name="1"> snapshot-2136 (B4 Oracle12c Installation) </td> 
+      <td name="1" align="right"> 82.74 </td> 
+      <td name="1"> Jan 26, 2017 11:11:39 PM </td> 
+      <td name="1" align="right"> 1,200 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> Oracle12CWin </td> 
+      <td name="1"> SC90LEGODC-UPG </td> 
+      <td name="1"> aptesx08_local </td> 
+      <td name="1" style="white-space: normal"> Oracle12CWin-000004.vmdk<br>Oracle12CWin_2.vmdk<br>Oracle12CWin_2-000004.vmdk<br>Oracle12CWin.vmdk<br>Oracle12CWin-Snapshot42.vmsn </td> 
+      <td name="1" style="white-space: normal"> snapshot-2018 (Oracle 11.2.0.2 , Portal :10001_P3_win_10232016) </td> 
+      <td name="1" align="right"> 68.24 </td> 
+      <td name="1"> Nov 7, 2016 6:42:23 PM </td> 
+      <td name="1" align="right"> 1,281 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_linux_x64-Snapshot1.vmsn<br>oracle_patch_test_linux_x64.vmdk </td> 
+      <td name="1"> snapshot-1212 (Clean) </td> 
+      <td name="1" align="right"> 5.90 </td> 
+      <td name="1"> Aug 3, 2011 5:48:18 PM </td> 
+      <td name="1" align="right"> 3,204 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_linux_x64-000004.vmdk<br>oracle_patch_test_linux_x64.vmdk<br>oracle_patch_test_linux_x64-Snapshot81.vmsn<br>oracle_patch_test_linux_x64-000011.vmdk<br>oracle_patch_test_linux_x64-000010.vmdk<br>oracle_patch_test_linux_x64-000008.vmdk </td> 
+      <td name="1"> snapshot-1216 (SC 10.0) </td> 
+      <td name="1" align="right"> 53.58 </td> 
+      <td name="1"> Jan 16, 2016 1:05:58 AM </td> 
+      <td name="1" align="right"> 1,577 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_linux_x64-000004.vmdk<br>oracle_patch_test_linux_x64.vmdk<br>oracle_patch_test_linux_x64-Snapshot102.vmsn<br>oracle_patch_test_linux_x64-000014.vmdk<br>oracle_patch_test_linux_x64-000011.vmdk<br>oracle_patch_test_linux_x64-000010.vmdk<br>oracle_patch_test_linux_x64-000008.vmdk </td> 
+      <td name="1"> snapshot-2044 (SC 10.1) </td> 
+      <td name="1" align="right"> 73.63 </td> 
+      <td name="1"> Nov 19, 2016 12:38:55 AM </td> 
+      <td name="1" align="right"> 1,269 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_linux_x64-000004.vmdk<br>oracle_patch_test_linux_x64.vmdk<br>oracle_patch_test_linux_x64-Snapshot61.vmsn </td> 
+      <td name="1"> snapshot-1213 (8.4.02 P1) </td> 
+      <td name="1" align="right"> 32.83 </td> 
+      <td name="1"> Mar 19, 2014 6:07:42 PM </td> 
+      <td name="1" align="right"> 2,245 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_linux_x64-000004.vmdk<br>oracle_patch_test_linux_x64.vmdk<br>oracle_patch_test_linux_x64-Snapshot80.vmsn<br>oracle_patch_test_linux_x64-000011.vmdk<br>oracle_patch_test_linux_x64-000008.vmdk </td> 
+      <td name="1"> snapshot-1215 (9.2.01_rel_P8) </td> 
+      <td name="1" align="right"> 46.83 </td> 
+      <td name="1"> Jan 15, 2016 7:40:32 PM </td> 
+      <td name="1" align="right"> 1,578 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_linux_x64-000001.vmdk<br>oracle_patch_test_linux_x64.vmdk<br>oracle_patch_test_linux_x64-Snapshot105.vmsn<br>oracle_patch_test_linux_x64-000011.vmdk<br>oracle_patch_test_linux_x64-000008.vmdk<br>oracle_patch_test_linux_x64-000004.vmdk </td> 
+      <td name="1"> snapshot-2386 (9.2.01_rel P15) </td> 
+      <td name="1" align="right"> 51.55 </td> 
+      <td name="1"> Oct 11, 2017 12:30:04 AM </td> 
+      <td name="1" align="right"> 943 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> oracle_patch_test_linux_x64 </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_linux_x64-000004.vmdk<br>oracle_patch_test_linux_x64.vmdk<br>oracle_patch_test_linux_x64-Snapshot79.vmsn<br>oracle_patch_test_linux_x64-000008.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-1214 (8.4.02_P1 proper with 8gb memory and static ip) </td> 
+      <td name="1" align="right"> 34.14 </td> 
+      <td name="1"> Jan 15, 2016 1:32:17 AM </td> 
+      <td name="1" align="right"> 1,578 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_win2008_x64 </td> 
+      <td name="1"> WIN-7QSHGN7H9RD </td> 
+      <td name="1"> ISCSI_APTNAS01_ISO_TEMPLATE </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_win2008_x64-000001.vmdk<br>oracle_patch_test_win2008_x64.vmdk<br>oracle_patch_test_win2008_x64-Snapshot60.vmsn<br>oracle_patch_test_win2008_x64-000010.vmdk<br>oracle_patch_test_win2008_x64-000005.vmdk<br>oracle_patch_test_win2008_x64-000002.vmdk </td> 
+      <td name="1"> snapshot-2422 (9.1.01P2) </td> 
+      <td name="1" align="right"> 66.07 </td> 
+      <td name="1"> Oct 13, 2014 6:52:46 PM </td> 
+      <td name="1" align="right"> 2,037 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_win2008_x64 </td> 
+      <td name="1"> WIN-7QSHGN7H9RD </td> 
+      <td name="1"> ISCSI_APTNAS01_ISO_TEMPLATE </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_win2008_x64-000001.vmdk<br>oracle_patch_test_win2008_x64.vmdk<br>oracle_patch_test_win2008_x64-Snapshot63.vmsn<br>oracle_patch_test_win2008_x64-000010.vmdk<br>oracle_patch_test_win2008_x64-000006.vmdk<br>oracle_patch_test_win2008_x64-000005.vmdk<br>oracle_patch_test_win2008_x64-000004.vmdk<br>oracle_patch_test_win2008_x64-000002.vmdk </td> 
+      <td name="1"> snapshot-2424 (9.2.00) </td> 
+      <td name="1" align="right"> 78.81 </td> 
+      <td name="1"> Jan 23, 2015 7:49:36 PM </td> 
+      <td name="1" align="right"> 1,935 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_win2008_x64 </td> 
+      <td name="1"> WIN-7QSHGN7H9RD </td> 
+      <td name="1"> ISCSI_APTNAS01_ISO_TEMPLATE </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_win2008_x64-000001.vmdk<br>oracle_patch_test_win2008_x64.vmdk<br>oracle_patch_test_win2008_x64-Snapshot59.vmsn<br>oracle_patch_test_win2008_x64-000010.vmdk<br>oracle_patch_test_win2008_x64-000002.vmdk </td> 
+      <td name="1"> snapshot-2421 (9.1.00) </td> 
+      <td name="1" align="right"> 59.57 </td> 
+      <td name="1"> Aug 6, 2014 5:52:16 PM </td> 
+      <td name="1" align="right"> 2,105 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_win2008_x64 </td> 
+      <td name="1"> WIN-7QSHGN7H9RD </td> 
+      <td name="1"> ISCSI_APTNAS01_ISO_TEMPLATE </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_win2008_x64-000002.vmdk<br>oracle_patch_test_win2008_x64.vmdk<br>oracle_patch_test_win2008_x64-Snapshot47.vmsn<br>oracle_patch_test_win2008_x64-000010.vmdk </td> 
+      <td name="1"> snapshot-2420 (9.0.01) </td> 
+      <td name="1" align="right"> 50.96 </td> 
+      <td name="1"> Mar 19, 2014 5:07:57 PM </td> 
+      <td name="1" align="right"> 2,245 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_win2008_x64 </td> 
+      <td name="1"> WIN-7QSHGN7H9RD </td> 
+      <td name="1"> ISCSI_APTNAS01_ISO_TEMPLATE </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_win2008_x64-Snapshot1.vmsn<br>oracle_patch_test_win2008_x64.vmdk </td> 
+      <td name="1"> snapshot-2419 (Clean) </td> 
+      <td name="1" align="right"> 9.13 </td> 
+      <td name="1"> Aug 9, 2011 5:07:04 PM </td> 
+      <td name="1" align="right"> 3,198 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> oracle_patch_test_win2008_x64 </td> 
+      <td name="1"> WIN-7QSHGN7H9RD </td> 
+      <td name="1"> ISCSI_APTNAS01_ISO_TEMPLATE </td> 
+      <td name="1" style="white-space: normal"> oracle_patch_test_win2008_x64-000001.vmdk<br>oracle_patch_test_win2008_x64.vmdk<br>oracle_patch_test_win2008_x64-Snapshot62.vmsn<br>oracle_patch_test_win2008_x64-000010.vmdk<br>oracle_patch_test_win2008_x64-000006.vmdk<br>oracle_patch_test_win2008_x64-000005.vmdk<br>oracle_patch_test_win2008_x64-000002.vmdk </td> 
+      <td name="1"> snapshot-2423 (9.1.01P3) </td> 
+      <td name="1" align="right"> 71.88 </td> 
+      <td name="1"> Jan 23, 2015 6:59:49 PM </td> 
+      <td name="1" align="right"> 1,935 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> qaautodeploy_w2012 </td> 
+      <td name="1"> qaautodeploy </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> qaautodeploy_w2012-000001.vmdk<br>qaautodeploy_w2012.vmdk<br>qaautodeploy_w2012-Snapshot15.vmsn </td> 
+      <td name="1"> snapshot-2229 (9.2.01_P15) </td> 
+      <td name="1" align="right"> 86.12 </td> 
+      <td name="1"> Apr 3, 2017 10:59:23 PM </td> 
+      <td name="1" align="right"> 1,133 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> qaautodeploy_w2012 </td> 
+      <td name="1"> qaautodeploy </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1" style="white-space: normal"> qaautodeploy_w2012-Snapshot2.vmsn<br>qaautodeploy_w2012.vmdk </td> 
+      <td name="1"> snapshot-687 (Clean) </td> 
+      <td name="1" align="right"> 13.06 </td> 
+      <td name="1"> Jun 10, 2015 10:36:59 PM </td> 
+      <td name="1" align="right"> 1,796 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> qacloud </td> 
+      <td name="1"> qacloud </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1"> qacloud-Snapshot2.vmsn<br>qacloud.vmdk </td> 
+      <td name="1"> snapshot-693 (QA cloud configuration complete) </td> 
+      <td name="1" align="right"> 60.00 </td> 
+      <td name="1"> Jul 31, 2014 7:13:25 PM </td> 
+      <td name="1" align="right"> 2,111 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> qalinmspdb </td> 
+      <td name="1"> qalinmspdb </td> 
+      <td name="1"> aptareesx_lun1 </td> 
+      <td name="1" style="white-space: normal"> qalinmspdb-000003.vmdk<br>qalinmspdb.vmdk<br>qalinmspdb-Snapshot49.vmsn </td> 
+      <td name="1"> snapshot-12608 (10201_P7 GA) </td> 
+      <td name="1" align="right"> 132.25 </td> 
+      <td name="1"> Feb 5, 2019 10:50:07 PM </td> 
+      <td name="1" align="right"> 460 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> qalinmspdb </td> 
+      <td name="1"> qalinmspdb </td> 
+      <td name="1"> aptareesx_lun1 </td> 
+      <td name="1" style="white-space: normal"> qalinmspdb-000002.vmdk<br>qalinmspdb.vmdk<br>qalinmspdb-Snapshot48.vmsn </td> 
+      <td name="1"> snapshot-11829 (10.2.00 P3) </td> 
+      <td name="1" align="right"> 114.04 </td> 
+      <td name="1"> Sep 6, 2018 10:16:54 PM </td> 
+      <td name="1" align="right"> 612 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> qaportal01 </td> 
+      <td name="1"> qaportal01 </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1"> qaportal01-Snapshot1.vmsn<br>qaportal01.vmdk </td> 
+      <td name="1"> snapshot-2334 (Clean) </td> 
+      <td name="1" align="right"> 14.16 </td> 
+      <td name="1"> Jul 28, 2017 5:27:22 PM </td> 
+      <td name="1" align="right"> 1,018 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> qaprod-win </td> 
+      <td name="1"> qaprod-win </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> qaprod-win-000002.vmdk<br>qaprod-win.vmdk<br>qaprod-win-Snapshot22.vmsn </td> 
+      <td name="1"> snapshot-11703 (10201 P2 GA Version ( 08142018)) </td> 
+      <td name="1" align="right"> 119.57 </td> 
+      <td name="1"> Aug 30, 2018 11:36:52 PM </td> 
+      <td name="1" align="right"> 619 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> qaprod-win </td> 
+      <td name="1"> qaprod-win </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1"> qaprod-win-Snapshot21.vmsn<br>qaprod-win.vmdk </td> 
+      <td name="1"> snapshot-2452 (10200RC2) </td> 
+      <td name="1" align="right"> 95.89 </td> 
+      <td name="1"> Dec 14, 2017 10:38:16 PM </td> 
+      <td name="1" align="right"> 878 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> rawdataload </td> 
+      <td name="1"> rawdataload </td> 
+      <td name="1"> netapp1_prod1 </td> 
+      <td name="1"> rawdataload-Snapshot6.vmsn<br>rawdataload.vmdk </td> 
+      <td name="1"> snapshot-743 (Clean 10202015) </td> 
+      <td name="1" align="right"> 38.66 </td> 
+      <td name="1"> Oct 20, 2015 5:23:45 PM </td> 
+      <td name="1" align="right"> 1,665 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> RTDRepo_prod </td> 
+      <td name="1"> reportlibrary.corp </td> 
+      <td name="1"> aptesx06_local </td> 
+      <td name="1"> RTDRepo_prod-Snapshot46.vmsn<br>RTDRepo_prod.vmdk </td> 
+      <td name="1"> snapshot-12641 (20190220 - before glibc update) </td> 
+      <td name="1" align="right"> 39.36 </td> 
+      <td name="1"> Feb 21, 2019 3:18:32 AM </td> 
+      <td name="1" align="right"> 445 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx08.corp </td> 
+      <td name="1"> salesportal5 </td> 
+      <td name="1"> salesportal5 </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1"> salesportal5-Snapshot1.vmsn<br>salesportal5.vmdk </td> 
+      <td name="1"> snapshot-6999 (FNB DB - before MTN) </td> 
+      <td name="1" align="right"> 111.96 </td> 
+      <td name="1"> Mar 27, 2018 1:42:33 PM </td> 
+      <td name="1" align="right"> 776 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> sc90legoportalit </td> 
+      <td name="1"> sc90legoportalit.corp </td> 
+      <td name="1"> aptesx06_local </td> 
+      <td name="1" style="white-space: normal"> sc90legoportalit-Snapshot4.vmsn<br>sc90legoportalit.vmdk </td> 
+      <td name="1"> snapshot-2175 (SC10.1GA) </td> 
+      <td name="1" align="right"> 58.55 </td> 
+      <td name="1"> Feb 28, 2017 10:05:35 PM </td> 
+      <td name="1" align="right"> 1,167 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx04.corp </td> 
+      <td name="1"> sc9legocollector </td> 
+      <td name="1"> sc9legocollector </td> 
+      <td name="1"> Netapp8_Prod2 </td> 
+      <td name="1" style="white-space: normal"> sc9legocollector-Snapshot7.vmsn<br>sc9legocollector.vmdk </td> 
+      <td name="1"> snapshot-2182 (10.1.00_Fresh Install_03022017) </td> 
+      <td name="1" align="right"> 42.57 </td> 
+      <td name="1"> Mar 2, 2017 9:58:08 PM </td> 
+      <td name="1" align="right"> 1,165 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> scprod_clone_10101 </td> 
+      <td name="1"> scprod.corp </td> 
+      <td name="1"> aptesx06_local </td> 
+      <td name="1"> scprod_clone-Snapshot1.vmsn<br>scprod_clone.vmdk </td> 
+      <td name="1"> snapshot-6365 (BeforeLicenseTest) </td> 
+      <td name="1" align="right"> 95.75 </td> 
+      <td name="1"> Mar 15, 2018 10:27:08 PM </td> 
+      <td name="1" align="right"> 787 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> service-reportdb </td> 
+      <td name="1"> service-reportdb </td> 
+      <td name="1"> Netapp7_Prod2 </td> 
+      <td name="1" style="white-space: normal"> service-reportdb-Snapshot28.vmsn<br>service-reportdb.vmdk </td> 
+      <td name="1"> snapshot-2271 (After upgrade to 10.1.02) </td> 
+      <td name="1" align="right"> 118.07 </td> 
+      <td name="1"> May 16, 2017 11:08:56 PM </td> 
+      <td name="1" align="right"> 1,090 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> ServiceLab_4 </td> 
+      <td name="1"> servicelab4 </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1"> ServiceLab_4.vmdk </td> 
+      <td name="1"> snapshot-12723 (20190327) </td> 
+      <td name="1" align="right"> 199.97 </td> 
+      <td name="1"> Mar 27, 2019 7:37:36 PM </td> 
+      <td name="1" align="right"> 411 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> ServiceLab_4 </td> 
+      <td name="1"> servicelab4 </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> ServiceLab_4-Snapshot1296.vmsn<br>ServiceLab_4_4.vmdk<br>ServiceLab_4.vmdk </td> 
+      <td name="1"> snapshot-12723 (20190327) </td> 
+      <td name="1" align="right"> 158.98 </td> 
+      <td name="1"> Mar 27, 2019 7:37:36 PM </td> 
+      <td name="1" align="right"> 411 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> servicelab_6 </td> 
+      <td name="1"> servicelab6 </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1" style="white-space: normal"> ServiceLab_6.vmdk<br>servicelab_6-Snapshot1.vmsn<br>ServiceLab_6_1.vmdk </td> 
+      <td name="1"> snapshot-12695 (before windows update) </td> 
+      <td name="1" align="right"> 174.13 </td> 
+      <td name="1"> Mar 15, 2019 2:48:12 PM </td> 
+      <td name="1" align="right"> 423 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx01.corp </td> 
+      <td name="1"> supportportal18 </td> 
+      <td name="1"> watsontest </td> 
+      <td name="1"> Bigbox_temp_1 </td> 
+      <td name="1" style="white-space: normal"> supportportal18-Snapshot1.vmsn<br>supportportal18_1.vmdk </td> 
+      <td name="1"> snapshot-12589 (10.1.01 P7) </td> 
+      <td name="1" align="right"> 120.01 </td> 
+      <td name="1"> Jan 29, 2019 1:44:52 PM </td> 
+      <td name="1" align="right"> 468 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> TBUB-DC </td> 
+      <td name="1"> TBUB-DC </td> 
+      <td name="1"> Netapp7_Prod2 </td> 
+      <td name="1" style="white-space: normal"> TBUB-DC-000003.vmdk<br>TBUB-DC.vmdk<br>TBUB-DC-Snapshot8.vmsn </td> 
+      <td name="1"> snapshot-2206 (.NET 3.5 and Networker client) </td> 
+      <td name="1" align="right"> 19.16 </td> 
+      <td name="1"> Nov 24, 2015 11:26:22 PM </td> 
+      <td name="1" align="right"> 1,629 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> testlink </td> 
+      <td name="1"> testlink </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1"> testlink-Snapshot10.vmsn<br>testlink.vmdk </td> 
+      <td name="1" style="white-space: normal"> snapshot-1334 (Before upgrading testlink to 1.9.14) </td> 
+      <td name="1" align="right"> 40.00 </td> 
+      <td name="1"> Apr 8, 2016 8:06:30 PM </td> 
+      <td name="1" align="right"> 1,494 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> training </td> 
+      <td name="1"> localhost.localdomain </td> 
+      <td name="1"> Netapp8_Prod1 </td> 
+      <td name="1" style="white-space: normal"> training-Snapshot2.vmsn<br>training.vmdk<br>training.vmdk </td> 
+      <td name="1"> snapshot-2433 (before 10.2) </td> 
+      <td name="1" align="right"> 126.20 </td> 
+      <td name="1"> Oct 27, 2017 1:47:26 AM </td> 
+      <td name="1" align="right"> 927 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> trainingportal </td> 
+      <td name="1"> trainingportal </td> 
+      <td name="1"> Netapp7_Prod2 </td> 
+      <td name="1" style="white-space: normal"> trainingportal-000003.vmdk<br>trainingportal.vmdk<br>trainingportal-Snapshot53.vmsn </td> 
+      <td name="1"> snapshot-2087 (Training Portal - 10.0.01 P3) </td> 
+      <td name="1" align="right"> 117.04 </td> 
+      <td name="1"> Dec 20, 2016 2:04:03 AM </td> 
+      <td name="1" align="right"> 1,238 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> trainingportal </td> 
+      <td name="1"> trainingportal </td> 
+      <td name="1"> Netapp7_Prod2 </td> 
+      <td name="1" style="white-space: normal"> trainingportal-Snapshot52.vmsn<br>trainingportal.vmdk </td> 
+      <td name="1"> snapshot-1777 (Training on SC1) </td> 
+      <td name="1" align="right"> 108.01 </td> 
+      <td name="1"> Aug 15, 2016 12:34:53 PM </td> 
+      <td name="1" align="right"> 1,365 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> Ubunitu14-Openstack </td> 
+      <td name="1"> Ubunitu14Openstack </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> Ubunitu14-Openstack-000001.vmdk<br>Ubunitu14-Openstack_3.vmdk<br>Ubunitu14-Openstack_2.vmdk<br>Ubunitu14-Openstack_1.vmdk<br>Ubunitu14-Openstack.vmdk<br>Ubunitu14-Openstack-Snapshot3.vmsn<br>Ubunitu14-Openstack-000002.vmdk </td> 
+      <td name="1"> snapshot-668 (WithSwiftRunning) </td> 
+      <td name="1" align="right"> 21.80 </td> 
+      <td name="1"> May 12, 2015 8:51:38 PM </td> 
+      <td name="1" align="right"> 1,825 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> Ubunitu14-Openstack </td> 
+      <td name="1"> Ubunitu14Openstack </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> Ubunitu14-Openstack-000001.vmdk<br>Ubunitu14-Openstack.vmdk<br>Ubunitu14-Openstack-Snapshot5.vmsn<br>Ubunitu14-Openstack-000004.vmdk<br>Ubunitu14-Openstack-000003.vmdk </td> 
+      <td name="1"> snapshot-670 (Snapshotafterdhcp setting change) </td> 
+      <td name="1" align="right"> 10.97 </td> 
+      <td name="1"> May 18, 2015 6:33:38 PM </td> 
+      <td name="1" align="right"> 1,820 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> Ubunitu14-Openstack </td> 
+      <td name="1"> Ubunitu14Openstack </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> Ubunitu14-Openstack-000001.vmdk<br>Ubunitu14-Openstack.vmdk<br>Ubunitu14-Openstack-Snapshot4.vmsn<br>Ubunitu14-Openstack-000004.vmdk </td> 
+      <td name="1"> snapshot-669 (Before Setting up controllernode) </td> 
+      <td name="1" align="right"> 10.58 </td> 
+      <td name="1"> May 14, 2015 12:09:50 AM </td> 
+      <td name="1" align="right"> 1,824 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> Ubunitu14-Openstack </td> 
+      <td name="1"> Ubunitu14Openstack </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> Ubunitu14-Openstack-000001.vmdk<br>Ubunitu14-Openstack.vmdk<br>Ubunitu14-Openstack-Snapshot2.vmsn </td> 
+      <td name="1"> snapshot-487 (After install of devstack) </td> 
+      <td name="1" align="right"> 10.31 </td> 
+      <td name="1"> Mar 16, 2015 11:34:00 PM </td> 
+      <td name="1" align="right"> 1,882 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx06.corp </td> 
+      <td name="1"> Ubunitu14-Openstack </td> 
+      <td name="1"> Ubunitu14Openstack </td> 
+      <td name="1"> netapp3_prod2 </td> 
+      <td name="1" style="white-space: normal"> Ubunitu14-Openstack-Snapshot1.vmsn<br>Ubunitu14-Openstack.vmdk </td> 
+      <td name="1"> snapshot-458 (before install of openstack) </td> 
+      <td name="1" align="right"> 7.16 </td> 
+      <td name="1"> Mar 12, 2015 11:20:11 PM </td> 
+      <td name="1" align="right"> 1,886 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx05.corp </td> 
+      <td name="1"> upgradetest </td> 
+      <td name="1"> upgradetest </td> 
+      <td name="1"> aptaresx05_local </td> 
+      <td name="1"> upgradetest-Snapshot3.vmsn<br>upgradetest.vmdk </td> 
+      <td name="1"> snapshot-11722 (Snapshot of SC10.2.01) </td> 
+      <td name="1" align="right"> 120.00 </td> 
+      <td name="1"> Aug 31, 2018 8:14:36 PM </td> 
+      <td name="1" align="right"> 619 Days </td> 
+     </tr> 
+     <tr class="even"> 
+      <td name="1"> aptesx07.corp </td> 
+      <td name="1"> W2K8-R2 </td> 
+      <td name="1"> W2K8-R2.aptare.com </td> 
+      <td name="1"> aptesx07_local_ora </td> 
+      <td name="1"> W2K8-R2-Snapshot21.vmsn<br>W2K8-R2.vmdk </td> 
+      <td name="1"> snapshot-1502 (after 9101P4 and import) </td> 
+      <td name="1" align="right"> 59.86 </td> 
+      <td name="1"> Jun 2, 2016 2:57:27 AM </td> 
+      <td name="1" align="right"> 1,439 Days </td> 
+     </tr> 
+     <tr class="odd"> 
+      <td name="1"> aptesx09.corp </td> 
+      <td name="1"> Watson90 </td> 
+      <td name="1"> Watson90 </td> 
+      <td name="1"> Netapp7_Prod1 </td> 
+      <td name="1"> Watson90-Snapshot1.vmsn<br>Watson90.vmdk </td> 
+      <td name="1"> snapshot-9484 (10.2.00 P5) </td> 
+      <td name="1" align="right"> 95.98 </td> 
+      <td name="1"> Jun 4, 2018 5:43:23 PM </td> 
+      <td name="1" align="right"> 707 Days </td> 
+     </tr> 
+    </tbody>
+    <tfoot> 
+     <tr class="aggregate"> 
+      <td> &#160; Aggregation </td> 
+      <td> &#160; </td> 
+      <td> &#160; </td> 
+      <td> &#160; </td> 
+      <td> &#160; </td> 
+      <td> &#160; </td> 
+      <td align="right"> &#160; <span title="Sum"> 7,828.00 </span> </td> 
+      <td> &#160; </td> 
+      <td align="right"> &#160; </td> 
+     </tr> 
+    </tfoot> 
+   </table> 
+  </div> 
+  <br> 
+  <div class="footer">
+    Copyright (Â©) 2020 Veritas Technologies LLC. All rights reserved. 
+  </div> 
+ </div> 
+ <input type="hidden" name="reportParameters" value="%3Ccom.aptare.sc.domain.report.ReportParameters+serialization%3D%22custom%22%3E%0A++%3Cunserializable-parents%2F%3E%0A++%3Cmap%3E%0A++++%3Cdefault%3E%0A++++++%3CloadFactor%3E0.75%3C%2FloadFactor%3E%0A++++++%3Cthreshold%3E24%3C%2Fthreshold%3E%0A++++%3C%2Fdefault%3E%0A++++%3Cint%3E32%3C%2Fint%3E%0A++++%3Cint%3E17%3C%2Fint%3E%0A++++%3Cstring%3EreportVersion%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EisCloudTemplate%3C%2Fstring%3E%0A++++%3Cstring%3Efalse%3C%2Fstring%3E%0A++++%3Cstring%3EfreeCombo1%3C%2Fstring%3E%0A++++%3Cstring%3EGB%3C%2Fstring%3E%0A++++%3Cstring%3EreportGuid%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EdateRange%3C%2Fstring%3E%0A++++%3Ccom.aptare.sc.domain.report.DateRange%3E%0A++++++%3CtimePeriod%3E2010%3C%2FtimePeriod%3E%0A++++++%3CuseFinishTime%3Etrue%3C%2FuseFinishTime%3E%0A++++%3C%2Fcom.aptare.sc.domain.report.DateRange%3E%0A++++%3Cstring%3Erefresh%3C%2Fstring%3E%0A++++%3Cstring%3Etrue%3C%2Fstring%3E%0A++++%3Cstring%3EnavigationHistory%3C%2Fstring%3E%0A++++%3Cstring%3E110257%3C%2Fstring%3E%0A++++%3Cstring%3EscopeJson%3C%2Fstring%3E%0A++++%3Cstring%3E%5B%7B%26quot%3Bvalue%26quot%3B%3A%26quot%3BHost+Group%3DAPTARE%26quot%3B%2C%26quot%3Bid%26quot%3B%3A%26quot%3B101558%26quot%3B%2C%26quot%3Btype%26quot%3B%3A%26quot%3BSERVER_GROUP%26quot%3B%7D%5D%3C%2Fstring%3E%0A++++%3Cstring%3EtemplateId%3C%2Fstring%3E%0A++++%3Cstring%3E110257%3C%2Fstring%3E%0A++++%3Cstring%3EscopeOnlyComponent%3C%2Fstring%3E%0A++++%3Cboolean%3Efalse%3C%2Fboolean%3E%0A++++%3Cstring%3EreportInstanceId%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EsystemName%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EpathToMetaFile%3C%2Fstring%3E%0A++++%3Cstring%3E%3C%2Fstring%3E%0A++++%3Cstring%3EscopeDomainId%3C%2Fstring%3E%0A++++%3Cstring%3E100002%3C%2Fstring%3E%0A++++%3Cstring%3EcascadeToSubGroups%3C%2Fstring%3E%0A++++%3Cboolean%3Etrue%3C%2Fboolean%3E%0A++++%3Cstring%3EreportScope%3C%2Fstring%3E%0A++++%3Clist%3E%0A++++++%3Ccom.aptare.sc.domain.scope.SelectedNode%3E%0A++++++++%3CnodeType%3ESERVER_GROUP%3C%2FnodeType%3E%0A++++++++%3Cname%3EAPTARE%3C%2Fname%3E%0A++++++++%3Cid%3E101558%3C%2Fid%3E%0A++++++++%3CnodeTypeName%3EHost+Group%3C%2FnodeTypeName%3E%0A++++++%3C%2Fcom.aptare.sc.domain.scope.SelectedNode%3E%0A++++%3C%2Flist%3E%0A++++%3Cstring%3EexportFormat%3C%2Fstring%3E%0A++++%3Ccom.aptare.sc.domain.report.enumerations.ExportFormat%3Ehtml%3C%2Fcom.aptare.sc.domain.report.enumerations.ExportFormat%3E%0A++%3C%2Fmap%3E%0A++%3Ccom.aptare.sc.domain.report.ReportParameters%3E%0A++++%3Cdefault%3E%0A++++++%3CreturnNulls%3Etrue%3C%2FreturnNulls%3E%0A++++%3C%2Fdefault%3E%0A++%3C%2Fcom.aptare.sc.domain.report.ReportParameters%3E%0A%3C%2Fcom.aptare.sc.domain.report.ReportParameters%3E"> 
+ <input type="hidden" name="evaluatedDateRange" value="%3Ccom.aptare.sc.domain.report.DateRange%3E%0A++%3CstartDate%3E2010-05-11+07%3A00%3A00.0+UTC%3C%2FstartDate%3E%0A++%3CfinishDate%3E2020-05-11+07%3A00%3A00.0+UTC%3C%2FfinishDate%3E%0A++%3CstartHour%3E0%3C%2FstartHour%3E%0A++%3CfinishHour%3E8%3C%2FfinishHour%3E%0A++%3CstartMinute%3E0%3C%2FstartMinute%3E%0A++%3CfinishMinute%3E21%3C%2FfinishMinute%3E%0A++%3CstartSecond%3E0%3C%2FstartSecond%3E%0A++%3CfinishSecond%3E19%3C%2FfinishSecond%3E%0A++%3CtimePeriod%3E2010%3C%2FtimePeriod%3E%0A++%3CuseFinishTime%3Etrue%3C%2FuseFinishTime%3E%0A%3C%2Fcom.aptare.sc.domain.report.DateRange%3E"> 
+</div></body></html>

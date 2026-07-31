@@ -1,0 +1,735 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>1</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>4ac6f3aa-90fb-4f51-a74b-65de13d29bed</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>5</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*09/26/2017</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>HP 3Par Array Utilization and Summary</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>241</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>ARRAYS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>TB</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>HP 3Par Array Utilization and Summary</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 09/26/2017
+WITH 
+VAR AS (
+SELECT
+DECODE(&apos;${freeCombo1}&apos;,
+&apos;GB&apos;,(1),&apos;TB&apos;,(1024),&apos;PB&apos;,(1024*1024)) div_by 
+FROM apt_v_dual
+),
+t1 AS (
+--Start HP 3Par
+SELECT
+--Get what you can from aps_v_storage_array
+sa.storage_array_id,
+sa.vendor_name,
+sa.array_family,
+sa.array_type,
+sa.product_name,
+sa.serial_nbr,
+sa.array_name,
+sa.agent_version,
+sa.controller_version,
+sa.last_updated, --Last Poll Time
+sa.nbr_hosts,
+sa.raw_allocated_gb,
+sa.raw_available_gb,
+pd.nbr_of_hot_spares,
+sa.estimated_used_kb/1024/1024 estimated_used_gb,
+--ROUND(sa.array_group_capacity_kb/1024/1024,2) array_group_capacity,
+ROUND(sa.array_group_available_kb/1024/1024,2) array_group_available, 
+ROUND(sa.allocated_kb/1024/1024,2) allocated, 
+ROUND(sa.lun_capacity_gb,2) lun_capacity, 
+ROUND(sa.lun_allocated_gb,2) lun_allocated,
+ROUND(sa.usable_internal_capacity_gb,2) usable_internal_capacity, --LDev Capacity
+ROUND(sa.usable_used_capacity_gb,2) usable_used_capacity, --LD used
+ROUND(sa.usable_free_capacity_gb,2) usable_free_capacity, --LD free
+ROUND(sa.usable_used_capacity_gb / ((sa.array_group_capacity_kb/1024/1024) + .0001) * 100,2) pct_used,
+--Extras
+pd.nbr_of_physical_disks,
+pd.raw_physical_disk_capacity,
+sa.raw_capacity_gb,
+sa.nbr_array_ports,
+sa.nbr_of_fc_ports,
+--Calculating it below in HP specific section
+--sa.nbr_of_iscsi_ports,
+sa.nbr_of_ethernet_ports,
+ap.nbr_of_target_ports,
+sa.nbr_of_array_groups,
+--ag.nbr_of_internal_array_groups,
+--ag.nbr_of_external_array_groups,
+sa.array_group_capacity_kb/1024/1024 array_group_capacity,
+sa.array_group_ALlocated_kb/1024/1024 array_group_allocated_capacity,
+--ag.array_group_overhead,
+sa.array_group_available_kb/1024/1024 array_group_free,
+--ag.array_group_usable,
+sa.nbr_of_storage_pools, 
+NVL(sa.thin_pool_capacity_kb, 0)/1024/1024 thin_pool_user_gb, 
+sa.thin_pool_allocated_kb/1024/1024 thin_pool_consumed_gb, 
+sa.thin_pool_available_kb/1024/1024 thin_pool_available_gb,  
+sa.thin_pool_subscribed_kb/1024/1024 thin_pool_subscribed_gb,
+sa.thin_pool_subscribed_pct thin_pool_subscribed_pct,
+lu.total_nbr_of_luns total_nbr_of_luns,
+sa.nbr_of_luns,
+--Translate these to HP3PAR
+sa.nbr_of_array_groups nbr_of_cpgs, 
+h3p.nbr_of_assoc_ldev nbr_of_assoc_ld, 
+sa.array_group_capacity_kb/1024/1024 array_group_capacity_gb, 
+sa.array_group_allocated_kb/1024/1024 array_group_alloc_capacity_gb,
+sa.nbr_allocated_luns nbr_allocated_vluns,
+sa.lun_allocated_gb alloc_vlun_capacity_gb, 
+h3p.vlun_capacity_gb - NVL(sa.lun_allocated_gb ,0) unalloc_vlun_capacity_gb,
+h3p.vlun_capacity_gb h3p_vlun_capacity_gb,
+lu.lu_estimated_used_gb,
+lu.nbr_allocated_luns,
+--sa.nbr_allocated_luns nbr_allocated_luns,
+lu.nbr_unallocated_luns, 
+--(sa.nbr_of_luns - lu.nbr_allocated_luns) nbr_unallocated_luns,
+--al.total_allocated_capacity_gb, 
+--al.total_unallocated_capacity_gb, 
+--al.estimated_used_gb lun_estimated_used_gb,
+--HP Specific
+h3p.nbr_of_hosts h3p_nbr_of_hosts,
+h3p.nbr_of_logical_disks h3p_nbr_of_logical_disks,
+h3p.nbr_of_assoc_ldev h3p_nbr_of_assoc_ldev,
+h3p.nbr_of_controllers h3p_nbr_of_controllers,
+h3p.vv_capacity_gb,
+h3p.alloc_snapdata_gb,
+h3p.alloc_snapadmin_gb,
+h3p.max_space_limit_gb,
+h3p.ipv4_address,
+h3p.time_zone,
+h3p.build_number,
+h3p.location,
+h3p.nbr_of_10gb_ports,
+h3p.nbr_of_1gb_ports,
+(h3p.nbr_of_1gb_ports + h3p.nbr_of_10gb_ports) nbr_of_iscsi_ports,
+h3p.h3p_storage_system_id,
+h3p.install_date,
+h3p.operational_status,
+h3p.primary_owner_name,
+h3p.primary_owner_contact,
+h3p.machine_model,
+h3p.serial_nbr h3p_serial_nbr,
+h3p.machine_type,
+h3p.system_name,
+h3p.system_version,
+h3p.free_hard_gb,
+h3p.free_soft_gb,
+h3p.total_hard_gb,
+h3p.total_free_gb,
+h3p.nbr_allocated_luns h3p_nbr_allocated_luns,
+h3p.nbr_of_luns h3p_nbr_of_luns,
+h3p.chunk_normal_used_ok_gb,
+h3p.chunk_normal_used_fail_gb,
+h3p.chunk_normal_unused_free_gb,
+h3p.chunk_normal_unused_uninit_gb,
+h3p.chunk_normal_unused_fail_gb,
+h3p.chunk_spare_used_ok_gb,
+h3p.chunk_spare_used_fail_gb,
+h3p.chunk_spare_unused_free_gb,
+h3p.chunk_spare_unused_uninit_gb,
+h3p.chunk_spare_unused_fail_gb,
+h3p_ld.h3p_nbr_of_ldevs,
+h3p_ld.h3p_ldev_raw_capacity_gb,
+h3p_ld.h3p_ldev_usable_capacity_gb,
+h3p_pd.h3p_nbr_of_physical_disks,
+h3p_pd.h3p_raw_physical_disk_capacity,
+h3p.alloc_snapdata_gb allocated_snapshot_gb, 
+h3p.alloc_snapadmin_gb allocated_admin_space_gb,
+h3p_lu.nbr_of_tp_vv,
+h3p_lu.nbr_of_cp_vv,h3p_lu.vv_raw_blocks,
+h3p_lu.vv_total_capacity,
+h3p_lu.vv_used_snap_admin,
+h3p_lu.vv_used_snap_data,
+h3p_lu.vv_raw_admin,
+h3p_lu.vv_raw_copy,
+h3p_lu.vv_raw_user,
+h3p_lu.vv_consumable_admin,
+h3p_lu.vv_consumable_copy,
+h3p_lu.vv_consumable_user,
+h3p_nbr_of_fc_disks,
+h3p_fc_disk_capacity,
+h3p_nbr_of_ssd_disks,
+h3p_ssd_disk_capacity,
+sysdate	
+FROM aps_v_storage_array sa, aps_v_h3p_storage_system h3p,
+     (SELECT 
+     storage_array_id,
+     COUNT(DISTINCT pdev_id) nbr_of_physical_disks,
+     SUM(capacity_gb) raw_physical_disk_capacity,
+     SUM(DECODE(hot_spare,&apos;Y&apos;,1,0)) nbr_of_hot_spares
+     FROM aps_v_pdev pd
+     GROUP BY storage_array_id
+     ) pd,
+     (SELECT --3PAR PDevs
+     h3p_storage_system_id,
+     COUNT(DISTINCT pdev_id) h3p_nbr_of_physical_disks,
+     SUM(capacity_gb) h3p_raw_physical_disk_capacity,
+     SUM(DECODE(disk_type,&apos;FC&apos;,1,0)) h3p_nbr_of_fc_disks,
+     SUM(DECODE(disk_type,&apos;FC&apos;,capacity_gb,0)) h3p_fc_disk_capacity,
+     SUM(DECODE(disk_type,&apos;SSD&apos;,1,0)) h3p_nbr_of_ssd_disks,
+     SUM(DECODE(disk_type,&apos;SSD&apos;,capacity_gb,0)) h3p_ssd_disk_capacity
+     FROM aps_v_h3p_pdev h3pd
+     GROUP BY h3p_storage_system_id
+     ) h3p_pd,
+     (SELECT
+     h3p_storage_system_id,
+     COUNT(h3p_ldev_id) h3p_nbr_of_ldevs,
+     SUM(raw_capacity_gb) h3p_ldev_raw_capacity_gb,
+     SUM(usable_capacity_gb) h3p_ldev_usable_capacity_gb
+     FROM aps_v_h3p_ldev
+     GROUP BY 
+     h3p_storage_system_id
+     ) h3p_ld,
+     (SELECT 
+     storage_array_id,
+     COUNT(DISTINCT port_id) nbr_of_array_ports,
+     SUM(DECODE(UPPER(port_role),&apos;TARGET&apos;,1,0)) nbr_of_target_ports
+     FROM aps_v_array_port
+     GROUP BY storage_array_id
+     ) ap,
+     (SELECT 
+     storage_array_id,
+     COUNT(DISTINCT array_group_id) nbr_of_array_groups,
+     SUM(DECODE(UPPER(is_external),&apos;Y&apos;,1,0)) nbr_of_external_array_groups,
+     SUM(DECODE(UPPER(is_external),&apos;N&apos;,1,0)) nbr_of_internal_array_groups,
+     SUM(total_capacity_gb) array_group_capacity,
+     SUM(allocated_capacity_gb) array_group_allocated_capacity,
+     SUM(overhead_gb) array_group_overhead,
+     SUM(free_capacity_gb) array_group_free,
+     SUM(usable_capacity_gb) array_group_usable
+     FROM aps_v_array_group
+     GROUP BY storage_array_id
+     ) ag,
+     (SELECT --HP 3PAR Virtual Volumes
+     h3p_storage_system_id,
+     SUM(DECODE(is_thinly_provisioned,&apos;Y&apos;,1,0)) nbr_of_tp_vv, --Thin Provisioned
+     SUM(DECODE(is_thinly_provisioned,&apos;N&apos;,1,0)) nbr_of_cp_vv, --Common Provisioned
+     SUM(raw_blocks_gb) vv_raw_blocks,
+     SUM(total_capacity_gb) vv_total_capacity,
+     SUM(used_snapshot_admin_space_gb) vv_used_snap_admin,
+     SUM(used_snapshot_data_space_gb) vv_used_snap_data,
+     SUM(raw_admin_gb) vv_raw_admin,
+     SUM(raw_copy_gb) vv_raw_copy,
+     SUM(raw_user_gb) vv_raw_user,
+     SUM(consumable_admin_gb) vv_consumable_admin,
+     SUM(consumable_copy_gb) vv_consumable_copy,
+     SUM(consumable_user_gb) vv_consumable_user
+     FROM aps_v_h3p_logical_unit
+     GROUP BY h3p_storage_system_id
+     ) h3p_lu,
+     (SELECT 
+     al.storage_array_id, 
+     NVL(tl.total_nbr_of_luns, 0) total_nbr_of_luns,
+     NVL(al.nbr_allocated_luns, 0) nbr_allocated_luns,
+     NVL(ua.nbr_unallocated_luns, 0) nbr_unallocated_luns, 
+     NVL(al.total_allocated_capacity_gb, 0) total_allocated_capacity_gb,
+     NVL(ua.total_unallocated_capacity_gb, 0) total_unallocated_capacity_gb, 
+     NVL(al.estimated_used_gb, 0) lu_estimated_used_gb 
+     FROM (SELECT storage_array_id, 
+          COUNT(DISTINCT logical_unit_id) nbr_allocated_luns, 
+          SUM(total_capacity_gb) total_allocated_capacity_gb, 
+          SUM(estimated_used_kb/1024/1024) estimated_used_gb
+          FROM aps_v_logical_unit
+          WHERE status LIKE &apos;allocated%&apos;
+          GROUP BY storage_array_id
+          ) al,
+          (SELECT storage_array_id, 
+          COUNT(DISTINCT logical_unit_id) nbr_unallocated_luns, 
+          SUM(total_capacity_gb) total_unallocated_capacity_gb
+          FROM aps_v_logical_unit
+          WHERE status LIKE &apos;unallocated&apos;
+          GROUP BY storage_array_id
+          ) ua,
+          (SELECT storage_array_id, 
+          COUNT(DISTINCT logical_unit_id) total_nbr_of_luns 
+          FROM aps_v_logical_unit
+          GROUP BY storage_array_id
+          ) tl
+     WHERE tl.storage_array_id = al.storage_array_id(+)
+     AND   tl.storage_array_id = ua.storage_array_id(+)
+     ) lu
+WHERE
+REGEXP_LIKE(sa.array_family,&apos;HP*&apos;)
+AND sa.storage_array_id IN (${arrays})
+AND sa.storage_array_id = h3p.h3p_storage_system_id (+)
+AND sa.storage_array_id = pd.storage_array_id (+)
+AND sa.storage_array_id = h3p_pd.h3p_storage_system_id (+)
+AND sa.storage_array_id = h3p_ld.h3p_storage_system_id (+)
+AND sa.storage_array_id = h3p_lu.h3p_storage_system_id (+)
+AND sa.storage_array_id = ap.storage_array_id (+)
+AND sa.storage_array_id = ag.storage_array_id (+)
+AND sa.storage_array_id = lu.storage_array_id (+)
+)
+SELECT 01 sort_order, array_name, &apos;&lt;b&gt;Array Summary&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 02 sort_order, array_name, &apos;Storage Array:&apos; metric, array_name value FROM t1 UNION
+SELECT 03 sort_order, array_name, &apos;Family:&apos; metric, array_family value FROM t1 UNION
+SELECT 04 sort_order, array_name, &apos;Type:&apos; metric, array_type value FROM t1 UNION
+SELECT 05 sort_order, array_name, &apos;Vendor:&apos; metric, &apos;HP&apos; value FROM t1 UNION --This is how it&apos;s done in SP
+SELECT 06 sort_order, array_name, &apos;Product:&apos; metric, product_name value FROM t1 UNION
+SELECT 07 sort_order, array_name, &apos;OS Firmware:&apos; metric, agent_version|| &apos;.&apos; ||build_number value FROM t1 UNION --FIXME UI should be OS not O/S Firmware
+SELECT 08 sort_order, array_name, &apos;Serial#:&apos; metric, serial_nbr value FROM t1 UNION
+SELECT 09 sort_order, array_name, &apos;Last Poll Time:&apos; metric, to_char(last_updated, &apos;mm/dd/yyyy&apos;) value FROM t1 UNION
+SELECT 10 sort_order, array_name, &apos;# Controllers:&apos; metric, TO_CHAR(h3p_nbr_of_controllers) value FROM t1 UNION
+SELECT 11 sort_order, array_name, &apos;&lt;font color=green&gt;Controller Version:&lt;/font&gt;&apos; metric, controller_version value FROM t1 UNION
+SELECT 12 sort_order, array_name, &apos;# FC Ports:&apos; metric, TO_CHAR(nbr_of_fc_ports) value FROM t1 UNION
+SELECT 13 sort_order, array_name, &apos;# iSCSI Ports:&apos; metric, TO_CHAR(nbr_of_iscsi_ports) value FROM t1 UNION
+SELECT 14 sort_order, array_name, &apos;# Hosts:&apos; metric, TO_CHAR(nbr_hosts) value FROM t1 UNION
+--FIXME SELECT 15 sort_order, array_name, &apos;Host Usage:&apos; metric, TO_CHAR(0, &apos;999,999,999.99&apos;) value FROM t1 UNION
+
+SELECT 20 sort_order, array_name, &apos;&lt;b&gt;Physical Summary&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 21 sort_order, array_name, &apos;&lt;font color=red&gt;# Disks:&lt;/font&gt;&apos; metric, TO_CHAR(nbr_of_physical_disks) value FROM t1 UNION
+SELECT 22 sort_order, array_name, &apos;&lt;font color=red&gt;# Disks H3p:&lt;/font&gt;&apos; metric, TO_CHAR(h3p_nbr_of_physical_disks) value FROM t1 UNION
+SELECT 23 sort_order, array_name, &apos;&lt;font color=green&gt;Raw Disk Capacity&lt;/font&gt;&apos; metric, TO_CHAR(raw_physical_disk_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 24 sort_order, array_name, &apos;&lt;font color=green&gt;Raw Disk Capacity H3p&lt;/font&gt;&apos; metric, TO_CHAR(h3p_raw_physical_disk_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 25 sort_order, array_name, &apos;&lt;font color=green&gt;# Solid State Disks:&lt;/font&gt;&apos; metric, TO_CHAR(h3p_nbr_of_ssd_disks) value FROM t1 UNION
+SELECT 26 sort_order, array_name, &apos;&lt;font color=green&gt;SSD Disk Capacity&lt;/font&gt;&apos; metric, TO_CHAR(h3p_ssd_disk_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 27 sort_order, array_name, &apos;&lt;font color=green&gt;# Fiber Chanel Disks:&lt;/font&gt;&apos; metric, TO_CHAR(h3p_nbr_of_fc_disks) value FROM t1 UNION
+SELECT 28 sort_order, array_name, &apos;&lt;font color=green&gt;FC Disk Capacity&lt;/font&gt;&apos; metric, TO_CHAR(h3p_fc_disk_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+/*
+SELECT 24 sort_order, array_name, &apos;&lt;font color=red&gt;# Hot Spares:&lt;/font&gt;&apos; metric, TO_CHAR(nbr_of_hot_spares) value FROM t1 UNION
+SELECT 25 sort_order, array_name, &apos;&lt;font color=red&gt;Raw &lt;/font&gt;Capacity&apos; metric, TO_CHAR(raw_capacity_gb,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 26 sort_order, array_name, &apos;&lt;font color=red&gt;Raw &lt;/font&gt;Allocated:&apos; metric, TO_CHAR(raw_allocated_gb,&apos;999,999,999.99&apos;)  value FROM t1 UNION
+SELECT 27 sort_order, array_name, &apos;&lt;font color=red&gt;Raw &lt;/font&gt;Available:&apos; metric, TO_CHAR(raw_available_gb,&apos;999,999,999.99&apos;)  value FROM t1 UNION
+SELECT 28 sort_order, array_name, &apos;%&lt;font color=red&gt; Raw &lt;/font&gt;Available:&apos; metric, TO_CHAR((raw_available_gb/(raw_physical_disk_capacity+.0001)*100),&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 29 sort_order, array_name, &apos;Raw Usage:&apos; metric, TO_CHAR((raw_allocated_gb)/(raw_physical_disk_capacity + .0001),&apos;999,999,999.99&apos;) value FROM t1 UNION
+*/
+SELECT 30 sort_order, array_name, &apos;&lt;b&gt;Chunklets&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 31 sort_order, array_name, &apos;Normal Used OK:&apos; metric, TO_CHAR(chunk_normal_used_ok_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 32 sort_order, array_name, &apos;Normal Used Failed:&apos; metric, TO_CHAR(chunk_normal_used_fail_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 33 sort_order, array_name, &apos;Normal Unused Free:&apos; metric, TO_CHAR(chunk_normal_unused_free_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 34 sort_order, array_name, &apos;Normal Unused Unitialized:&apos; metric, TO_CHAR(chunk_normal_unused_uninit_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 35 sort_order, array_name, &apos;Normal Unused Failed:&apos; metric, TO_CHAR(chunk_normal_unused_fail_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 36 sort_order, array_name, &apos;Spare Used OK:&apos; metric, TO_CHAR(chunk_spare_used_ok_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 37 sort_order, array_name, &apos;Spare Used Failed:&apos; metric, TO_CHAR(chunk_spare_used_fail_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 38 sort_order, array_name, &apos;Spare Unused Free:&apos; metric, TO_CHAR(chunk_spare_unused_free_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 39 sort_order, array_name, &apos;Spare Unused Unitialized:&apos; metric, TO_CHAR(chunk_spare_unused_uninit_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 40 sort_order, array_name, &apos;Spare Unused Failed:&apos; metric, TO_CHAR(chunk_spare_unused_fail_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+--FIXME SELECT 40 sort_order, array_name, &apos;Chunklet Usage:&apos; metric, TO_CHAR(0,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+/*
+SELECT 30 sort_order, array_name, &apos;&lt;b&gt;Raw RAID Group Summary&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 31 sort_order, array_name, &apos;# RAID Groups:&apos; metric, TO_CHAR(nbr_of_array_groups) value FROM t1 UNION
+SELECT 32 sort_order, array_name, &apos;RAID Groups Capacity:&apos; metric, TO_CHAR(array_group_capacity,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 33 sort_order, array_name, &apos;RAID Groups Used:&apos; metric, TO_CHAR(array_group_allocated_capacity,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 34 sort_order, array_name, &apos;RAID Groups Available:&apos; metric, TO_CHAR(array_group_free,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 35 sort_order, array_name, &apos;RAID Groups Usage:&apos; metric, TO_CHAR((array_group_allocated_capacity*100/(array_group_capacity +.0001)),&apos;999,999,999.99&apos;) value FROM t1  UNION
+SELECT 40 sort_order, array_name, &apos;&lt;b&gt;Thin Provisioning&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 41 sort_order, array_name, &apos;# of Pools:&apos; metric, TO_CHAR(nbr_of_storage_pools) value FROM t1 UNION
+--SELECT 42 sort_order, array_name, &apos;Raw Capacity:&apos; metric, TO_CHAR(thin_pool_raw_gb,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 43 sort_order, array_name, &apos;User Capacity:&apos; metric, TO_CHAR(thin_pool_user_gb,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 44 sort_order, array_name, &apos;Consumed Capacity:&apos; metric, TO_CHAR(thin_pool_consumed_gb,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 45 sort_order, array_name, &apos;% Used:&apos; metric, TO_CHAR(thin_pool_consumed_gb/(thin_pool_user_gb + .0001)*100, &apos;999,999,999.99&apos;)||&apos;%&apos; value FROM t1 UNION
+SELECT 46 sort_order, array_name, &apos;Available Capacity:&apos; metric, TO_CHAR(thin_pool_available_gb,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 47 sort_order, array_name, &apos;Subscribed Capacity:&apos; metric, TO_CHAR(thin_pool_subscribed_gb,&apos;999,999,999.99&apos;) value FROM t1 UNION
+SELECT 48 sort_order, array_name, &apos;% Subscribed Capacity:&apos; metric, TO_CHAR(thin_pool_subscribed_pct)||&apos;%&apos; value FROM t1 UNION
+*/
+SELECT 50 sort_order, array_name, &apos;&lt;b&gt;Logical (LD) Summary&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 51 sort_order, array_name, &apos;# Logical Drives (LD):&apos; metric, TO_CHAR(h3p_nbr_of_logical_disks) value FROM t1 UNION
+SELECT 52 sort_order, array_name, &apos;# Logical Drives (LD):&apos; metric, TO_CHAR(h3p_nbr_of_ldevs) value FROM t1 UNION
+SELECT 53 sort_order, array_name, &apos;&lt;font color=red&gt;LD Raw Capacity:&lt;/font&gt;&apos; metric, TO_CHAR(h3p_ldev_raw_capacity_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 54 sort_order, array_name, &apos;LD Capacity:&apos; metric, TO_CHAR(usable_internal_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 55 sort_order, array_name, &apos;LD Used:&apos; metric, TO_CHAR(usable_used_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 56 sort_order, array_name, &apos;LD Free:&apos; metric, TO_CHAR(usable_free_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 57 sort_order, array_name, &apos;LD Usage:&apos; metric, &apos;FIXME 0%&apos; value FROM t1 UNION
+--
+SELECT 60 sort_order, array_name, &apos;&lt;b&gt;Common Provisioning Groups (CPG)&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 61 sort_order, array_name, &apos;# CPGs:&apos; metric, TO_CHAR(nbr_of_cpgs) value FROM t1 UNION
+SELECT 62 sort_order, array_name, &apos;# Associated LDs:&apos; metric, TO_CHAR(nbr_of_assoc_ld) value FROM t1 UNION
+SELECT 63 sort_order, array_name, &apos;Consumed Capacity:&apos; metric, TO_CHAR(estimated_used_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 64 sort_order, array_name, &apos;Allocated for Snapshot:&apos; metric, TO_CHAR(allocated_snapshot_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 65 sort_order, array_name, &apos;Allocated for Admin:&apos; metric, TO_CHAR(allocated_admin_space_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+--
+SELECT 70 sort_order, array_name, &apos;&lt;b&gt;VV Summary&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 71 sort_order, array_name, &apos;# VVs:&apos; metric, TO_CHAR(nbr_of_luns) value FROM t1 UNION
+SELECT 72 sort_order, array_name, &apos;# TPVVs:&apos; metric, TO_CHAR(nbr_of_tp_vv) value FROM t1 UNION
+SELECT 73 sort_order, array_name, &apos;# CPVVs:&apos; metric, TO_CHAR(nbr_of_cp_vv) value FROM t1 UNION
+SELECT 74 sort_order, array_name, &apos;Total VV Capacity:&apos; metric, TO_CHAR(vv_capacity_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 75 sort_order, array_name, &apos;# Allocated VVs:&apos; metric, TO_CHAR(nbr_allocated_vluns) value FROM t1 UNION
+SELECT 76 sort_order, array_name, &apos;Alloc VV Capacity:&apos; metric, TO_CHAR(alloc_vlun_capacity_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 77 sort_order, array_name, &apos;# UnAllocated VVs:&apos; metric, TO_CHAR(null) value FROM t1 UNION
+SELECT 78 sort_order, array_name, &apos;UnAlloc VV Capacity:&apos; metric, TO_CHAR(unalloc_vlun_capacity_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+--FIXME SELECT 79 sort_order, array_name, &apos;VV Usage:&apos; metric, null value FROM t1 UNION
+SELECT 80 sort_order, array_name, &apos;#VLUNs:&apos; metric, TO_CHAR(nbr_allocated_vluns) value FROM t1 UNION
+--Extras
+SELECT 90 sort_order, array_name, &apos;&lt;b&gt;Additional Info&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 91 sort_order, array_name, &apos;System Version:&apos; metric, TO_CHAR(system_version) value FROM t1 UNION
+SELECT 92 sort_order, array_name, &apos;Operational Status:&apos; metric, operational_status value FROM t1 UNION
+SELECT 93 sort_order, array_name, &apos;IPv4 Address:&apos; metric, ipv4_address value FROM t1 UNION
+SELECT 94 sort_order, array_name, &apos;Location:&apos; metric, location value FROM t1 UNION
+SELECT 95 sort_order, array_name, &apos;Time Zone:&apos; metric, time_zone value FROM t1 UNION
+SELECT 96 sort_order, array_name, &apos;Max Space Limit:&apos; metric, TO_CHAR(max_space_limit_gb/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 97 sort_order, array_name, &apos;Primary Owner:&apos; metric, primary_owner_name value FROM t1 UNION
+SELECT 98 sort_order, array_name, &apos;Primary Contact:&apos; metric, primary_owner_contact value FROM t1 UNION
+--
+SELECT 100 sort_order, array_name, &apos;&lt;b&gt;Additional Virtual Volume Info&lt;/b&gt;&apos; metric, NULL value FROM t1 UNION
+SELECT 101 sort_order, array_name, &apos;VV Raw Blocks:&apos; metric, TO_CHAR(vv_raw_blocks/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 102 sort_order, array_name, &apos;VV Total Capacity:&apos; metric, TO_CHAR(vv_total_capacity/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 103 sort_order, array_name, &apos;VV Used Snapshot Admin:&apos; metric, TO_CHAR(vv_used_snap_admin/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 104 sort_order, array_name, &apos;VV Used Snapshot Data:&apos; metric, TO_CHAR(vv_used_snap_data/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 105 sort_order, array_name, &apos;VV Raw Admin:&apos; metric, TO_CHAR(vv_raw_admin/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 106 sort_order, array_name, &apos;VV Raw Copy:&apos; metric, TO_CHAR(vv_raw_copy/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 107 sort_order, array_name, &apos;VV Raw User:&apos; metric, TO_CHAR(vv_raw_user/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 108 sort_order, array_name, &apos;VV Consumable Admin:&apos; metric, TO_CHAR(vv_consumable_admin/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 109 sort_order, array_name, &apos;VV Consumable Copy:&apos; metric, TO_CHAR(vv_consumable_copy/div_by,&apos;999,999,999.99&apos;) value FROM t1,var UNION
+SELECT 110 sort_order, array_name, &apos;VV Consumable User:&apos; metric, TO_CHAR(vv_consumable_user/div_by,&apos;999,999,999.99&apos;) value FROM t1,var 
+/*
+SELECT
+disk_type||&apos; &apos;||rpm||DECODE(rpm,null,null,&apos;RPM&apos;) disk_type,
+COUNT(pdev_id) nbr_of_disks,
+SUM(capacity_gb) capacity_gb
+FROM aps_v_h3p_pdev
+GROUP BY disk_type||&apos; &apos;||rpm||DECODE(rpm,null,null,&apos;RPM&apos;)
+*/
+</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100834</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;sort_order&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;array_name&quot;,&quot;label&quot;:&quot;Array&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;metric&quot;,&quot;label&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;value&quot;,&quot;label&quot;:&quot;Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>HP 3Par Array Utilization and Summary</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>Array</caption>
+                    <name>array_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <caption></caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <wrap>Y</wrap>
+                    <aggregationResult>0</aggregationResult>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption></caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>Value</caption>
+                    <name>value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Values in: ${freeCombo1}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.PmYUwel3t7uQFC3WLyB943EAI+1ie1Xf5vjjlmKwN3Q=

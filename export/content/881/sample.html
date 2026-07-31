@@ -1,0 +1,62 @@
+<H2>Links to Canned Reports</H2> <br> <br> <H1>Backup Manager</H1> 
+<pre> 
+systemName=displayServerDetail&serverId=${row['server_id']}
+systemName=displayServerDetail&serverId=${row['client_id']} 
+systemName=backupDetails&jobId=${row['job_id']}
+systemName=tapeMediaDetail&tapeMediaId=${row['tape_media_id']}
+systemName=tapeLibDriveUtilization&listOfLibraryIds=${row['library_id']}&groupById=10
+systemName=backupPolicy&policyId=${row['policy_id']}
+</pre> 
+<H1>TSM</H1> 
+<pre> 
+systemName=tsmDomainDetail&domainId=${row['domain_id']} </pre> 
+<H1>EMC Networker (Legato)</H1> <pre> 
+systemName=savesetGroupDetail&groupId=${row['saveset_group_id']} 
+</pre> 
+<H1>Avamar</H1> 
+<pre> 
+systemName=displayDatasetDetail&serverId=${row['master_server_id']}&datasetId=${row['dataset_id']} 
+systemName=listGroupClients&serverId=${row['master_server_id']}&groupId=${row['avm_group_id']} 
+systemName=displayGroupDetail&serverId=${row['master_server_id']}&groupId=groupId=${row['avm_group_id']} 
+systemName=displayScheduleDetail&serverId=${row['master_server_id']}&scheduleId=${row['schedule_id']} 
+systemName=displayRetentionPolicyDetail&serverId=${row['master_server_id']}&retentionPolicyId=${row['retention_policy_id']} 
+systemName=tapeMediaSummary&supportsPagenation=true&cascadeToSubGroups=true&tapeStatusIds=1&listOfLibraryIds=${row['library_id']}&serverGroupIds=&clientIds=${row['server_id']} 
+</pre> 
+<H1>Drilling options into Backup Job Summary</H1> 
+<pre>
+WITH d1 AS ( SELECT --Dates Required for Drilldown to_char(${startDate},'MM/DD/YYYY') start_date_char, to_char(${startDate},'HH24') start_hour_char, to_char(${endDate},'MM/DD/YYYY') finish_date_char, to_char(${endDate},'HH24') finish_hour_char FROM DUAL ), --Failed Jobs systemName=jobSummary&jobStatusIds=2&dateRange.startDate=${row['start_date_char']}&dateRange.startHour=${row['start_hour_char']}&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=${row['finish_date_char']}&dateRange.finishHour=${row['finish_hour_char']}&dateRange.finishMinute=59&dateRange.finishSecond=59&dateRange.useFinishTime=false&serverIds=${row['server_id']}&parentJobOnly=false&ignoreRetries=true --Partially Successful systemName=jobSummary&jobStatusIds=1&dateRange.startDate=${row['start_date_char']}&dateRange.startHour=${row['start_hour_char']}&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=${row['finish_date_char']}&dateRange.finishHour=${row['finish_hour_char']}&dateRange.finishMinute=59&dateRange.finishSecond=59&dateRange.useFinishTime=false&serverIds=${row['server_id']}&parentJobOnly=false&ignoreRetries=true --Successful systemName=jobSummary&jobStatusIds=0&dateRange.startDate=${row['start_date_char']}&dateRange.startHour=${row['start_hour_char']}&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=${row['finish_date_char']}&dateRange.finishHour=${row['finish_hour_char']}&dateRange.finishMinute=59&dateRange.finishSecond=59&dateRange.useFinishTime=false&serverIds=${row['server_id']}&parentJobOnly=false&ignoreRetries=true 
+</pre> 
+<H1>Capacity Manager</H1> 
+<pre> 
+systemName=hostUtilizationDetail&serverId=${row['host_id']}&reportScope= 
+systemName=listChargebackByLUNDetail&policyIds=104418&clientIds=102768&reportScope= 
+systemName=arrayCapacity&arrayIds=${row['storage_array_id']} 
+systemName=hostCapacity&arrayIds=${row['storage_array_id']}&reportScope= 
+systemName=listLUNUtilizationSummary&lunStatus=C&lunIds=${row['logical_unit_id'].data}&byteSize=MB&ignoreParent=true 
+</pre> 
+<H1>VMWare</H1> 
+<pre> 
+systemName=vmDatastoreDetail&datastoreId=${row['vmw_datastore_id']}&datastoreIds=${row['vmw_datastore_id']} 
+systemName=vmSummary&vmHostIds=${row['virtual_system_id']}&byteSize=GB&ignoreParent=true 
+systemName=vmSummary&vmHostIds=${row['virtual_system_id']}&activeVMonly=Y&byteSize=GB&ignoreParent=true 
+systemName=vmDetail&vmId=${row['partition_id']}&vmIds=${row['partition_id']}&byteSize=GB&ignoreParent=true 
+systemName=vmHostDetail&ignoreParent=true&vmHostId=${row['virtual_system_id']}&vmHostIds=${row['virtual_system_id']}&byteSize=GB&topNum=3 
+</pre> 
+<H1>Drilling options into Backup Job Summary</H1> 
+<pre> 
+--Dates Required for Drilldown Accuracy to_char(${startDate},'MM/DD/YYYY') start_date_char, to_char(${startDate},'HH24') start_hour_char, to_char(${endDate},'MM/DD/YYYY') finish_date_char, to_char(${endDate},'HH24') finish_hour_char, 
+systemName=jobSummary&supportsPagenation=true&jobStatusIds=1&dateRange.startDate=11/07/2019&dateRange.startHour=0&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=11/07/2019&dateRange.finishHour=23&dateRange.finishMinute=59&dateRange.finishSecond=59&dateRange.useFinishTime=true&parentJobOnly=false&ignoreRetries=false 
+systemName=jobSummary&supportsPagenation=true&jobStatusIds=1&dateRange.startDate=11/07/2019&dateRange.startHour=0&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=11/07/2019&dateRange.finishHour=23&dateRange.finishMinute=59&dateRange.finishSecond=59&dateRange.useFinishTime=true&parentJobOnly=false&ignoreRetries=false 
+systemName=jobSummary&supportsPagenation=true&jobStatusIds=2&dateRange.startDate=${row['start_date_char']}&dateRange.startHour=${row['start_hour_char']}&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=${row['finish_date_char']}&dateRange.finishHour=${row['finish_hour_char']}&dateRange.finishMinute=59&dateRange.finishSecond=59&dateRange.useFinishTime=true&parentJobOnly=false&ignoreRetries=true&serverIds=${row['server_id']} 
+systemName=jobSummary&&dateRange.startDate=${row['start_date_char']}&dateRange.startHour=0&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=${row['finish_date_char']}&dateRange.finishHour=23&dateRange.finishMinute=59&dateRange.finishSecond=59&clientIds=${row['client_id']}&serverGroupIds=&jobStatusIds=2&dateRange.useFinishTime=false&parentJobOnly=false systemName=jobSummary&&dateRange.startDate=${row['start_date_char']}&dateRange.startHour=0&dateRange.finishDate=${row['finish_date_char']}&dateRange.finishHour=23&dateRange.finishMinute=59&dateRange.finishSecond=59&clientIds=${row['client_id']}&serverGroupIds=&jobStatusIds=2 
+systemName=jobSummary&supportsPagenation=true&jobStatusIds=2&dateRange.startDate=06/29/2019&dateRange.startHour=0&dateRange.startMinute=0&dateRange.startSecond=0&dateRange.finishDate=06/29/2010&dateRange.finishHour=23&dateRange.finishMinute=59&dateRange.finishSecond=59&dateRange.useFinishTime=true&parentJobOnly=false&ignoreRetries=true systemName=jobSummary&jobStatusIds=2&serverIds=305697&aptStatusCodeList.smallStringList=41&aptStatusCodeList.numberList=41 
+</pre> 
+<H1>Replication Manager</H1> 
+<pre> 
+systemName=volumeUtilizationSummary&amp;qtreeIds=&amp;volumeIds=2139435 
+systemName=listQtreeSummary&amp;qtreeIds=119359 
+systemName=snapVaultDetail&snapVaultStatusId=${row['nap_snapvault_status_id'].data} 
+</pre>
+<H1>Template to template</H1> 
+<pre> 
+templateName=TheTapesExpiringD&the_server_id=${row['server_id']}&the_expiration=${row['retention_name']} </pre> 

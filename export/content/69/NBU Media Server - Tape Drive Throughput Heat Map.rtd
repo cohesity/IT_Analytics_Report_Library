@@ -1,0 +1,374 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: dave.king@aptare.com
+--Last Updated: 05/01/2012
+--NBU Media Server Tape Drive Throughput Heat Map
+WITH 
+avg_tpt AS (
+SELECT 
+AVG((j.kilobytes/1024) / ((j.finished_readwrite-j.started_readwrite)*24*60*60)) avgThroughput
+FROM apt_v_nbu_job_try j
+WHERE j.media_server_id IN (${hosts})
+AND j.started_readwrite BETWEEN ${startDate} AND ${endDate}
+AND j.finished_readwrite  IS NOT NULL
+AND j.finished_readwrite &gt; j.started_readwrite
+AND j.kilobytes &gt; 1024
+AND j.summary_status &lt;= 1
+),
+pol AS ( 
+SELECT 
+DISTINCT jtm.drive_id, j.media_host_name
+FROM apt_v_nbu_job_try j, apt_v_job_tape_media jtm
+WHERE j.job_id = jtm.job_id
+AND j.media_server_id IN (${hosts})
+AND j.started_readwrite BETWEEN ${startDate} AND ${endDate}
+AND j.finished_readwrite IS NOT NULL
+AND j.finished_readwrite &gt; j.started_readwrite
+AND j.kilobytes &gt; 1024
+AND j.summary_status &lt;= 1
+), 
+ap AS (
+SELECT 
+pol.drive_id, pol.media_host_name, d.the_date
+FROM pol, (SELECT the_date FROM TABLE(CAST(rtd.APTlistOfDates(${startDate}, ${endDate},10) AS dateListType))) d
+), 
+jobs AS (
+SELECT 
+ap.drive_id, 
+ap.media_host_name, 
+ap.the_date,
+0 throughput
+FROM ap
+UNION ALL
+SELECT 
+ap.drive_id, 
+j.media_host_name, 
+ap.the_date, 
+ROUND(NVL(SUM(j.kilobytes/1024)/(SUM(j.finished_readwrite-j.started_readwrite)*24*60*60),0 ),2) throughput
+FROM ap, apt_v_nbu_job_try j, apt_v_job_tape_media jtm
+WHERE j.job_id = jtm.job_id 
+AND ap.drive_id = jtm.drive_id
+AND j.media_server_id  IN (${hosts})
+AND j.started_readwrite &lt;= (ap.the_date + 3599/86400)
+AND j.finished_readwrite &gt;= ap.the_date
+AND j.finished_readwrite IS NOT NULL
+AND j.finished_readwrite &gt; j.started_readwrite
+AND j.kilobytes &gt; 1024
+AND j.summary_status &lt;= 1
+GROUP BY ap.drive_id, j.media_host_name, ap.the_date
+),
+jobs1 AS (
+SELECT 
+drive_id, 
+media_host_name, 
+the_date,
+max(throughput) throughput
+FROM jobs
+GROUP BY 
+drive_id, 
+media_host_name, 
+the_date
+)   
+SELECT 
+to_char(jobs1.the_date,&#039;MM/DD hh:AM&#039;) the_date, 
+jobs1.media_host_name||&#039; - &#039;||td.drive_name media_server_tape_drive,  
+throughput,
+CASE 
+
+
+WHEN throughput &gt; 0 AND throughput &lt;= avgThroughput-(avgThroughput*.3333) THEN
+    &#039;&lt;table width=&quot;100%&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;&lt;td bgcolor=&quot;#B30505&quot; align=right&gt;&lt;font color=&quot;white&quot;&gt;&#039;||throughput||&#039;&lt;/td&gt;&lt;/table&gt;&#039;
+  WHEN throughput &gt;= avgThroughput-(avgThroughput*.3333) AND throughput &lt;= avgThroughput+(avgThroughput*.3333) THEN
+    &#039;&lt;table width=&quot;100%&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;&lt;td bgcolor=&quot;#DBD611&quot; align=right&gt;&lt;font color=&quot;black&quot;&gt;&#039;||throughput||&#039;&lt;/td&gt;&lt;/table&gt;&#039;
+  WHEN throughput &gt;= avgThroughput+(avgThroughput*.3333) THEN
+    &#039;&lt;table width=&quot;100%&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;&lt;td bgcolor=&quot;#347800&quot; align=right&gt;&lt;font color=&quot;white&quot;&gt;&#039;||throughput||&#039;&lt;/td&gt;&lt;/table&gt;&#039;
+  WHEN throughput = 0 THEN
+    &#039; &#039;
+
+END throughput_dot
+
+FROM jobs1, avg_tpt, apt_v_tape_drive td
+WHERE jobs1.drive_id = td.drive_id
+AND jobs1.media_host_name    is not null
+ORDER BY upper(jobs1.media_host_name), upper(td.drive_name), jobs1.the_date</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Media Server - Tape Drive Throughput Heat Map</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Media Server - Tape Drive Throughput Heat Map</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>the_date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <name>media_server_tape_drive</name>
+                    <fieldIndex>0</fieldIndex>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption>Media server - Tape drive</caption>
+                    <name>media_server_tape_drive</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>throughput</caption>
+                    <name>throughput</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###.00</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>throughput_dot</caption>
+                    <name>throughput_dot</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <additionalDetail>${row[&#039;throughput&#039;].data} MB/Sec</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;the_date&quot;,&quot;name&quot;:&quot;the_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Media server - Tape drive&quot;,&quot;name&quot;:&quot;media_server_tape_drive&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;throughput&quot;,&quot;name&quot;:&quot;throughput&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;throughput&#039;].data} MB/Sec&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;0.00&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;throughput_dot&quot;,&quot;name&quot;:&quot;throughput_dot&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>&lt;img src=../skins/aptare/statusGreen.gif&gt; 33% Above Average &lt;img src=../skins/aptare/statusYellow.gif&gt; Average &lt;img src=../skins/aptare/statusRed.gif&gt; 33% Below Average</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Media Server - Tape Drive Throughput Heat Map</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

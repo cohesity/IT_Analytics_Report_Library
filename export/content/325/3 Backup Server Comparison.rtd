@@ -1,0 +1,490 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>descriptiveName</string>
+            <string>3 Backup Server Comparison</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>WITH 
+t1 AS (
+SELECT
+to_char(trunc(start_date,DECODE(&#039;${freeCombo2}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)),&#039;MM/DD/YYYY&#039;) the_date,
+to_char(trunc(start_date,DECODE(&#039;${freeCombo2}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)),&#039;YYYYMMDD&#039;) sort_order,
+server_name entity,
+trunc(SUM(kilobytes/1024/1024)) job_size_gb,
+COUNT(DISTINCT client_id) client_count,
+SUM(nbr_of_files) file_count,
+COUNT(DISTINCT job_id) job_count,
+SUM(DECODE(summary_status,0,1)) successful_jobs,
+SUM(DECODE(summary_status,1,1)) partial_jobs,
+SUM(DECODE(summary_status,2,1)) failed_jobs,
+AVG(mbytes_sec) mbytes_sec,
+AVG(duration_secs/60) duration_min
+FROM apt_v_job
+WHERE 
+server_name IN (&#039;${queryCombo1}&#039;,&#039;${queryCombo2}&#039;,&#039;${queryCombo3}&#039;)
+AND start_date BETWEEN ${startDate} AND ${endDate}
+GROUP BY
+to_char(trunc(start_date,DECODE(&#039;${freeCombo2}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)),&#039;MM/DD/YYYY&#039;),
+to_char(trunc(start_date,DECODE(&#039;${freeCombo2}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)),&#039;YYYYMMDD&#039;),
+server_name
+),
+t2 AS (
+SELECT
+the_date,
+sort_order,
+entity,
+DECODE(&#039;${freeCombo1}&#039;,
+&#039;Job Size(GB)&#039;,job_size_gb,
+&#039;Client Count&#039;,client_COUNT,
+&#039;File Count&#039;,file_COUNT,
+&#039;Job Count&#039;,job_COUNT,
+&#039;Successful Jobs&#039;,successful_jobs,
+&#039;Partial Jobs&#039;,partial_jobs,
+&#039;Failed Jobs&#039;,failed_jobs,
+&#039;MB/sec&#039;,mbytes_sec,
+&#039;Duration(Min)&#039;,duration_MIN
+) metric
+FROM t1
+),
+t3 AS (
+SELECT
+the_date,
+sort_order,
+SUM(DECODE(entity,&#039;${queryCombo1}&#039;,metric,0)) metric1,
+SUM(DECODE(entity,&#039;${queryCombo2}&#039;,metric,0)) metric2,
+SUM(DECODE(entity,&#039;${queryCombo3}&#039;,metric,0)) metric3
+FROM t2
+GROUP BY 
+the_date,
+sort_order
+)
+SELECT
+the_date,
+sort_order,
+&#039;${freeCombo1}&#039; report_on,
+&#039;${queryCombo1}&#039; entity1,
+metric1,
+&#039;${queryCombo2}&#039; entity2,
+metric2,
+&#039;${queryCombo3}&#039; entity3,
+metric3
+FROM t3
+ORDER BY sort_order</string>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>Job Size(GB),Client Count,File Count,Job Count,Successful Jobs,Partial Jobs,Failed Jobs,MB/sec,Duration(Min)</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>Day,Week,Month,Quarter,Year</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Report on:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Group by:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>sql</string>
+                    <string>SELECT DISTINCT hostname key,hostname value FROM apt_v_server WHERE server_type_name IN (&#039;NetBackup Master&#039;,&#039;TSM Server&#039;,&#039;CommVault Simpana Server&#039;,&#039;EMC Avamar Server&#039;,&#039;NetWorker Server&#039;,&#039;Data Protector Cell Manager&#039;) AND date_modified &gt;= sysdate -31 ORDER BY UPPER(hostname)</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT DISTINCT hostname key,hostname value FROM apt_v_server WHERE server_type_name IN (&#039;NetBackup Master&#039;,&#039;TSM Server&#039;,&#039;CommVault Simpana Server&#039;,&#039;EMC Avamar Server&#039;,&#039;NetWorker Server&#039;,&#039;Data Protector Cell Manager&#039;) AND date_modified &gt;= sysdate -31 ORDER BY UPPER(hostname)</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues2</string>
+                    <string>SELECT DISTINCT hostname key,hostname value FROM apt_v_server WHERE server_type_name IN (&#039;NetBackup Master&#039;,&#039;TSM Server&#039;,&#039;CommVault Simpana Server&#039;,&#039;EMC Avamar Server&#039;,&#039;NetWorker Server&#039;,&#039;Data Protector Cell Manager&#039;) AND date_modified &gt;= sysdate -31 ORDER BY UPPER(hostname)</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues3</string>
+                    <string>SELECT DISTINCT hostname key,hostname value FROM apt_v_server WHERE server_type_name IN (&#039;NetBackup Master&#039;,&#039;TSM Server&#039;,&#039;CommVault Simpana Server&#039;,&#039;EMC Avamar Server&#039;,&#039;NetWorker Server&#039;,&#039;Data Protector Cell Manager&#039;) AND date_modified &gt;= sysdate -31 ORDER BY UPPER(hostname)</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading3</string>
+                    <string>Backup Server 3:</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading2</string>
+                    <string>Backup Server 2:</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Backup Server 1:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>101461</long>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>b4e12b47-2ef8-428d-88a0-51fc55ed0922</string>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>01/05/2015 Compare backup statistics across 3 different backup servers </string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>longDescription</string>
+      <string>Comparison of:&#039;Job Size(GB)&#039;,&#039;Client Count&#039;,&#039;File Count&#039;,&#039;Job Count&#039;,&#039;Successful Jobs&#039;,&#039;Partial Jobs&#039;,&#039;Failed Jobs&#039;,&#039;MB/sec&#039;,&#039;Duration(Min)&#039;</string>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedBarChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Reporting on: &lt;b&gt;${freeCombo1}&lt;/b&gt;, Comparing Backup Server #1: &lt;b&gt;${queryCombo1}&lt;/b&gt;, Backup Server #2: &lt;b&gt;${queryCombo2}&lt;/b&gt;, Backup Server #3:&lt;b&gt; ${queryCombo3}&lt;/b&gt;</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>3 Backup Server Comparison</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>report_on</caption>
+                    <name>report_on</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>entity1</caption>
+                    <name>entity1</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Backup Server #1</caption>
+                    <name>metric1</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#8CD1BF</color>
+                    <secondaryColor>#8CD1BF</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;entity1&#039;].data} ${row[&#039;report_on&#039;].data}: ${row[&#039;metric1&#039;].data}</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>entity2</caption>
+                    <name>entity2</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Backup Server #2</caption>
+                    <name>metric2</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#C79900</color>
+                    <secondaryColor>#C79900</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;entity2&#039;].data} ${row[&#039;report_on&#039;].data}: ${row[&#039;metric2&#039;].data}</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>entity3</caption>
+                    <name>entity3</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Backup Server #3</caption>
+                    <name>metric3</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#AEA1D3</color>
+                    <secondaryColor>#AEA1D3</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;entity3&#039;].data} ${row[&#039;report_on&#039;].data}: ${row[&#039;metric3&#039;].data}</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;name&quot;:&quot;the_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;name&quot;:&quot;sort_order&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;report_on&quot;,&quot;name&quot;:&quot;report_on&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;entity1&quot;,&quot;name&quot;:&quot;entity1&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;entity1&#039;].data} ${row[&#039;report_on&#039;].data}: ${row[&#039;metric1&#039;].data}&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#8CD1BF&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Backup Server #1&quot;,&quot;name&quot;:&quot;metric1&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;entity2&quot;,&quot;name&quot;:&quot;entity2&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;entity2&#039;].data} ${row[&#039;report_on&#039;].data}: ${row[&#039;metric2&#039;].data}&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#C79900&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Backup Server #2&quot;,&quot;name&quot;:&quot;metric2&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;entity3&quot;,&quot;name&quot;:&quot;entity3&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;char&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;entity3&#039;].data} ${row[&#039;report_on&#039;].data}: ${row[&#039;metric3&#039;].data}&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#AEA1D3&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Backup Server #3&quot;,&quot;name&quot;:&quot;metric3&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>3 Backup Server Comparison</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

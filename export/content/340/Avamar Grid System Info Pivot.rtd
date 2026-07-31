@@ -1,0 +1,473 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>2</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>61c3aab8-aeb7-460b-9696-c9f51e2d40da</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>5</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*04/04/2018</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Avamar Grid System Info Pivot</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>7</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>KB,MB,GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>TB</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Avamar Grid System Info Pivot</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 04/03/2018
+WITH 
+var AS (
+SELECT
+ROUND((${endDate} - ${startDate}),2) nbrOfDays,
+DECODE(&#039;${freeCombo1}&#039;,
+&#039;KB&#039;,1,&#039;MB&#039;,(1024),&#039;GB&#039;,(1024*1024),&#039;TB&#039;,(1024*1024*1024),&#039;PB&#039;,(1024*1024*1024*1024)) div_by 
+FROM dual
+),
+n1 AS (--Get the nodes and their capacities
+SELECT
+n.master_server_id,
+COUNT(DISTINCT n.node_id) nodes,
+REPLACE(aptStringConcat(DISTINCT version),&#039;,&#039;,&#039;&lt;br&gt;&#039;) versions,
+SUM(n.total_capacity_kb/div_by) nodes_total_capacity,
+SUM((n.total_capacity_kb-n.used_capacity_kb)/div_by) nodes_free_capacity,
+SUM(n.used_capacity_kb/div_by) nodes_used_capacity
+FROM apt_v_avm_node n, var, apt_v_server s
+WHERE
+n.master_server_id IN (${hosts})
+AND s.server_id = n.master_server_id
+GROUP BY 
+n.master_server_id
+),
+dp AS (--Data Protected according to Avamar
+SELECT
+ds.master_server_id,
+MAX(ds.data_protected_kb) data_protected_kb
+FROM apt_v_avm_dpn_statistics ds, apt_v_server s
+WHERE 
+ds.master_server_id IN (${hosts})
+AND s.server_id = master_server_id
+GROUP BY master_server_id
+),
+t2 AS (--Get the highest value for each client/plugin combination
+SELECT 
+aa.server_id, 
+aa.client_id,
+aa.plugin_id,
+MAX(aa.scanned_kb) scanned_kb
+FROM apt_v_avm_activities aa, var, apt_v_server s
+WHERE
+aa.server_id IN (${hosts}) 
+AND aa.scanned_kb &gt; 0
+AND aa.expiration_date &gt; sysdate
+AND s.server_id = aa.server_id
+GROUP BY 
+aa.server_id,
+client_id,
+plugin_id
+),
+t3 AS (--Add them up and this should be the &quot;Front End &quot; size of each client on the grid
+SELECT 
+t2.server_id master_server_id,
+COUNT(DISTINCT client_id) clients,
+SUM(t2.scanned_kb) scanned_kb
+FROM t2
+GROUP BY 
+t2.server_id
+), t4 AS (
+SELECT 
+ms.axion_system_id,
+ms.gsan_system_name, 
+ms.gsan_system_id, 
+ms.master_server_id, 
+ms.hfs_address,
+ms.local_hfs_address, 
+ms.hfs_port, 
+ms.mcs_port, 
+ms.gsan_run_level, 
+DECODE(ms.gsan_run_level,&#039;up&#039;,&#039;green&#039;,&#039;degraded&#039;,&#039;yellow&#039;,&#039;red&#039;) run_level_dot,
+t3.clients,
+t3.scanned_kb/div_by scanned,
+dp.data_protected_kb/div_by data_protected,
+ROUND((dp.data_protected_kb / used_capacity_kb),1)||&#039;:1&#039; dedup_ratio,
+((ms.total_capacity_kb - ms.used_capacity_kb)*(dp.data_protected_kb / ms.used_capacity_kb))/div_by est_available_capacity,
+ms.total_capacity_kb/var.div_by total_capacity,
+(ms.total_capacity_kb - ms.used_capacity_kb)/div_by available_capacity,
+ms.used_capacity_kb/var.div_by used_capacity,  
+(ms.used_capacity_kb/DECODE(ms.total_capacity_kb,0,null,ms.total_capacity_kb)) used_pct,
+(ms.used_capacity_kb/DECODE(ms.total_capacity_kb,0,null,ms.total_capacity_kb))*100 pct_used,
+ms.protected_bytes_quota, 
+ms.license_expiration_date, 
+ms.time_since_server_init, 
+rtd.secsToHoursMinSecs(ms.time_since_server_init) time_since_server_init_hrs, 
+ms.last_updated_in_avm, 
+ms.last_checkpoint, 
+ms.last_validated_checkpoint,
+n1.nodes,
+n1.versions,
+n1.nodes_total_capacity,
+n1.nodes_used_capacity, 
+n1.nodes_free_capacity
+FROM apt_v_avm_axion_system ms, var, n1, dp, t3, apt_v_server s
+WHERE 
+ms.master_server_id IN (${hosts})
+AND s.server_id = ms.master_server_id
+AND ms.master_server_id = n1.master_server_id
+AND ms.master_server_id = dp.master_server_id(+)
+AND ms.master_server_id = t3.master_server_id(+)
+)
+SELECT gsan_system_name, &#039;01&#039; sort_order,&#039;&lt;b&gt;Server ID Primary Key&lt;/b&gt;&#039; metric, TO_CHAR(master_server_id) value FROM t4 UNION
+SELECT gsan_system_name, &#039;02&#039; sort_order,&#039;&lt;b&gt;HFS IP Address&lt;/b&gt;&#039; metric, hfs_address value FROM t4 UNION
+SELECT gsan_system_name, &#039;03&#039; sort_order,&#039;&lt;b&gt;HFS Name&lt;/b&gt;&#039; metric, local_hfs_address value FROM t4 UNION
+SELECT gsan_system_name, &#039;04&#039; sort_order,&#039;&lt;b&gt;HFS Port&lt;/b&gt;&#039; metric, TO_CHAR(hfs_port) value FROM t4 UNION
+SELECT gsan_system_name, &#039;05&#039; sort_order,&#039;&lt;b&gt;MCS Port&lt;/b&gt;&#039; metric, TO_CHAR(mcs_port) value FROM t4 UNION 
+SELECT gsan_system_name, &#039;06&#039; sort_order,&#039;&lt;b&gt;Run Level&lt;/b&gt;&#039; metric, gsan_run_level value FROM t4 UNION 
+SELECT gsan_system_name, &#039;07&#039; sort_order,&#039;&lt;b&gt;Number of Clients&lt;/b&gt;&#039; metric, TO_CHAR(clients) value FROM t4 UNION 
+SELECT gsan_system_name, &#039;08&#039; sort_order,&#039;&lt;b&gt;Client Front End (Scanned)&lt;/b&gt;&#039; metric, TO_CHAR(scanned,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; value FROM t4 UNION 
+SELECT gsan_system_name, &#039;09&#039; sort_order,&#039;&lt;b&gt;Data Protected&lt;/b&gt;&#039; metric, TO_CHAR(data_protected,&#039;999G999G999D99&#039;)||&#039;${freeCombo1}&#039; value FROM t4 UNION 
+SELECT gsan_system_name, &#039;10&#039; sort_order,&#039;&lt;b&gt;Dedup Ratio&lt;/b&gt;&#039; metric, dedup_ratio value FROM t4 UNION 
+SELECT gsan_system_name, &#039;11&#039; sort_order,&#039;&lt;b&gt;Estimated Available Capacity*&lt;/b&gt;&#039; metric, TO_CHAR(est_available_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;12&#039; sort_order,&#039;&lt;b&gt;Total Disk Capacity&lt;/b&gt;&#039; metric, TO_CHAR(total_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;13&#039; sort_order,&#039;&lt;b&gt;Used Disk Capacity&lt;/b&gt;&#039; metric, TO_CHAR(used_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;14&#039; sort_order,&#039;&lt;b&gt;Available Disk Capacity&lt;/b&gt;&#039; metric, TO_CHAR(available_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;15&#039; sort_order,&#039;&lt;b&gt;Percent Used&lt;/b&gt;&#039; metric, TO_CHAR(pct_used,&#039;999D99&#039;)||&#039;%&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;16&#039; sort_order,&#039;&lt;b&gt;Available Disk Capacity&lt;/b&gt;&#039; metric, TO_CHAR(available_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;17&#039; sort_order,&#039;&lt;b&gt;Protected Quota&lt;/b&gt;&#039; metric, protected_bytes_quota FROM t4 UNION 
+SELECT gsan_system_name, &#039;18&#039; sort_order,&#039;&lt;b&gt;License Expiration&lt;/b&gt;&#039; metric, NVL(TO_CHAR(license_expiration_date,&#039;MM/DD/YYYY&#039;),&#039;Never&#039;) FROM t4 UNION 
+SELECT gsan_system_name, &#039;19&#039; sort_order,&#039;&lt;b&gt;Time Since Server Intitialization&lt;/b&gt;&#039; metric, time_since_server_init_hrs FROM t4 UNION 
+SELECT gsan_system_name, &#039;20&#039; sort_order,&#039;&lt;b&gt;Last Checkpoint&lt;/b&gt;&#039; metric, TO_CHAR(last_checkpoint,&#039;MM/DD/YYYY&#039;) FROM t4 UNION 
+SELECT gsan_system_name, &#039;21&#039; sort_order,&#039;&lt;b&gt;Last Validated Checkpoint&lt;/b&gt;&#039; metric, TO_CHAR(last_validated_checkpoint,&#039;MM/DD/YYYY&#039;) FROM t4 UNION 
+SELECT gsan_system_name, &#039;22&#039; sort_order,&#039;&lt;b&gt;Number of Nodes&lt;/b&gt;&#039; metric, TO_CHAR(nodes) FROM t4 UNION 
+SELECT gsan_system_name, &#039;23&#039; sort_order,&#039;&lt;b&gt;Version(s)&lt;/b&gt;&#039; metric, TO_CHAR(versions) FROM t4 UNION 
+SELECT gsan_system_name, &#039;24&#039; sort_order,&#039;&lt;b&gt;Nodes Disk Capacity&lt;/b&gt;&#039; metric, TO_CHAR(nodes_total_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;25&#039; sort_order,&#039;&lt;b&gt;Nodes Used Capacity&lt;/b&gt;&#039; metric, TO_CHAR(nodes_used_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 UNION 
+SELECT gsan_system_name, &#039;26&#039; sort_order,&#039;&lt;b&gt;Nodes Available Capacity&lt;/b&gt;&#039; metric, TO_CHAR(nodes_free_capacity,&#039;999G999G999D99&#039;)||&#039; ${freeCombo1}&#039; FROM t4 
+ORDER BY 1,2</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100230</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>101425</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;gsan_system_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;System Name&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;sort_order&quot;,&quot;typeName&quot;:&quot;char&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;metric&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Metric&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;value&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Value&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Avamar Grid System Info Pivot</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>System Name</caption>
+                    <name>gsan_system_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <caption>Metric</caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <aggregationResult>0</aggregationResult>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption>Metric</caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>Value</caption>
+                    <name>value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*Values in: ${freeCombo1}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

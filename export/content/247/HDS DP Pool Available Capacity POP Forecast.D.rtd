@@ -1,0 +1,349 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 03/30/2012
+--Computes the future capacity of an array based on 
+--a Period over Period forecasting method
+--This is a drill down report that can&#039;t run stand alone
+--TemplateName: HDSDPPoolAvailableCapacityPOPForecast.D
+WITH 
+d0 AS (--Convert the human readable date selection to numeric values
+SELECT
+DECODE(&#039;${TheGroupBy}&#039;,&#039;Day&#039;,1,&#039;Week&#039;,7,&#039;Month&#039;,31,&#039;Quarter&#039;,93,&#039;Year&#039;,365.24) nbr_of_days,
+--Limit the forecasting periods to 48
+CASE 
+WHEN to_number(&#039;${TheForecastPeriods}&#039;) &gt; 48 THEN 48 
+ELSE to_number(&#039;${TheForecastPeriods}&#039;) END forecast_periods,
+&#039;${TheGroupBy}&#039; the_group_by --Need this for the drilldown
+FROM dual
+),
+a0 AS (--Get all the capacity merics for each period
+SELECT 
+storage_array_id,
+pool_id,
+TRUNC(log_date,DECODE(&#039;${TheGroupBy}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)) log_date,
+ROW_NUMBER() OVER (PARTITION BY storage_array_id,  pool_id ORDER BY storage_array_id,  pool_id) row_number,
+ROUND(MAX(available_kb/1024/1024),2) available
+FROM aps_v_hds_journal_pool_log
+WHERE log_date BETWEEN ${startDate} AND ${endDate}
+AND array_name = &#039;${TheArrayName}&#039;
+AND pool_id = &#039;${ThePoolID}&#039;
+AND pool_function = 5
+GROUP BY storage_array_id,pool_id,trunc(log_date,DECODE(&#039;${freeCombo1}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;))
+),
+p0 AS (--Get the first and last period number for each array &amp; pool 
+SELECT
+storage_array_id,
+pool_id,
+MIN(row_number) first_period_number, --First period will always be 1
+MAX(row_number) last_period_number, --Last period is the current period or last time data was collected
+min(log_date) first_period_date,
+MAX(log_date) last_period_date,
+COUNT(log_date) period_count
+FROM a0
+GROUP BY 
+storage_array_id,
+pool_id
+),
+pop1 AS (--Get the first and last period metrics based on the row number of the periods
+SELECT
+a0.storage_array_id, a0.pool_id,
+MAX(last_period_number) nbr_of_periods,
+SUM(DECODE(a0.row_number,first_period_number,a0.available,0)) first_available,
+SUM(DECODE(a0.row_number,last_period_number,a0.available,0)) last_available
+FROM a0,p0
+WHERE a0.storage_array_id = p0.storage_array_id
+AND a0.pool_id = p0.pool_id
+GROUP BY a0.storage_array_id, a0.pool_id
+),
+pop2 AS (--Calculate the Period Over Period Changes
+SELECT
+storage_array_id, 
+pool_id,
+first_available,
+last_available,
+ROUND(last_available - first_available,2) pop_available_delta,
+ROUND((last_available - first_available ) / DECODE(nbr_of_periods,0,null,nbr_of_periods),2) pop_available_trend
+FROM pop1
+) 
+SELECT --Plot the prior history
+a0.log_date, 
+a0.available,
+0 future_available,
+pop2.last_available - (pop2.pop_available_trend*(period_count-ROWNUM)) available_trend_line
+FROM a0, p0, pop2
+WHERE a0.storage_array_id = pop2.storage_array_id
+AND a0.pool_id = pop2.pool_id
+AND a0.storage_array_id = p0.storage_array_id
+AND a0.pool_id = p0.pool_id
+UNION ALL --Future values
+SELECT 
+trunc(the_date,DECODE(&#039;${TheGroupBy}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;,&#039;YY&#039;)) log_date,
+0 available,
+pop2.last_available + (pop2.pop_available_trend*ROWNUM) future_available,
+pop2.last_available + (pop2.pop_available_trend*ROWNUM) available_trend_line
+FROM a0, pop2, d0, p0, TABLE(rtd.APTlistOfDates(p0.last_period_date+d0.nbr_of_days,p0.last_period_date+(d0.forecast_periods*d0.nbr_of_days),DECODE(&#039;${TheGroupBy}&#039;,&#039;Day&#039;,11,&#039;Week&#039;,12,&#039;Month&#039;,13,&#039;Quarter&#039;,14,&#039;Year&#039;,15))) the_dates
+WHERE a0.storage_array_id = pop2.storage_array_id
+AND a0.pool_id = pop2.pool_id
+AND a0.storage_array_id = p0.storage_array_id
+AND a0.pool_id = p0.pool_id
+AND a0.row_number = p0.period_count --Only need the last row
+ORDER BY 1</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>HDS DP Pool Available Capacity POP Forecast.D</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100100</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedBarChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>HDS DP Pool Available Capacity POP Forecast.D</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Date</caption>
+                    <name>log_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Available (GB)</caption>
+                    <name>available</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#003478</color>
+                    <secondaryColor>#003478</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;available&#039;].data} GB</additionalDetail>
+                    <drillDown>${row[&#039;available&#039;].data} GB</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Future Available (GB)</caption>
+                    <name>future_available</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#BFC2C9</color>
+                    <secondaryColor>#BFC2C9</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail>${row[&#039;future_available&#039;].data} GB</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Trend</caption>
+                    <name>available_trend_line</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#983222</color>
+                    <secondaryColor>#983222</secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;name&quot;:&quot;log_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;available&#039;].data} GB&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#003478&quot;,&quot;drilldown&quot;:&quot;${row[&#039;available&#039;].data} GB&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Available (GB)&quot;,&quot;name&quot;:&quot;available&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;${row[&#039;future_available&#039;].data} GB&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;#BFC2C9&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Future Available (GB)&quot;,&quot;name&quot;:&quot;future_available&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;colour&quot;:&quot;#983222&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Trend&quot;,&quot;name&quot;:&quot;available_trend_line&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Array: ${TheArrayName} Pool: ${ThePoolID} has ${TheForecastPeriods}  ${TheGroupBy}s  of available capacity based on a Period Over Period (POP) forecasting algorithm</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>*All values in (GB)</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>HDS DP Pool Available Capacity POP Forecast.D</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <string>HDSDPPoolAvailableCapacityPOPForecast.D</string>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

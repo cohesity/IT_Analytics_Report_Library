@@ -1,0 +1,741 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>Lists daily changes by comparing the log entries using the LAG() function.Detects changes in:--Array Thin Pool Availabe GB--VMWare # Guests--Array Group Free Capacity GB--Array Raw Available GB--Array Allocated GB--VNX Pool Availabe GB --HDS Journal Pool Allocated--VPLEX</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>ecb38ee4-53a7-4bac-91f8-351ffbdee038</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>05/09/2018 </string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Enterprise Change History Detail</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>0%,1%,2%,3%,4%,5%,10%,20%,30%,40%,50%,60%,70%,80%,90%,100%</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Change Threshold:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Enterprise Change History Detail</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 05/09/2018
+--
+--Array Thin Pool Availabe GB
+--VMWare # Guests
+--Array Group Free Capacity GB
+--Array Raw Available GB
+--Array Allocated GB
+--VNX Pool Availabe GB 
+--HDS Journal Pool Allocated
+--VPLEX
+WITH 
+var AS (
+SELECT
+DECODE(&apos;${freeCombo1}&apos;,&apos;0%&apos;,0,&apos;1%&apos;,1,&apos;2%&apos;,2,&apos;3%&apos;,3,&apos;4%&apos;,4,&apos;5%&apos;,5,&apos;10%&apos;,10,&apos;20%&apos;,20,&apos;30%&apos;,30,&apos;40%&apos;,40,&apos;50%&apos;,50,&apos;60%&apos;,60,&apos;70%&apos;,70,&apos;80%&apos;,80,&apos;90%&apos;,90,&apos;100%&apos;,100) threshold
+FROM apt_v_dual
+),
+t1 AS (--get the one entry per day for each entity and metric
+--
+--The modular metric gathering framework begins here. 
+--
+SELECT --Host Allocated Storage
+&apos;Host&apos;                        entity,
+l.host_id                     entity_id, 
+l.host_name                   entity_name, 
+&apos;Allocated Storage&apos;           metric,
+TRUNC(l.log_date)             log_date,
+MAX(l.allocated_kb/1024/1024) metric_value,
+null                          metric_pct
+FROM  aps_v_host_alloc_unused_log l
+WHERE l.log_date  BETWEEN ${startDate} AND ${endDate}
+GROUP BY 
+l.host_id, 
+l.host_name,
+TRUNC(l.log_date)
+--End Host Allocated Storage
+--
+--
+UNION
+SELECT --VMWare Total # Guests on ESX Host
+&apos;VMWare&apos;                     entity,
+1                            entity_id, 
+&apos;Entire VMWare Environment&apos;  entity_name, 
+&apos;#Guests Total&apos;              metric,
+TRUNC(psl.log_date)          log_date,
+COUNT(DISTINCT partition_id) metric_value,
+null metric_pct
+FROM  apt_v_vmw_partition_stats_log psl, apt_v_virtual_system vs
+WHERE psl.log_date  BETWEEN ${startDate} AND ${endDate}
+AND psl.virtual_system_id = vs.virtual_system_id
+GROUP BY 
+TRUNC(psl.log_date)
+--End -VMWare Total # Guests
+--
+UNION
+SELECT --VMWare # Guests on vSphere Cluster
+&apos;VMWare&apos;                     entity,
+vc.vmw_cluster_id            entity_id, 
+vc.cluster_name              entity_name, 
+&apos;#Guests on vSphere Cluster&apos; metric,
+TRUNC(psl.log_date)          log_date,
+COUNT(DISTINCT partition_id) metric_value,
+null metric_pct
+FROM  
+apt_v_vmw_cluster vc, apt_v_vmw_partition_stats_log psl, apt_v_virtual_system vs
+WHERE 
+psl.log_date  BETWEEN ${startDate} AND ${endDate}
+AND vc.vmw_cluster_id = vs.vmw_cluster_id
+AND psl.virtual_system_id = vs.virtual_system_id
+GROUP BY 
+vc.vmw_cluster_id,
+vc.cluster_name,
+TRUNC(psl.log_date)
+--End -VMWare # Guests on vSphere Cluster
+--
+UNION
+SELECT --VMWare # Guests on ESX Host
+&apos;VMWare&apos;                     entity,
+psl.virtual_system_id        entity_id, 
+vs.virtual_system_name       entity_name, 
+&apos;#Guests on ESX Host&apos;        metric,
+TRUNC(psl.log_date)          log_date,
+COUNT(DISTINCT partition_id) metric_value,
+null metric_pct
+FROM  apt_v_vmw_partition_stats_log psl, apt_v_virtual_system vs
+WHERE psl.log_date  BETWEEN ${startDate} AND ${endDate}
+AND psl.virtual_system_id = vs.virtual_system_id
+GROUP BY 
+psl.virtual_system_id, 
+vs.virtual_system_name,
+TRUNC(psl.log_date)
+--End -VMWare # Guests on ESX Host
+--
+UNION
+SELECT--Array Group Free Capacity GB 
+&apos;Array Group&apos;                      entity,
+gl.storage_array_id                entity_id, 
+gl.array_name||&apos; - &apos;||g.group_name entity_name, 
+&apos;Free Capacity GB&apos;                 metric,
+TRUNC(gl.log_date)                 log_date,
+MAX(gl.free_capacity_kb/1024/1024) metric_value,
+null metric_pct
+FROM aps_v_array_group_log gl, aps_v_array_group g 
+WHERE gl.log_date  BETWEEN ${startDate} AND ${endDate}
+AND gl.array_group_id = g.array_group_id
+GROUP BY 
+gl.storage_array_id, 
+gl.array_name||&apos; - &apos;||g.group_name,
+TRUNC(log_date)
+--End Array Group Free Capacity GB 
+--
+UNION
+SELECT --Array Raw Available GB
+&apos;Storage Array&apos;       entity,
+storage_array_id      entity_id, 
+array_name            entity_name, 
+&apos;Raw Available GB&apos;    metric,
+TRUNC(log_date)       log_date,
+MAX(raw_available_gb) metric_value,
+null metric_pct
+FROM aps_v_storage_array_log 
+WHERE log_date  BETWEEN ${startDate} AND ${endDate}
+GROUP BY 
+storage_array_id, 
+array_name,
+TRUNC(log_date)
+--End Array Raw Available GB
+--
+UNION
+SELECT --Array Allocated GB 
+&apos;Storage Array&apos;       entity,
+al.storage_array_id      entity_id, 
+al.array_name            entity_name, 
+&apos;Allocated GB&apos;        metric,
+TRUNC(al.log_date)       log_date,
+MAX(al.allocated_gb)     metric_value,
+MAX(al.available_gb) / DECODE(MAX(al.capacity_gb),0,null,MAX(al.capacity_gb))*100 metric_pct
+FROM aps_v_storage_array_log al, aps_v_storage_array a
+WHERE al.log_date BETWEEN ${startDate} AND ${endDate}
+AND al.storage_array_id = a.storage_array_id
+AND a.vendor_name != &apos;NetApp&apos;
+GROUP BY 
+al.storage_array_id, 
+al.array_name,
+TRUNC(al.log_date)
+--End Array Allocated GB
+--
+UNION
+SELECT --NetApp Array Aggregate GB
+&apos;NetApp Array&apos;       entity,
+al.storage_array_id      entity_id, 
+al.array_name            entity_name, 
+&apos;Aggregate GB&apos;        metric,
+TRUNC(al.log_date)       log_date,
+MAX(al.allocated_gb)     metric_value,
+MAX(al.available_gb) / DECODE(MAX(al.capacity_gb),0,null,MAX(al.capacity_gb))*100 metric_pct
+FROM aps_v_storage_array_log al, aps_v_storage_array a
+WHERE al.log_date BETWEEN ${startDate} AND ${endDate}
+AND al.storage_array_id = a.storage_array_id
+AND a.vendor_name = &apos;NetApp&apos;
+GROUP BY 
+al.storage_array_id, 
+al.array_name,
+TRUNC(al.log_date)
+--End NetApp Array Aggregate GB
+--
+UNION
+SELECT --Array Thin Pool Availabe GB 
+&apos;Storage Array&apos;             entity,
+al.storage_array_id         entity_id, 
+al.array_name               entity_name, 
+&apos;Thin Pool Available GB&apos;    metric,
+TRUNC(al.log_date)          log_date,
+MAX(al.thin_pool_available_gb) metric_value,
+MAX(al.thin_pool_available_gb) / DECODE(MAX(al.thin_pool_capacity_gb),0,null,MAX(al.thin_pool_capacity_gb))*100 metric_pct
+FROM aps_v_storage_array_log al, aps_v_storage_array sa
+WHERE 
+al.log_date BETWEEN ${startDate} AND ${endDate}
+AND al.storage_array_id = sa.storage_array_id
+AND sa.array_family NOT LIKE &apos;NetApp Cluster&apos;
+GROUP BY 
+al.storage_array_id, 
+al.array_name,
+TRUNC(al.log_date)
+--End Array Thin Pool Availabe GB
+--
+UNION
+SELECT --VNX Pool Availabe GB 
+&apos;VNX Storage Array&apos;                           entity,
+vnx_storage_system_id                         entity_id, 
+system_name||&apos; - &apos;||storage_pool_name         entity_name, 
+&apos;VNX Pool Available GB&apos;                       metric,
+TRUNC(log_date)                               log_date,
+MAX((total_size_kb - used_size_kb)/1024/1024) metric_value,
+MAX((total_size_kb - used_size_kb)) / DECODE(MAX(total_size_kb/1024/1024),0,null,MAX(total_size_kb/1024/1024))*100 metric_pct
+FROM aps_v_vnx_storage_pool_log
+WHERE log_date BETWEEN ${startDate} AND ${endDate}
+GROUP BY 
+vnx_storage_system_id, 
+system_name||&apos; - &apos;||storage_pool_name,
+TRUNC(log_date)
+--End VNX Pool Availabe GB
+--
+--
+UNION
+SELECT -- HDS Journal Pool Allocated
+&apos;HDS Storage Array&apos;                                       entity,
+sa.storage_array_id                                       entity_id, 
+sa.serial_nbr||&apos; - DP &apos;||jp.pool_id||&apos; - &apos;||jp.pool_name  entity_name,
+&apos;HDS Journal Pool Allocated GB&apos;                           metric,
+TRUNC(log_date)                                           log_date,
+MAX(jpl.allocated_kb/1024/1024)                            metric_value,
+MAX(jpl.allocated_kb/1024/1024)/DECODE(((MAX(jpl.allocated_kb)+MAX(jpl.unallocated_kb))/1024/1024),0,NULL,((MAX(jpl.allocated_kb)+MAX(jpl.unallocated_kb))/1024/1024)) metric_pct
+FROM aps_v_hds_journal_pool jp, aps_v_hds_journal_pool_log jpl, aps_v_storage_array sa, var
+WHERE log_date BETWEEN ${startDate} AND ${endDate}
+AND jpl.journal_pool_id = jp.journal_pool_id
+AND jp.storage_array_id = sa.storage_array_id
+GROUP BY
+sa.storage_array_id,
+sa.serial_nbr||&apos; - DP &apos;||jp.pool_id||&apos; - &apos;||jp.pool_name,
+TRUNC(log_date)
+-- End HDS Journal Pool Allocated
+--
+--
+UNION
+SELECT --VPLEX Host LUN Capacity GB
+&apos;VPLEX Host - LUN&apos; entity,
+vl.logical_unit_id       entity_id, 
+vh.host_name||&apos; - &apos;||lu.logical_unit_name           entity_name, 
+&apos;LUN Capacity GB&apos;    metric,
+TRUNC(vl.log_date)       log_date,
+MAX(vl.capacity_gb) metric_value,
+null metric_pct
+FROM aps_v_vpl_virtual_volume_log vl, aps_v_logical_unit lu, aps_v_vpl_host_to_backend vh 
+WHERE vl.log_date  BETWEEN ${startDate} AND ${endDate}
+AND vl.logical_unit_id = lu.logical_unit_id
+AND lu.logical_unit_id = vh.frontend_logical_unit_id
+GROUP BY 
+vl.logical_unit_id, 
+vh.host_name||&apos; - &apos;||lu.logical_unit_name,
+TRUNC(vl.log_date)
+--End VPLEX Host LUN Capacity GB
+--
+--
+UNION
+SELECT --VPLEX Virtual Volume Capacity GB
+&apos;VPLEX Storage System&apos; entity,
+vpl_storage_system_id       entity_id, 
+array_name            entity_name, 
+&apos;Virtual Volume Capacity GB&apos;    metric,
+TRUNC(log_date)       log_date,
+MAX(capacity_gb) metric_value,
+null metric_pct
+FROM aps_v_vpl_virtual_volume_log 
+WHERE log_date  BETWEEN ${startDate} AND ${endDate}
+GROUP BY 
+vpl_storage_system_id, 
+array_name,
+TRUNC(log_date)
+--End VPLEX Virtual Volume Capacity GB
+--
+--
+--
+--End modular metric gathering framework 
+--
+--------------------------------------------------------------------------------
+--
+--Presentation Framework begins here
+),
+t2 AS (--get the previous values
+SELECT 
+entity, entity_id, entity_name,
+metric,
+log_date, metric_value,
+metric_pct,
+LAG(log_date, 1,null)   OVER (PARTITION BY entity, entity_id, entity_name, metric  ORDER BY entity, entity_id, entity_name, metric, log_date) AS prev_log_date,
+LAG(metric_value, 1, 0) OVER (PARTITION BY entity, entity_id, entity_name, metric  ORDER BY entity, entity_id, entity_name, metric, log_date) AS prev_metric_value
+FROM t1
+)
+SELECT --Calculate the deltas
+entity, entity_id, entity_name,
+metric, 
+prev_log_date, 
+log_date, 
+ROUND(prev_metric_value) prev_metric_value,
+ROUND(metric_value) metric_value, 
+(ROUND(metric_value) - ROUND(prev_metric_value)) delta_value,
+ROUND((metric_value - prev_metric_value)/DECODE(metric_value,0,null,metric_value)*100,2) delta_pct,
+metric_pct available_pct,
+&apos;On: &apos;||log_date||&apos; &apos;||entity||&apos;: &lt;b&gt;&apos;||entity_name||&apos;:&lt;/b&gt; &apos;||metric||&apos;, Changed &lt;b&gt;from:&lt;/b&gt; &apos;||ROUND(prev_metric_value)||&apos;&lt;b&gt; to: &lt;/b&gt;&apos;||ROUND(metric_value)||DECODE(metric_pct,null,&apos;&apos;,&apos; &lt;b&gt;Leaving:&lt;/b&gt; &apos;||ROUND(metric_pct,2)||&apos;% Available&apos;) the_change
+FROM t2, var
+WHERE 
+(ROUND(metric_value) - ROUND(prev_metric_value)) &lt;&gt; 0
+AND prev_log_date IS NOT NULL
+AND ABS(ROUND((metric_value - prev_metric_value)/DECODE(metric_value,0,null,metric_value)*100,2)) &gt;= threshold
+ORDER BY 
+log_date DESC,entity,entity_name, metric
+</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100798</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;entity&quot;,&quot;label&quot;:&quot;Entity&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;entity_id&quot;,&quot;label&quot;:&quot;entity_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;entity_name&quot;,&quot;label&quot;:&quot;Entity Name&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;metric&quot;,&quot;label&quot;:&quot;Metric&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;prev_log_date&quot;,&quot;label&quot;:&quot;prev_log_date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;log_date&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;prev_metric_value&quot;,&quot;label&quot;:&quot;Prev Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;metric_value&quot;,&quot;label&quot;:&quot;Curr Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;delta_value&quot;,&quot;label&quot;:&quot;Delta&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;delta_pct&quot;,&quot;label&quot;:&quot;Change%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;available_pct&quot;,&quot;label&quot;:&quot;Available%&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###.00&apos;%&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_change&quot;,&quot;label&quot;:&quot;Change&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Enterprise Change History Detail</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Entity</caption>
+                    <name>entity</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>entity_id</caption>
+                    <name>entity_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Entity Name</caption>
+                    <name>entity_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Metric</caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>prev_log_date</caption>
+                    <name>prev_log_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Date</caption>
+                    <name>log_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Prev Value</caption>
+                    <name>prev_metric_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Curr Value</caption>
+                    <name>metric_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Delta</caption>
+                    <name>delta_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Change%</caption>
+                    <name>delta_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Available%</caption>
+                    <name>available_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###.00&apos;%&apos;</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Change</caption>
+                    <name>the_change</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Reporting on resources that changed +- ${freeCombo1}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.xQlziO7WRTppJnX/ZxCDUHh24juW6Bp2hfMC6jwLhNQ=

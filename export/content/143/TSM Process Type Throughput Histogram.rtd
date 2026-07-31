@@ -1,0 +1,357 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>descriptiveName</string>
+            <string>TSM Process Type Throughput Histogram</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 10/30/2015
+WITH 
+avg_tpt AS (
+SELECT AVG((j.kilobytes/1024) / ((j.finish_date-j.start_date)*24*60*60)) avgThroughput
+  FROM apt_v_job j, apt_v_tsm_process p
+  WHERE j.server_id          IN (${hosts})
+    AND j.start_date         BETWEEN ${startDate} AND ${endDate}
+    AND j.finish_date        IS NOT NULL
+    AND j.job_id = p.job_id
+    AND j.finish_date        &gt; j.start_date
+    AND j.kilobytes          &gt; 1024
+    AND j.summary_status     &lt;= 1
+),
+pol AS ( 
+SELECT DISTINCT p.job_type_name
+  FROM apt_v_job j, apt_v_tsm_process p
+  WHERE j.server_id          IN (${hosts})
+    AND j.start_date         BETWEEN ${startDate} AND ${endDate}
+    AND j.job_id = p.job_id
+    AND j.finish_date        IS NOT NULL
+    AND j.finish_date        &gt; j.start_date
+    AND j.kilobytes          &gt;1024
+    AND j.summary_status     &lt;= 1
+), 
+jt AS (
+SELECT job_type_name, the_date
+  FROM pol, (SELECT the_date FROM TABLE(CAST(rtd.APTlistOfDates(${startDate}, ${endDate}, 10) AS dateListType))) d
+), 
+jobs AS (
+SELECT jt.job_type_name, jt.the_date, 
+  ROUND(NVL(SUM(j.kilobytes/1024) / (SUM(j.finish_date-j.start_date)*24*60*60),0 ) , 2) throughput
+  FROM jt, apt_v_job j, apt_v_tsm_process p
+  WHERE jt.job_type_name   = p.job_type_name
+    AND j.client_id          IN (${hosts})
+    AND j.job_id = p.job_id
+    AND j.start_date         &lt;= (jt.the_date + 3599/86400)
+    AND j.finish_date        &gt;= jt.the_date
+    AND j.finish_date        IS NOT NULL
+    AND j.finish_date        &gt; j.start_date
+    AND j.kilobytes          &gt; 1024
+    AND j.summary_status     &lt;= 1
+    GROUP BY jt.job_type_name, jt.the_date
+)   
+SELECT to_char(jt.the_date,&#039;MM/DD hh:AM&#039;) the_date, jt.job_type_name,  
+  CASE 
+  WHEN throughput &gt; 0 AND throughput &lt;= avgThroughput-(avgThroughput*.3333) THEN
+    &#039;&lt;table width=100% border=0 cellspacing=0 cellpadding=0&gt;&lt;td style=background-color:red align=right&gt;&lt;font color=white&gt;&#039;||throughput||&#039;&lt;/td&gt;&lt;/table&gt;&#039;
+  WHEN throughput &gt;= avgThroughput-(avgThroughput*.3333) AND throughput &lt;= avgThroughput+(avgThroughput*.3333) THEN
+    &#039;&lt;table width=100% border=0 cellspacing=0 cellpadding=0&gt;&lt;td style=background-color:yellow align=right&gt;&lt;font color=black&gt;&#039;||throughput||&#039;&lt;/td&gt;&lt;/table&gt;&#039;
+  WHEN throughput &gt;= avgThroughput+(avgThroughput*.3333) THEN
+    &#039;&lt;table width=100% border=0 cellspacing=0 cellpadding=0&gt;&lt;td style=background-color:green align=right&gt;&lt;font color=white&gt;&#039;||throughput||&#039;&lt;/td&gt;&lt;/table&gt;&#039;
+  WHEN throughput = 0 THEN
+    &#039; &#039;
+  END throughput  
+  FROM jt, jobs, avg_tpt 
+  WHERE jt.job_type_name       = jobs.job_type_name (+)
+    AND jt.the_date        = jobs.the_date (+)
+  ORDER BY upper(jt.job_type_name), jt.the_date</string>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>showTime</string>
+                    <string>true</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100244</long>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>cd2adb48-4bdc-4efa-89b7-75816dd40794</string>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>TSM Process Type Throughput Histogram</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*All values are MB/Sec</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>Yellow is average, Green is 33% above average, Red is 33% below average</string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>TSM Process Type Throughput Histogram</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>the_date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <caption>Process Type</caption>
+                    <name>job_type_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <aggregationResult>0</aggregationResult>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption>Process Type</caption>
+                    <name>job_type_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>throughput</caption>
+                    <name>throughput</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_date&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;the_date&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;job_type_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Process Type&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;throughput&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;throughput&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>TSM Process Type Throughput Histogram</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

@@ -1,0 +1,266 @@
+
+
+
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>1</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>
+--Author: rich.rose@aptare.com    Date: 07/07/2011
+--
+--
+WITH t1 as (
+SELECT to_char(poll_date,&#039;MM/DD/YY&#039;) poll_date,
+host_name tcp_client_name, 
+node_name node,
+node_name||&#039; - &#039;||storage_pool_name node_storage_pool,
+node_name||&#039; - &#039;||filespace_name node_filespace,
+storage_pool_name storage_pool,
+filespace_name filespace,
+storage_pool_name,  
+(stg_pool_phy_mbytes/1024) size_gb
+FROM apt_v_tsm_occupancy_log
+WHERE poll_date BETWEEN ${startDate} AND ${endDate}
+AND client_id in (${hosts})
+)
+SELECT poll_date, to_char(${freeCombo1}) unit,sum(size_gb) size_gb
+FROM t1
+GROUP BY poll_date, to_char(${freeCombo1})</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>TSM Daily Occupancy(GB) by</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>TCP_Client_Name,Node, Node_Filespace,Node_Storage_Pool,Filespace,Storage_Pool</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>TSM Occupancy by</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDecorator</className>
+        <data>
+          <entry>
+            <string>headers</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>spanningCaptions</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>columns</string>
+            <list>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <type>pivotX</type>
+                <caption>poll_date</caption>
+                <fieldName>poll_date</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <type>pivotYId</type>
+                <fieldName>unit</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <type>pivotY</type>
+                <caption> </caption>
+                <fieldName>unit</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <type>tableColumn</type>
+                <caption>size_gb</caption>
+                <fieldName>size_gb</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>TSM Daily Occupancy(GB) by</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>numberOfGridColumns</string>
+            <int>3</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;poll_date&quot;,&quot;name&quot;:&quot;poll_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot; &quot;,&quot;name&quot;:&quot;unit&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;size_gb&quot;,&quot;name&quot;:&quot;size_gb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>TSM Daily Occupancy(GB) by</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>
+
+

@@ -1,0 +1,730 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>Reports on: CPU Usage Latency, reads, writes and throughput</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>82f93df1-8b43-48cb-bb7c-11e8c29a6f9d</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>80-20 Rule of Problematic VM Guests</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>80-20 Rule of Problematic VM Guests</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>5,10,15,20</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Top:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>80-20 Rule of Problematic VM Guests</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 03/31/2015
+WITH 
+memstats AS (
+SELECT
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name guest_host_name,
+v.virtual_system_id, v.virtual_system_name,
+ROUND(MAX(p.avg_memory_usage_kb/1024/1024),2) max_memory_usage_gb,
+ROUND(MAX(p.avg_memory_usage_pct),2) max_memory_usage_pct,
+ROUND(MAX(p.avg_balloon_memory_kb/1024),2) max_baloon_memory_usage_gb
+FROM apt_v_vmw_perform_memory_log p, apt_v_partition g, apt_v_virtual_system v, aps_v_host h
+WHERE g.partition_id  = p.partition_id (+)
+AND p.end_log_date  BETWEEN ${startDate} AND ${endDate}
+AND g.collection_status != 3
+AND g.host_id IN (${hosts})
+AND g.host_id = h.host_id
+AND g.virtual_system_id = v.virtual_system_id
+AND h.host_name &lt;&gt; v.virtual_system_name --this table has both guests and ESX servers
+GROUP BY 
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name,
+v.virtual_system_id, v.virtual_system_name
+),
+cpustats AS (
+SELECT
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name guest_host_name,
+v.virtual_system_id, v.virtual_system_name,
+ROUND(MAX(p.avg_cpu_usage_mhz/1000),2) max_cpu_usage_ghz, --MHz converted to GHz
+ROUND(MAX(p.avg_cpu_usage_pct),2) max_cpu_usage_pct,
+ROUND(MAX(p.avg_cpu_wait_ms),2) max_cpu_wait_ms,
+ROUND(MAX(p.avg_cpu_ready_ms),2) max_cpu_ready_ms
+FROM apt_v_vmw_perform_cpu_log p, apt_v_partition g, apt_v_virtual_system v, aps_v_host h
+WHERE g.partition_id  = p.partition_id (+)
+AND p.end_log_date  BETWEEN ${startDate} AND ${endDate}
+AND g.collection_status != 3
+AND g.host_id IN (${hosts})
+AND g.host_id = h.host_id
+AND g.virtual_system_id = v.virtual_system_id
+AND h.host_name &lt;&gt; v.virtual_system_name --this table has both guests and ESX servers
+GROUP BY 
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name,
+v.virtual_system_id, v.virtual_system_name
+),
+diskstats AS (
+SELECT
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name guest_host_name,
+v.virtual_system_id, v.virtual_system_name,
+ROUND(AVG(p.disk_read_kbps/1024),2) disk_read_data_xfer_mbps,
+ROUND(AVG(p.disk_write_kbps/1024),2) disk_write_data_xfer_mbps,
+ROUND(AVG(NVL(p.total_device_latency_ms,0)),2) average_device_latency_ms, 
+ROUND(MAX(NVL(p.total_device_latency_ms,0)),2) max_device_latency_ms, 
+ROUND(SUM(p.nbr_of_disk_read),2) disk_read_nbr_reads, 
+ROUND(AVG(NVL(p.avg_device_read_latency_ms,0)),2) disk_read_latency_ms, 
+ROUND(SUM(p.nbr_of_disk_write),2) disk_write_nbr_writes, 
+ROUND(AVG(NVL(p.avg_device_write_latency_ms,0)),2) disk_write_latency_ms
+FROM apt_v_vmw_perform_disk_log p, apt_v_partition g, apt_v_virtual_system v, aps_v_host h
+WHERE g.partition_id  = p.partition_id (+)
+AND p.start_log_date  BETWEEN ${startDate} AND ${endDate}
+AND g.collection_status != 3
+AND p.instance_name IS NOT NULL
+AND g.host_id IN (${hosts})
+AND g.host_id = h.host_id
+AND g.virtual_system_id = v.virtual_system_id
+GROUP BY 
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name,
+v.virtual_system_id, v.virtual_system_name
+),
+capstats AS (
+SELECT
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name guest_host_name,
+v.virtual_system_id, v.virtual_system_name,
+ROUND(MAX(total_size_kb/1024/1024),2) total_size_gb
+FROM apt_v_vmw_virtual_machine_log p, apt_v_partition g, apt_v_virtual_system v, aps_v_host h
+WHERE g.partition_id  = p.partition_id (+)
+AND p.log_date  BETWEEN ${startDate} AND ${endDate}
+AND g.collection_status != 3
+AND g.host_id IN (${hosts})
+AND g.host_id = h.host_id
+AND g.virtual_system_id = v.virtual_system_id
+AND h.host_name &lt;&gt; v.virtual_system_name --this table has both guests and ESX servers
+GROUP BY 
+g.partition_id, g.partition_name, 
+g.host_id, h.host_name,
+v.virtual_system_id, v.virtual_system_name
+),
+guestcount AS (
+SELECT count(*) guest_count
+FROM cpustats
+),
+most_cpu_usage_ghz AS (
+SELECT 0 sort_order,  &apos; Most CPU Usage&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(max_cpu_usage_ghz)||&apos;GHz&apos; value 
+FROM cpustats
+ORDER BY max_cpu_usage_ghz DESC
+),
+most_cpu_usage_PCT AS (
+SELECT 1 sort_order,  &apos; Most CPU %Used&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(max_cpu_usage_pct)||&apos;%&apos; value 
+FROM cpustats
+ORDER BY max_cpu_usage_pct DESC
+),
+most_memory_usage AS (
+SELECT 2 sort_order,  &apos; Most Peak Memory Usage&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+max_memory_usage_gb||&apos;GB&apos; value 
+FROM memstats
+WHERE max_memory_usage_gb IS NOT NULL
+ORDER BY max_memory_usage_gb DESC
+),
+most_memory_usage_pct AS (
+SELECT 3 sort_order,  &apos; Most Peak Memory %Used&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+max_memory_usage_pct||&apos;%&apos; value 
+FROM memstats
+ORDER BY max_memory_usage_pct DESC
+),
+most_disk_reads AS (
+SELECT 4 sort_order,  &apos; Most Disk Reads&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(disk_read_nbr_reads)||&apos; Reads&apos; value 
+FROM diskstats
+ORDER BY disk_read_nbr_reads DESC
+),
+most_disk_writes AS (
+SELECT 5 sort_order,  &apos; Most Disk writes&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(disk_write_nbr_writes)||&apos; Writes&apos; value 
+FROM diskstats
+ORDER BY disk_write_nbr_writes DESC
+),
+most_read_mbps AS (
+SELECT 6 sort_order,  &apos; Highest Disk Read MB/Sec&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(disk_read_data_xfer_mbps)||&apos; KB/Sec&apos; value 
+FROM diskstats
+ORDER BY disk_read_data_xfer_mbps DESC
+),
+most_write_mbps AS (
+SELECT 7 sort_order,  &apos; Highest Disk Write MB/Sec&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(disk_write_data_xfer_mbps)||&apos; KB/Sec&apos; value 
+FROM diskstats
+ORDER BY disk_write_data_xfer_mbps DESC
+),
+most_max_device_latency AS (
+SELECT 9 sort_order,  &apos; Most Peak Device Latency&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(max_device_latency_ms)||&apos; ms.&apos; value 
+FROM diskstats
+ORDER BY max_device_latency_ms DESC
+),
+most_total_size_gb AS (
+SELECT 8 sort_order,  &apos; Most Disk Usage&apos; metric, 
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name, 
+ROUND(total_size_gb)||&apos; GB&apos; value 
+FROM capstats
+WHERE total_size_gb IS NOT NULL
+ORDER BY total_size_gb DESC
+),
+t2 AS (
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_memory_usage
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_memory_usage_pct
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_cpu_usage_ghz
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_cpu_usage_pct
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_disk_reads
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_disk_writes
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_read_mbps
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_write_mbps
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_max_device_latency
+WHERE rownum &lt;=  ${freeCombo1}
+UNION
+SELECT sort_order, rownum rank, rownum||DECODE(rownum,1,&apos;st&apos;,2,&apos;nd&apos;,3,&apos;rd&apos;,&apos;th&apos;)||metric metric,
+virtual_system_id, virtual_system_name,  partition_id, partition_name, host_id, guest_host_name,value 
+FROM most_total_size_gb
+WHERE rownum &lt;=  ${freeCombo1}
+),
+occurrences AS (
+SELECT
+partition_name,
+COUNT(*) occurrences,
+aptStringConcat(metric) other_bad_things
+FROM t2
+GROUP BY partition_name
+)
+SELECT t2.*, occurrences, guest_count,
+DECODE(occurrences,1,&apos;white&apos;,2,&apos;yellow&apos;,&apos;red&apos;) status_dot,
+other_bad_things,
+REPLACE(REPLACE(other_bad_things,&apos;,&apos;,&apos; &apos;),metric,&apos;&apos;) also
+FROM t2, occurrences occ, guestcount
+WHERE
+t2.partition_name = occ.partition_name
+ORDER BY
+sort_order ASC, rank ASC</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100686</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;sort_order&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;rank&quot;,&quot;label&quot;:&quot;rank&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;metric&quot;,&quot;label&quot;:&quot;Metric&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;virtual_system_id&quot;,&quot;label&quot;:&quot;virtual_system_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;virtual_system_name&quot;,&quot;label&quot;:&quot;ESX Server&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=vmPerformanceSummary&amp;vmHostIds=${row[&apos;virtual_system_id&apos;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;partition_id&quot;,&quot;label&quot;:&quot;partition_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;partition_name&quot;,&quot;label&quot;:&quot;VM Name&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=vmPerformanceSummary&amp;vmIds=${row[&apos;partition_id&apos;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;host_id&quot;,&quot;label&quot;:&quot;host_id&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;guest_host_name&quot;,&quot;label&quot;:&quot;Guest&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;value&quot;,&quot;label&quot;:&quot;Value&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;occurrences&quot;,&quot;label&quot;:&quot;Strikes&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;guest_count&quot;,&quot;label&quot;:&quot;guest_count&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;status_dot&quot;,&quot;label&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;Out of ${row[&apos;guest_count&apos;].data} VM Guests this ranks ${row[&apos;other_bad_things&apos;].data} &quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;other_bad_things&quot;,&quot;label&quot;:&quot;other_bad_things&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;also&quot;,&quot;label&quot;:&quot;Also&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>80-20 Rule of Problematic VM Guests</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>rank</caption>
+                    <name>rank</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Metric</caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>virtual_system_id</caption>
+                    <name>virtual_system_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>ESX Server</caption>
+                    <name>virtual_system_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=vmPerformanceSummary&amp;vmHostIds=${row[&apos;virtual_system_id&apos;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>partition_id</caption>
+                    <name>partition_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>VM Name</caption>
+                    <name>partition_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=vmPerformanceSummary&amp;vmIds=${row[&apos;partition_id&apos;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>host_id</caption>
+                    <name>host_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Guest</caption>
+                    <name>guest_host_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Value</caption>
+                    <name>value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Strikes</caption>
+                    <name>occurrences</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>guest_count</caption>
+                    <name>guest_count</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption></caption>
+                    <name>status_dot</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail>Out of ${row[&apos;guest_count&apos;].data} VM Guests this ranks ${row[&apos;other_bad_things&apos;].data} </additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>other_bad_things</caption>
+                    <name>other_bad_things</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Also</caption>
+                    <name>also</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.Oe3AT7TWK3a1kbktqcqTtHXL2zLpBFdiQj83tenHTg8=

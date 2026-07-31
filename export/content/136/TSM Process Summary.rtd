@@ -1,0 +1,362 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>1</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>SELECT i.instance_name, 
+       p.process_type_name,
+       p.job_type_name,
+       p.process_id,
+       CASE j.summary_status 
+         WHEN 0 THEN &#039;&lt;font color=&quot;blue&quot;&gt;Successful&lt;/font&gt;&#039;
+         WHEN 1 THEN &#039;&lt;font color=&quot;orange&quot;&gt;Partial&lt;/font&gt;&#039;
+         ELSE &#039;&lt;font color=&quot;red&quot;&gt;Failed&lt;/font&gt;&#039;
+       END status,
+       j.start_date, j.finish_date,
+       p.source_stg_pool || &#039; -&gt; &#039; || p.destination_stg_pool transaction_desc,
+       j.kilobytes/1024/1024 size_GB, j.nbr_of_files,
+       p.nbr_examined_objects, p.nbr_failed_objects, p.media_wait_secs,
+       p.idle_secs, p.nbr_of_processes
+    FROM 
+         apt_v_job j,
+         apt_v_tsm_process p,
+         apt_v_server s,
+         apt_v_server_instance i
+    WHERE j.server_id IN (${hosts})
+      AND j.finish_date BETWEEN ${startDate} AND ${endDate}
+      AND j.job_id = p.job_id
+      AND p.job_type_name LIKE DECODE(&#039;${freeCombo}&#039;,&#039;All&#039;,&#039;%&#039;,&#039;${freeCombo}&#039;)
+      AND j.server_id = s.server_id
+      AND p.server_instance_id = i.server_instance_id</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>TSM Process Summary</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues</string>
+                    <string>All,Migration,Reclamation,Expiration,Full DB Backup,Incr DB Backup,StgPool Backup,Move Media</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading</string>
+                    <string>Process Type...</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDecorator</className>
+        <data>
+          <entry>
+            <string>headers</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>spanningCaptions</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>columns</string>
+            <list>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Server Instance</caption>
+                <fieldName>instance_name</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Process Type</caption>
+                <fieldName>process_type_name</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Job Type</caption>
+                <fieldName>job_type_name</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Status</caption>
+                <fieldName>status</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Start Date</caption>
+                <fieldName>start_date</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <formatter>DateFormatter</formatter>
+                <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Finish Date</caption>
+                <fieldName>finish_date</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <formatter>DateFormatter</formatter>
+                <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Transaction</caption>
+                <fieldName>transaction_desc</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Size(GB)</caption>
+                <fieldName>size_gb</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>File Count</caption>
+                <fieldName>nbr_of_files</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Examined Objects</caption>
+                <fieldName>nbr_examined_objects</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Failed Objects</caption>
+                <fieldName>nbr_failed_objects</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Media Wait(Sec)</caption>
+                <fieldName>media_wait_secs</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Idle(Sec)</caption>
+                <fieldName>idle_secs</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Process Count</caption>
+                <fieldName>nbr_of_processes</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>TSM Process Summary</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>numberOfGridColumns</string>
+            <int>3</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Server Instance&quot;,&quot;name&quot;:&quot;instance_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Process Type&quot;,&quot;name&quot;:&quot;process_type_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Job Type&quot;,&quot;name&quot;:&quot;job_type_name&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;process_id&quot;,&quot;name&quot;:&quot;process_id&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Status&quot;,&quot;name&quot;:&quot;status&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Start Date&quot;,&quot;name&quot;:&quot;start_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Finish Date&quot;,&quot;name&quot;:&quot;finish_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Transaction&quot;,&quot;name&quot;:&quot;transaction_desc&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Size(GB)&quot;,&quot;name&quot;:&quot;size_gb&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;File Count&quot;,&quot;name&quot;:&quot;nbr_of_files&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Examined Objects&quot;,&quot;name&quot;:&quot;nbr_examined_objects&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Failed Objects&quot;,&quot;name&quot;:&quot;nbr_failed_objects&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Media Wait(Sec)&quot;,&quot;name&quot;:&quot;media_wait_secs&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Idle(Sec)&quot;,&quot;name&quot;:&quot;idle_secs&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Process Count&quot;,&quot;name&quot;:&quot;nbr_of_processes&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>TSM Process Summary</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

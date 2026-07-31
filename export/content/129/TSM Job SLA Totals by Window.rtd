@@ -1,0 +1,291 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>1</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>WITH t1 as (
+  SELECT start_date, finish_date finish_date  FROM 
+              TABLE(rtd.ListOfBackupWindowDates(${startDate},${endDate}, 
+      apt_BackupWindowListType( 
+        APT_BACKUPWINDOWTYPE(&#039;Mon&#039;,44,68), 
+        APT_BACKUPWINDOWTYPE(&#039;Tue&#039;,68,92), 
+        APT_BACKUPWINDOWTYPE(&#039;Wed&#039;,92,116), 
+        APT_BACKUPWINDOWTYPE(&#039;Thu&#039;,116,140), 
+        APT_BACKUPWINDOWTYPE(&#039;Weekend&#039;,140,212) ))) bw
+),
+t2 as (
+  SELECT t1.start_date, t1.finish_date,
+      count(j.job_id) Job_Count,
+      sum(1*(1-abs(sign(j.summary_status-0)))) success,
+      sum(1*(1-abs(sign(j.summary_status-1)))) partial,
+      sum(1*(1-abs(sign(j.summary_status-2)))) failed
+      FROM apt_v_tsm_job j,t1
+      WHERE j.start_date BETWEEN t1.start_date AND t1.finish_date
+      AND t1.start_date &gt;= ${startDate}
+      AND j.client_id IN (${hosts})
+      AND j.job_type_name like &#039;%Backup&#039;
+      AND j.summary_status IS NOT null 
+      AND j.vendor_state IS NOT null 
+      GROUP BY  t1.start_date, t1.finish_date
+      ORDER BY t1.start_date, t1.finish_date
+) SELECT t2.start_date AS &quot;Window Start&quot;, t2.finish_date AS &quot;Window End&quot;, 
+      t2.job_count AS &quot;Jobs&quot;, t2.success AS &quot;Successful&quot;, t2.partial AS &quot;Partial&quot;, 
+      t2.failed AS &quot;Failed&quot;,
+      (t2.success+t2.partial) / t2.job_count AS &quot;Success Rate&quot;
+      FROM t2</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>TSM Job SLA Totals by Window</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDecorator</className>
+        <data>
+          <entry>
+            <string>headers</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>spanningCaptions</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>columns</string>
+            <list>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Window Start</caption>
+                <fieldName>window start</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <formatter>DateFormatter</formatter>
+                <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Window End</caption>
+                <fieldName>window end</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <formatter>DateFormatter</formatter>
+                <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Jobs</caption>
+                <fieldName>jobs</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Successful</caption>
+                <fieldName>successful</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Partial</caption>
+                <fieldName>partial</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Failed</caption>
+                <fieldName>failed</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>#,##0</formatPattern>
+                <aggregation>sum</aggregation>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+              <com.aptare.sc.domain.report.ColumnDecorator>
+                <caption>Success Rate</caption>
+                <fieldName>success rate</fieldName>
+                <fieldIndex>0</fieldIndex>
+                <align>right</align>
+                <formatter>NumberFormatter</formatter>
+                <formatPattern>###.##%</formatPattern>
+                <drillDown></drillDown>
+                <rowCount>0</rowCount>
+              </com.aptare.sc.domain.report.ColumnDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>TSM Job SLA Totals by Window</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>numberOfGridColumns</string>
+            <int>3</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Window Start&quot;,&quot;name&quot;:&quot;window start&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;Window End&quot;,&quot;name&quot;:&quot;window end&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;date&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Jobs&quot;,&quot;name&quot;:&quot;jobs&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Successful&quot;,&quot;name&quot;:&quot;successful&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Partial&quot;,&quot;name&quot;:&quot;partial&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Failed&quot;,&quot;name&quot;:&quot;failed&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###.##%&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Success Rate&quot;,&quot;name&quot;:&quot;success rate&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>TSM Job SLA Totals by Window</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

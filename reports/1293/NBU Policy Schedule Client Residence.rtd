@@ -1,0 +1,756 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>More precise handling of residence hierarchy in final results.</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>02fab57d-fc3f-4d44-9e6b-1c66b8ce32a5</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>May. 24, 2024 : NBU Policy Schedule Client enhanced v9</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>NBU Policy Schedule Client Residence</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>defaultTimePeriod</string>
+                    <string>1007</string>
+                  </entry>
+                  <entry>
+                    <string>showTime</string>
+                    <string>true</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Policy State</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>All,Active,Inactive</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>Active</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>NBU Policy Schedule Client Residence</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>-- Author ernie.bergan@aptare.com
+-- Last modified Dec. 28, 2018
+-- Final selection logic: schedule SLP, else Policy SLP, else Policy
+-- Additional checks for hosts clause
+-- Added DISTINCT clause to last query
+-- Added ability to specify policy_type_name
+-- Added solver hints, limited paths length to 4000 characters.
+-- Shows policy, schedule, and lifecycles invoked by policies and schedules.  Logic to
+-- emulate Residence values for Policy and Schedule, as well as Effective (ruling) Residence is included.
+--
+with pol as ( -- Policy information
+select /*+ NO_MERGE */ 
+p.policy_id,
+p.SERVER_ID,
+p.MASTER_SERVER_NAME,
+p.POLICY_NAME,
+p.IS_ACTIVE,
+p.POLICY_TYPE_NAME,
+p.STORAGE_UNIT_ID,
+p.STORAGE_UNIT_GROUP_ID,
+sug.STORAGE_UNIT_GROUP_NAME,
+p.STORAGE_UNIT,
+p.VOLUME_POOL_ID,
+vp.VOLUME_POOL_NAME,
+p.lifecycle_policy_id,
+p.LIFECYCLE_POLICY_NAME
+from apt_v_nbu_policy p,
+apt_v_nbu_volume_pool vp,
+apt_v_nbu_storage_unit_group sug
+where p.volume_pool_id = vp.volume_pool_id (+)
+--and REGEXP_LIKE (p.policy_type_name , &apos;${queryCombo1}&apos;)
+and p.storage_unit_group_id = sug.storage_unit_group_id (+)
+AND p.is_active = DECODE(&apos;${freeCombo1}&apos;,&apos;Active&apos;,&apos;Y&apos;,&apos;Inactive&apos;,&apos;N&apos;,p.is_active)
+--and p.is_active=&apos;Y&apos;
+--and p.server_id in (${queryCombo1})
+)
+,regpc as ( 
+select policy_id, client_id, client_name from apt_v_nbu_policy_client
+--where client_id in (${hosts}) ADDED below line to improve perf.
+--where server_id = ${queryCombo1}
+)
+,nonpc as (
+select distinct policy_id, client_id, client_host_name from apt_v_nbu_job
+where start_date between ${startDate} and ${endDate} --to_date(&apos;01-OCT-2018&apos;,&apos;DD-MON-YYYY&apos;) and to_date(&apos;15-OCT-2018&apos;,&apos;DD-MON-YYYY&apos;)
+--and client_id in (${hosts})
+and policy_id is not null
+-- Added below line for performance improvment
+--and server_id = ${queryCombo1}
+and client_id not in (select client_id from regpc)
+)
+,allpc as (
+select /*+ NO_MERGE */  * from regpc
+UNION
+select /*+ NO_MERGE */ * from nonpc
+)
+--select * from allpc
+
+/*
+,rwo as (
+SELECT *
+FROM allpc MATCH_RECOGNIZE(
+   PARTITION BY policy_id
+   ORDER BY client_id
+   MEASURES match_number() AS mno
+   ALL ROWS PER MATCH
+   AFTER MATCH SKIP PAST LAST ROW
+   PATTERN (S B*)
+   DEFINE B AS LENGTHB(S.client_name) + SUM(LENGTHB(B.client_name) + LENGTHB(&apos;&lt;br /&gt;&apos;)) &lt; = 4000)
+)
+*/
+,pc as (SELECT
+ policy_id,
+ LISTAGG(client_name, &apos;&lt;br/&gt;&apos; ON OVERFLOW TRUNCATE) WITHIN GROUP (ORDER BY client_name) AS clients
+FROM allpc
+GROUP BY policy_id--, mno
+)
+,pf as (
+select pf.policy_id,
+REPLACE(aptStringConcat(DISTINCT decode(pf.include_exclude_flag,&apos;I&apos;,&apos;I:&apos;,&apos;E&apos;,&apos;E:&apos;)||pf.pathname),&apos;,&apos;,&apos;&lt;br /&gt;&apos;) paths
+from apt_v_nbu_policy_file pf, apt_v_nbu_policy p
+where
+pf.policy_id = p.policy_id
+--and p.server_id  in (${queryCombo1}) -- added to restrict returned rows
+group by pf.policy_id
+)
+,stg as ( -- resolves schedule storage unit sourced from either storage unit group or storage unit
+select /*+ NO_MERGE */ 
+storage_unit_group_id sug_id, 
+storage_unit_group_name resolved_storage_unit_name
+from apt_v_nbu_storage_unit_group
+UNION
+select /*+ NO_MERGE */ 
+storage_unit_id id,
+storage_unit_label resolved_storage_unit_name
+from apt_v_nbu_storage_unit
+)
+
+,sched as ( -- resolves schedule and joins to any schedule initiated lifecycle policies
+select /*+ NO_MERGE */ 
+sc.schedule_id,
+sc.schedule_name,
+sc.policy_id,
+DECODE(sc.retention_days,9999,&apos;Never Expires&apos;,-1,&apos;Expires Immediately&apos;,sc.retention_days) s_retention_days,
+sc.storage_unit_id s_storage_unit_id,
+su2.storage_unit_label s_storage_unit_label,
+stg.resolved_storage_unit_name,
+sc.volume_pool_id s_volume_pool_id,
+sc.volume_pool_name s_volume_pool_name,
+DECODE(sc.selection_type,1,&apos;Frequency Based&apos;,2,&apos;Calendar Based&apos;) s_selection_type,
+DECODE(sc.mon_start,null,null,sc.mon_start||&apos; - &apos;||sc.mon_end||&apos;&lt;br/&gt;&apos;)||
+DECODE(sc.tue_start,null,null,sc.tue_start||&apos; - &apos;||sc.tue_end||&apos;&lt;br/&gt;&apos;)||
+DECODE(sc.wed_start,null,null,sc.wed_start||&apos; - &apos;||sc.wed_end||&apos;&lt;br/&gt;&apos;)||
+DECODE(sc.thu_start,null,null,sc.thu_start||&apos; - &apos;||sc.thu_end||&apos;&lt;br/&gt;&apos;)||
+DECODE(sc.fri_start,null,null,sc.fri_start||&apos; - &apos;||sc.fri_end||&apos;&lt;br/&gt;&apos;)||
+DECODE(sc.sat_start,null,null,sc.sat_start||&apos; - &apos;||sc.sat_end||&apos;&lt;br/&gt;&apos;)||
+DECODE(sc.sun_start,null,null,sc.sun_start||&apos; - &apos;||sc.sun_end||&apos;&lt;br/&gt;&apos;) cal_days,
+DECODE(
+sc.frequency,3600,&apos;Every Hour&apos;,
+7200,&apos;Every 2 Hours&apos;,
+64800,&apos;Every 18 Hours&apos;,
+72000,&apos;Every 20 Hours&apos;,
+82800,&apos;Every 23 Hours&apos;,
+86400,&apos;Every Day&apos;,
+345600,&apos;Every 4 Days&apos;,
+604800,&apos;Every 7 Days&apos;,
+21168000,&apos;Every 245 Days&apos;,
+NULL,&apos;Calendar&apos;) frequency,
+sc.lifecycle_policy_id s_lifecycle_policy_id,
+slp.lifecycle_policy_name s_slp_name, 
+slpd.destination_index_nbr s_slp_destination_index,
+DECODE(to_char(slpd.used_for),
+    &apos;0&apos;,&apos;Backup&apos;,
+    &apos;1&apos;,&apos;Duplication&apos;,
+    &apos;2&apos;,&apos;Snapshot&apos;,
+    &apos;3&apos;,&apos;Remote Server Duplication&apos;,
+    &apos;4&apos;,&apos;Import&apos;,
+    &apos;5&apos;,&apos;Backup Snapshot&apos;,
+    &apos;6&apos;,&apos;Index Snapshot&apos;,
+    &apos;7&apos;,&apos;Replication&apos;,
+null,null,to_char(slpd.used_for)) s_slp_used_for,
+decode(slpd.retention_days,9999,&apos;Never Expires&apos;,-1,&apos;Expires Immediately&apos;,slpd.retention_days) s_slp_retention_days,
+slpd.volume_pool_id s_slp_volume_pool_id,
+vp.volume_pool_name s_slp_volume_pool_name,
+slpd.storage_unit_id s_slp_storage_unit_id,
+su.storage_unit_label s_slp_storage_unit_label
+from apt_v_nbu_schedule sc,
+apt_v_nbu_lifecycle_policy slp,
+apt_v_nbu_lifecycpolicy_dest slpd,
+apt_v_nbu_storage_unit su,
+apt_v_nbu_storage_unit su2,
+apt_v_nbu_volume_pool vp,
+stg
+where sc.lifecycle_policy_id = slp.lifecycle_policy_id (+)
+and sc.lifecycle_policy_id = slpd.lifecycle_policy_id (+)
+and slpd.storage_unit_id = su.storage_unit_id (+)
+and slpd.volume_pool_id = vp.volume_pool_id (+)
+and sc.storage_unit_id =  su2.storage_unit_id (+)
+and sc.storage_unit_id = stg.sug_id (+)
+and sc.exists_in_catalog = &apos;Y&apos;
+--and sc.policy_id in (select distinct policy_id from apt_v_nbu_policy where server_id in (${queryCombo1}) and is_active = &apos;Y&apos; )
+)
+
+,slp as (  -- Resolve policy lifecycle information
+select /*+ NO_MERGE */ 
+slp.lifecycle_policy_id,
+slp.LIFECYCLE_POLICY_NAME,
+slpd.destination_index_nbr,
+DECODE(to_char(slpd.used_for),
+    &apos;0&apos;,&apos;Backup&apos;,
+    &apos;1&apos;,&apos;Duplication&apos;,
+    &apos;2&apos;,&apos;Snapshot&apos;,
+    &apos;3&apos;,&apos;Remote Server Duplication&apos;,
+    &apos;4&apos;,&apos;Import&apos;,
+    &apos;5&apos;,&apos;Backup Snapshot&apos;,
+    &apos;6&apos;,&apos;Index Snapshot&apos;,
+    &apos;7&apos;,&apos;Replication&apos;, 
+null,null,to_char(slpd.used_for)) p_slp_used_for,
+decode(slpd.retention_days,9999,&apos;Never Expires&apos;,-1,&apos;Expires Immediately&apos;,slpd.retention_days) retention_days,
+slpd.volume_pool_id,
+vp.volume_pool_name,
+slpd.storage_unit_id,
+su.storage_unit_label
+from apt_v_nbu_lifecycle_policy slp,
+apt_v_nbu_lifecycpolicy_dest slpd,
+apt_v_nbu_storage_unit su,
+apt_v_nbu_volume_pool vp
+where slp.lifecycle_policy_id = slpd.lifecycle_policy_id (+)
+and slpd.storage_unit_id = su.storage_unit_id (+)
+and slpd.volume_pool_id = vp.volume_pool_id (+)
+--and slp.management_server_id in (${queryCombo1})  -- added to restrict returns
+)
+,finl as (
+select DISTINCT p.is_active,
+p.master_server_name, 
+p.policy_name,
+p.policy_type_name,
+p.policy_id,
+nvl(p.LIFECYCLE_POLICY_NAME,p.storage_unit) policy_residence,
+p.storage_unit policy_storage_unit,
+p.volume_pool_name policy_volume_pool,
+p.lifecycle_policy_id pol_slp_id,
+sc.schedule_id,
+sc.schedule_name,
+sc.s_selection_type,
+sc.cal_days,
+sc.frequency,
+sc.s_storage_unit_id,
+sc.s_storage_unit_label,
+sc.s_volume_pool_id,
+sc.s_volume_pool_name,
+sc.resolved_storage_unit_name,
+sc.s_retention_days,
+sc.s_LIFECYCLE_POLICY_ID,
+sc.s_slp_name,
+sc.s_slp_destination_index,
+sc.s_slp_used_for, 
+sc.s_slp_storage_unit_id, 
+sc.s_slp_storage_unit_label,
+sc.s_slp_volume_pool_name,
+sc.s_slp_retention_days,
+nvl(sc.s_slp_name,nvl(sc.resolved_storage_unit_name,&apos;Any Available&apos;)) Schedule_Residence,
+slp.LIFECYCLE_POLICY_ID p_slp_id,
+slp.lifecycle_policy_name p_slp_name,
+slp.DESTINATION_INDEX_NBR p_dest_index_nbr, 
+slp.p_slp_used_for,
+slp.retention_days p_slp_retention_days,
+slp.STORAGE_UNIT_ID p_slp_storage_unit_id,
+slp.storage_unit_label p_slp_storage_unit_label,
+slp.VOLUME_POOL_ID p_slp_volume_pool,
+slp.volume_pool_name p_slp_volume_pool_name,
+nvl(slp.volume_pool_name,nvl(slp.storage_unit_label,NULL)) P_SLP_Residence,
+nvl(sc.s_slp_storage_unit_label,nvl(p.LIFECYCLE_POLICY_NAME,nvl(sc.resolved_storage_unit_name,p.storage_unit))) Effective_Residence, --12/28/2018  corrected
+nvl(sc.s_slp_retention_days,nvl(slp.retention_days,sc.s_retention_days)) Resolved_Retention_Days,
+pc.clients,
+substr(pf.paths,1,20000) paths
+from 
+pol p,
+sched sc,
+slp,pc, pf
+where
+p.policy_id = sc.policy_id (+)
+and p.LIFECYCLE_POLICY_ID = slp.LIFECYCLE_POLICY_ID (+)
+AND p.policy_id = pc.policy_id (+)
+AND p.policy_id = pf.policy_id (+)
+--and p.policy_name=&apos;s-direc-energy-win&apos;
+--order by p.policy_name, sc.schedule_id, sc.s_slp_destination_index,slp.DESTINATION_INDEX_NBR
+)
+select distinct is_active,
+master_server_name,policy_name, 
+policy_type_name, policy_id,
+schedule_id,schedule_name,
+s_selection_type,
+cal_days,
+frequency,
+nvl(s_slp_destination_index,nvl(p_dest_index_nbr,1)) Residence_Destination_Index,
+nvl(s_slp_used_for,nvl(p_slp_used_for,&apos;POLICY?&apos;)) Residence_Used_For,
+effective_residence,
+resolved_retention_days,
+clients,
+paths
+from finl
+order by 2,3,6,11</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100082</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100951</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;is_active&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;is_active&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;master_server_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Master Server&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;policy_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Policy&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;systemName=backupPolicy&amp;policyId=${row[&apos;policy_id&apos;]}&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;policy_type_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Policy Type&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;policy_id&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Policy ID&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;#&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;schedule_id&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Schedule_id&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;#&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;schedule_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Schedule_name&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;s_selection_type&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Schedule_selection_type&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;cal_days&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Frequency Backup Window     Start - End&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;left&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;frequency&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Frequency&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;residence_destination_index&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;residence_destination_index&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;#&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;residence_used_for&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;residence_used_for&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;effective_residence&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Effective Residence&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;resolved_retention_days&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Resolved Retention Days&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;clients&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Clients&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;paths&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Paths&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;fieldFormatter&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>NBU Policy Schedule Client Residence</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>is_active</caption>
+                    <name>is_active</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Master Server</caption>
+                    <name>master_server_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Policy</caption>
+                    <name>policy_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown>systemName=backupPolicy&amp;policyId=${row[&apos;policy_id&apos;]}</drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Policy Type</caption>
+                    <name>policy_type_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>Policy ID</caption>
+                    <name>policy_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>#</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Schedule_id</caption>
+                    <name>schedule_id</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>#</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Schedule_name</caption>
+                    <name>schedule_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Schedule_selection_type</caption>
+                    <name>s_selection_type</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Frequency Backup Window     Start - End</caption>
+                    <name>cal_days</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>left</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Frequency</caption>
+                    <name>frequency</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>residence_destination_index</caption>
+                    <name>residence_destination_index</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>#</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>residence_used_for</caption>
+                    <name>residence_used_for</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Effective Residence</caption>
+                    <name>effective_residence</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Resolved Retention Days</caption>
+                    <name>resolved_retention_days</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Clients</caption>
+                    <name>clients</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Paths</caption>
+                    <name>paths</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Showing ${freeCombo1} Policies</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.pgQF+s55UUIsKyc36ZYkBQp/SASgSTx84+29/l+zTIk=

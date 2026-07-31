@@ -1,0 +1,21 @@
+---
+title: "Host HBA Summary"
+report_id: 1041
+rtd_name: "Host HBA Summary.rtd"
+description: "Host HBA Summary"
+problem_statement: ""
+author: "rich.rose@aptare.com\n"
+modified_date: "2023-07-14"
+download_count: 0
+has_video: false
+video_url: ""
+thumbnail: true
+has_sample: true
+has_sql: true
+sql_query: "\n--Author: rich.rose@aptare.com\n--Last Modified: 05/10/2012\nSELECT \nhost_id, host_name, \nmanufacturer,\nhba_model, \ndriver,\ndriver_version, \nfirmware_version, \nnode_nickname,\ndevice_name, \nnode_wwn_id, node_wwn  \nFROM aps_v_hba_node_detail\nWHERE host_id IN (${hosts})"
+has_explanation: false
+products: [{"slug": "capacity-manager-host-probe-reports", "name": "Host Probe Reports"}]
+categories: []
+product_slugs: ["capacity-manager-host-probe-reports"]
+category_slugs: []
+---

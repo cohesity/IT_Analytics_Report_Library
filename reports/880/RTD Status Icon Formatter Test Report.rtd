@@ -1,0 +1,379 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>7cc3adfe-8ebb-4721-b7a2-90f0d3ccc161</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>08/15/2018</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>RTD Status Icon Formatter Test Report</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>RTD Status Icon Formatter Test Report </string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>SELECT 1 sort_order, &apos;red&apos; char_formatted,&apos;red&apos; status_dot_formatted,&apos;../skins/aptare/statusRed.gif&apos; img_path, &apos;&lt;img src=../skins/aptare/statusRed.gif&gt;&apos; status_html FROM apt_v_dual
+UNION
+SELECT 2 sort_order, &apos;yellow&apos; char_formatted,&apos;yellow&apos; status_dot_formatted, &apos;../skins/aptare/statusYellow.gif&apos; img_path, &apos;&lt;img src=../skins/aptare/statusYellow.gif&gt;&apos; status_html FROM apt_v_dual
+UNION
+SELECT 3 sort_order, &apos;green&apos; char_formatted,&apos;green&apos; status_dot_formatted, &apos;../skins/aptare/statusGreen.gif&apos; img_path, &apos;&lt;img src=../skins/aptare/statusGreen.gif&gt;&apos; status_html FROM apt_v_dual
+UNION
+SELECT 4 sort_order, &apos;blue&apos; char_formatted,&apos;blue&apos; status_dot_formatted, &apos;../skins/aptare/statusBlue.gif&apos; img_path, &apos;&lt;img src=../skins/aptare/statusBlue.gif&gt;&apos; status_html FROM apt_v_dual
+UNION
+SELECT 5 sort_order, &apos;white&apos; char_formatted,&apos;white&apos; status_dot_formatted, &apos;../skins/aptare/statusWhite.gif&apos; img_path, &apos;&lt;img src=../skins/aptare/statusWhite.gif&gt;&apos; status_html FROM apt_v_dual
+UNION
+SELECT 6 sort_order, &apos;error&apos; char_formatted,&apos;error&apos; status_dot_formatted, &apos;../images/status/error.png&apos;  img_path, &apos;&lt;img src=../images/status/error.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 7 sort_order, &apos;warning&apos; char_formatted,&apos;warning&apos; status_dot_formatted, &apos;../images/status/warning.png&apos;  img_path, &apos;&lt;img src=../images/status/warning.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 8 sort_order, &apos;success&apos; char_formatted,&apos;success&apos; status_dot_formatted, &apos;../images/status/success.png&apos;  img_path, &apos;&lt;img src=../images/status/success.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 9 sort_order, &apos;unknown&apos; char_formatted,&apos;unknown&apos; status_dot_formatted, &apos;../images/status/unknown.png&apos;  img_path, &apos;&lt;img src=../images/status/unknown.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 10 sort_order, &apos;trend_up&apos; char_formatted,&apos;trend_up&apos; status_dot_formatted, &apos;../images/trend_up.png&apos;  img_path, &apos;&lt;img src=../images/trend_up.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 11 sort_order, &apos;trend_flat&apos; char_formatted,&apos;trend_flat&apos; status_dot_formatted, &apos;../images/trend_flat.png&apos;  img_path, &apos;&lt;img src=../images/trend_flat.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 12 sort_order, &apos;trend_down&apos; char_formatted,&apos;trend_down&apos; status_dot_formatted, &apos;../images/trend_down.png&apos;  img_path, &apos;&lt;img src=../images/trend_down.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 13 sort_order, &apos;status0&apos; char_formatted,&apos;status0&apos; status_dot_formatted, &apos;../images/ostatus00.png&apos;  img_path, &apos;&lt;img src=../images/ostatus00.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 14 sort_order, &apos;status1&apos; char_formatted,&apos;status1&apos; status_dot_formatted, &apos;../images/ostatus01.png&apos;  img_path, &apos;&lt;img src=../images/ostatus01.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 15 sort_order, &apos;status2&apos; char_formatted,&apos;status2&apos; status_dot_formatted, &apos;../images/ostatus02.png&apos;  img_path, &apos;&lt;img src=../images/ostatus02.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 16 sort_order, &apos;status3&apos; char_formatted,&apos;status3&apos; status_dot_formatted, &apos;../images/ostatus03.png&apos;  img_path, &apos;&lt;img src=../images/ostatus03.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 17 sort_order, &apos;status4&apos; char_formatted,&apos;status4&apos; status_dot_formatted, &apos;../images/ostatus04.png&apos;  img_path, &apos;&lt;img src=../images/ostatus04.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 18 sort_order, &apos;status5&apos; char_formatted,&apos;status5&apos; status_dot_formatted, &apos;../images/ostatus05.png&apos;  img_path, &apos;&lt;img src=../images/ostatus05.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 19 sort_order, &apos;status6&apos; char_formatted,&apos;status6&apos; status_dot_formatted, &apos;../images/ostatus06.png&apos;  img_path, &apos;&lt;img src=../images/ostatus06.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 20 sort_order, &apos;status7&apos; char_formatted,&apos;status7&apos; status_dot_formatted, &apos;../images/ostatus07.png&apos;  img_path, &apos;&lt;img src=../images/ostatus07.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 21 sort_order, &apos;status8&apos; char_formatted,&apos;status8&apos; status_dot_formatted, &apos;../images/ostatus08.png&apos;  img_path, &apos;&lt;img src=../images/ostatus08.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 22 sort_order, &apos;status9&apos; char_formatted,&apos;status9&apos; status_dot_formatted, &apos;../images/ostatus09.png&apos;  img_path, &apos;&lt;img src=../images/ostatus09.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 23 sort_order, &apos;status10&apos; char_formatted,&apos;status10&apos; status_dot_formatted, &apos;../images/ostatus10.png&apos;  img_path, &apos;&lt;img src=../images/ostatus10.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 24 sort_order, &apos;status11&apos; char_formatted,&apos;status11&apos; status_dot_formatted, &apos;../images/ostatus11.png&apos;  img_path, &apos;&lt;img src=../images/ostatus11.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 25 sort_order, &apos;status12&apos; char_formatted,&apos;status12&apos; status_dot_formatted, &apos;../images/ostatus12.png&apos;  img_path, &apos;&lt;img src=../images/ostatus12.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 26 sort_order, &apos;status13&apos; char_formatted,&apos;status13&apos; status_dot_formatted, &apos;../images/ostatus13.png&apos;  img_path, &apos;&lt;img src=../images/ostatus13.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 27 sort_order, &apos;status14&apos; char_formatted,&apos;status14&apos; status_dot_formatted, &apos;../images/ostatus14.png&apos;  img_path, &apos;&lt;img src=../images/ostatus14.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 28 sort_order, &apos;status15&apos; char_formatted,&apos;status15&apos; status_dot_formatted, &apos;../images/ostatus15.png&apos;  img_path, &apos;&lt;img src=../images/ostatus15.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 29 sort_order, &apos;slow&apos; char_formatted,&apos;slow&apos; status_dot_formatted, &apos;../images/status/slow.png&apos;  img_path, &apos;&lt;img src=../images/status/slow.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 30 sort_order, &apos;medium&apos; char_formatted,&apos;medium&apos; status_dot_formatted, &apos;../images/status/medium.png&apos;  img_path, &apos;&lt;img src=../images/status/medium.png&gt;&apos;  status_html FROM apt_v_dual
+UNION
+SELECT 31 sort_order, &apos;fast&apos; char_formatted,&apos;fast&apos; status_dot_formatted, &apos;../images/status/fast.png&apos;  img_path, &apos;&lt;img src=../images/status/fast.png&gt;&apos;  status_html FROM apt_v_dual
+</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100980</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;sort_order&quot;,&quot;label&quot;:&quot;&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;char_formatted&quot;,&quot;label&quot;:&quot;No Formatter&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;status_dot_formatted&quot;,&quot;label&quot;:&quot;Status Icon Formatted&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;img_path&quot;,&quot;label&quot;:&quot;Image Path&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;status_html&quot;,&quot;label&quot;:&quot;Img HTML Tag&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>RTD Status Icon Formatter Test Report </string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption></caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>No Formatter</caption>
+                    <name>char_formatted</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Status Icon Formatted</caption>
+                    <name>status_dot_formatted</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Image Path</caption>
+                    <name>img_path</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Img HTML Tag</caption>
+                    <name>status_html</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.yog6Beh1/z6g+Q8FoF6dUmqK7wRYYZLEIoXYYdCiZfU=

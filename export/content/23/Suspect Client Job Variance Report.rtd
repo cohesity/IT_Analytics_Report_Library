@@ -1,0 +1,497 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>
+
+--Author: rich.rose@aptare.com
+--Last Modified: 05/10/2012
+-- Ad Hoc Variance
+-- Suspect Backups X% variance Date over Date
+-- Suspect Client variance Report 
+-- Compares the Period over Period values and displays the ones greater than +- X%
+-- Options to compare: Avg Job Size(GB),Job Volume(GB),File Count,Job Count,Successful Jobs,Partial Jobs,Failed Jobs,MB/sec,Duration(Min)
+--
+WITH
+d0 as ( --Decode the date ranges
+SELECT 
+DECODE(&#039;${queryCombo1}&#039;,&#039;Day over Day&#039;,1,&#039;Week over Week&#039;,7,&#039;Month over Month&#039;,30,&#039;Qtr over Qtr&#039;,90) day_num
+FROM dual
+),
+d1 as (
+SELECT
+sysdate - (day_num * 2) prior_start_date,
+(sysdate - day_num)  prior_end_date,
+(sysdate - day_num) current_start_date,
+sysdate current_end_date
+FROM d0
+),
+t0 as ( --Clients
+SELECT DISTINCT server_id client_id, hostname client_name
+FROM apt_v_server
+WHERE server_id  IN (${hosts})
+), 
+t1 as ( --Prior period stats
+SELECT j.client_id, 
+sum(kilobytes/1024/1024) job_size_gb_p1,
+avg(kilobytes/1024/1024) avg_job_size_gb_p1,
+sum(nbr_of_files) file_count_p1,
+count(job_id) job_count_p1,
+sum(DECODE(summary_status,0,1)) successful_jobs_p1,
+sum(DECODE(summary_status,1,1)) partial_jobs_p1,
+sum(DECODE(summary_status,2,1)) failed_jobs_p1,
+avg(mbytes_sec) mbytes_sec_p1,
+avg(duration_secs/60) duration_min_p1
+FROM d1, t0, apt_v_job j
+WHERE j.client_id = t0.client_id
+AND j.start_date BETWEEN prior_start_date AND prior_end_date
+AND j.summary_status IN (0,1)
+AND &#039;${freeCombo3}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo3}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN j.job_type_name LIKE &#039;Full%&#039; THEN &#039;Full&#039;
+        WHEN j.job_type_name LIKE &#039;Incr%&#039; THEN &#039;Incremental&#039;
+        WHEN j.job_type_name NOT LIKE &#039;Incr%&#039; AND j.job_type_name NOT LIKE &#039;Full%&#039; THEN &#039;Other&#039;
+      END
+   ELSE &#039;All&#039;
+ END
+GROUP BY j.client_id
+),
+t2 AS ( --Current period stats
+SELECT j.client_id, 
+sum(kilobytes/1024/1024) job_size_gb_p2,
+avg(kilobytes/1024/1024) avg_job_size_gb_p2,
+sum(nbr_of_files) file_count_p2,
+count(job_id) job_count_p2,
+sum(DECODE(summary_status,0,1)) successful_jobs_p2,
+sum(DECODE(summary_status,1,1)) partial_jobs_p2,
+sum(DECODE(summary_status,2,1)) failed_jobs_p2,
+avg(mbytes_sec) mbytes_sec_p2,
+avg(duration_secs/60) duration_min_p2
+FROM d1, t0, apt_v_job j
+WHERE j.client_id = t0.client_id
+AND j.start_date BETWEEN current_start_date AND current_end_date
+AND j.summary_status IN (0,1)
+AND &#039;${freeCombo3}&#039; IN 
+  CASE 
+    WHEN &#039;${freeCombo3}&#039; NOT IN (&#039;All&#039;) THEN
+      CASE
+        WHEN j.job_type_name LIKE &#039;Full%&#039; THEN &#039;Full&#039;
+        WHEN j.job_type_name LIKE &#039;Incr%&#039; THEN &#039;Incremental&#039;
+        WHEN j.job_type_name NOT LIKE &#039;Incr%&#039; AND j.job_type_name NOT LIKE &#039;Full%&#039; THEN &#039;Other&#039;
+      END
+   ELSE &#039;All&#039;
+END
+GROUP BY j.client_id
+),
+t3 as ( 
+SELECT t0.client_name client, 
+job_size_gb_p1, job_size_gb_p2, 
+avg_job_size_gb_p1, avg_job_size_gb_p2, 
+file_count_p1, file_count_p2, 
+job_count_p1, job_count_p2, 
+successful_jobs_p1,successful_jobs_p2,
+partial_jobs_p1,partial_jobs_p2,
+failed_jobs_p1,failed_jobs_p2,
+mbytes_sec_p1, mbytes_sec_p2, 
+duration_min_p1, duration_min_p2 
+FROM d1, t0, t1, t2
+WHERE t0.client_id = t1.client_id (+)
+AND t0.client_id = t2.client_id (+)
+ORDER BY t0.client_name
+),
+t4 as (
+SELECT client, 
+to_char(prior_start_date,&#039;MM/DD/YYYY&#039;)||&#039; - &#039;||to_char(prior_end_date,&#039;MM/DD/YYYY&#039;) prior_period,
+DECODE(&#039;${freeCombo2}&#039;,
+&#039;Job Volume(GB)&#039;,job_size_gb_p1,
+&#039;Avg Job Size(GB)&#039;,avg_job_size_gb_p1,
+&#039;File Count&#039;,file_count_p1,
+&#039;Job Count&#039;,job_count_p1,
+&#039;Successful Jobs&#039;,successful_jobs_p1,
+&#039;Partial Jobs&#039;,partial_jobs_p1,
+&#039;Failed Jobs&#039;,failed_jobs_p1,
+&#039;MB/sec&#039;,mbytes_sec_p1,
+&#039;Duration(Min)&#039;,duration_min_p1
+) the_metric_p1,
+to_char(current_start_date,&#039;MM/DD/YYYY&#039;)||&#039; - &#039;||to_char(current_end_date,&#039;MM/DD/YYYY&#039;) current_period,
+DECODE(&#039;${freeCombo2}&#039;,
+&#039;Job Volume(GB)&#039;,job_size_gb_p2,
+&#039;Avg Job Size(GB)&#039;,avg_job_size_gb_p2,
+&#039;File Count&#039;,file_count_p2,
+&#039;Job Count&#039;,job_count_p2,
+&#039;Successful Jobs&#039;,successful_jobs_p2,
+&#039;Partial Jobs&#039;,partial_jobs_p2,
+&#039;Failed Jobs&#039;,failed_jobs_p2,
+&#039;MB/sec&#039;,mbytes_sec_p2,
+&#039;Duration(Min)&#039;,duration_min_p2
+) the_metric_p2
+FROM d1,t3
+),
+t5 as (
+SELECT
+client,
+prior_period,
+the_metric_p1,
+current_period,
+the_metric_p2,
+    (the_metric_p1 - the_metric_p2)*-1 the_diff,
+    (the_metric_p1 - the_metric_p2) / DECODE(the_metric_p1,0,null,the_metric_p1)*100*-1 the_metric_diff_pct,
+abs((the_metric_p1 - the_metric_p2) / DECODE(the_metric_p1,0,null,the_metric_p1)*100) abs_the_metric_diff_pct
+FROM t4
+)
+SELECT
+client,
+prior_period,
+the_metric_p1,
+current_period,
+the_metric_p2,
+the_diff,
+CASE 
+WHEN  the_metric_diff_pct &gt; 0
+THEN &#039;&lt;font color=&quot;green&quot;&gt;+&#039;||trunc(the_metric_diff_pct)||&#039;%&lt;/font&gt;&#039;
+WHEN  the_metric_diff_pct &lt; 0
+THEN &#039;&lt;font color=&quot;red&quot;&gt;&#039;||trunc(the_metric_diff_pct)||&#039;%&lt;/font&gt;&#039;
+WHEN  the_metric_diff_pct = 0
+THEN &#039;&lt;font color=&quot;black&quot;&gt;&#039;||trunc(the_metric_diff_pct)||&#039;%&lt;/font&gt;&#039;
+END the_metric_diff_pct
+FROM t5
+WHERE abs_the_metric_diff_pct &gt;= DECODE(&#039;${freeCombo1}&#039;,&#039;5%&#039;,5,&#039;10%&#039;,10,&#039;20%&#039;,20,&#039;30%&#039;,30,&#039;40%&#039;,40,&#039;50%&#039;,50,&#039;60%&#039;,60,&#039;70%&#039;,70,&#039;80%&#039;,80,&#039;90%&#039;,90,&#039;100%&#039;,100)</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Suspect Client Job Variance Report</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>5%,10%,20%,30%,40%,50%,60%,70%,80%,90%,100%</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>Avg Job Size(GB),Job Volume(GB),File Count,Job Count,Successful Jobs,Partial Jobs,Failed Jobs,MB/sec,Duration(Min)</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>Full,Incremental,Other,All</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Variance%:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>Backup Type:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>In:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT &#039;Day over Day&#039; key, &#039;Day over Day&#039; value FROM dual UNION SELECT &#039;Week over Week&#039; key, &#039;Week over Week&#039; value FROM dual UNION SELECT &#039;Month over Month&#039; key, &#039;Month over Month&#039; value FROM dual UNION SELECT &#039;Qtr over Qtr&#039; key, &#039;Qtr over Qtr&#039; value FROM dual</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Compare:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100020</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*Clients with a ${freeCombo1} ${queryCombo1} variance in ${freeCombo2} for ${freeCombo3} backups</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Suspect Client Job Variance Report</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Client</caption>
+                    <name>client</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Prior Period</caption>
+                    <name>prior_period</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>center</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Prior Value</caption>
+                    <name>the_metric_p1</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0.##</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Current Period</caption>
+                    <name>current_period</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>center</align>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Current Value</caption>
+                    <name>the_metric_p2</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0.##</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Variance</caption>
+                    <name>the_diff</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0.##</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Variance%</caption>
+                    <name>the_metric_diff_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Client&quot;,&quot;name&quot;:&quot;client&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Prior Period&quot;,&quot;name&quot;:&quot;prior_period&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0.##&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Prior Value&quot;,&quot;name&quot;:&quot;the_metric_p1&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Current Period&quot;,&quot;name&quot;:&quot;current_period&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0.##&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Current Value&quot;,&quot;name&quot;:&quot;the_metric_p2&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0.##&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Variance&quot;,&quot;name&quot;:&quot;the_diff&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Variance%&quot;,&quot;name&quot;:&quot;the_metric_diff_pct&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Suspect Client Job Variance Report</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

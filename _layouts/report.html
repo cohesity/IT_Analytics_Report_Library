@@ -1,0 +1,55 @@
+---
+layout: default
+---
+<article class="report">
+  <h1>{{ page.title }}</h1>
+
+  <div class="report-tags">
+    {% for c in page.categories %}<a class="tag tag-category" href="{{ '/categories/' | append: c.slug | append: '/' | relative_url }}">{{ c.name }}</a>{% endfor %}
+    {% for p in page.products %}<a class="tag tag-product" href="{{ '/products/' | append: p.slug | append: '/' | relative_url }}">{{ p.name }}</a>{% endfor %}
+  </div>
+
+  <div class="report-actions">
+    <a class="btn btn-primary" href="{{ '/reports/' | append: page.report_id | append: '/' | append: page.rtd_name | relative_url }}" download>Download Template (.rtd)</a>
+    {% if page.has_sample %}
+    <a class="btn" href="{{ '/reports/' | append: page.report_id | append: '/sample.html' | relative_url }}" target="_blank" rel="noopener">View Sample Output ↗</a>
+    {% endif %}
+    {% if page.has_video and page.video_url %}
+    <a class="btn" href="{{ page.video_url }}" target="_blank" rel="noopener">Watch Video ↗</a>
+    {% endif %}
+  </div>
+
+  {% if page.has_sample %}
+  <h3>Report Preview</h3>
+  <iframe class="report-sample-frame"
+          src="{{ '/reports/' | append: page.report_id | append: '/sample.html' | relative_url }}"
+          title="Sample output for {{ page.title }}"
+          loading="lazy"
+          onload="this.style.height = (this.contentWindow.document.body.scrollHeight + 20) + 'px'"></iframe>
+  {% endif %}
+
+  {% if page.has_sql %}
+  <details class="report-sql">
+    <summary>SQL Query</summary>
+    <pre><code>{{ page.sql_query | escape }}</code></pre>
+  </details>
+  {% endif %}
+
+  {% if page.thumbnail %}
+  <h3>Report Designer Screen</h3>
+  <img class="report-thumb" src="{{ '/reports/' | append: page.report_id | append: '/thumbnail.png' | relative_url }}" alt="Report designer / scoping screen">
+  {% endif %}
+
+  {% if page.description %}<p class="report-desc">{{ page.description }}</p>{% endif %}
+  {% if page.problem_statement %}<h3>Problem this solves</h3><p>{{ page.problem_statement }}</p>{% endif %}
+  {% if page.has_explanation %}
+  <h3>How this report works</h3>
+  {{ content }}
+  {% endif %}
+
+  <dl class="report-meta">
+    {% if page.author %}<dt>Author</dt><dd>{{ page.author }}</dd>{% endif %}
+    {% if page.modified_date %}<dt>Last updated</dt><dd>{{ page.modified_date }}</dd>{% endif %}
+    <dt>Downloads</dt><dd>{{ page.download_count | default: 0 }}</dd>
+  </dl>
+</article>

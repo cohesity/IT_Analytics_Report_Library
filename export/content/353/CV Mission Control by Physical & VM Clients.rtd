@@ -1,0 +1,658 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>descriptiveName</string>
+            <string>CV Mission Control by Physical &amp; VM Clients</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 10/01/2015
+WITH 
+VAR AS (
+SELECT
+ROUND((${endDate} - ${startDate}),2) nbrOfDays, 
+${startDate} startDate, 
+&#039;${freeCombo1}&#039; unit,
+DECODE(&#039;${freeCombo1}&#039;, &#039;KB&#039;,1,&#039;MB&#039;,1024,&#039;GB&#039;,(1024*1024),&#039;TB&#039;,(1024*1024*1024),&#039;PB&#039;,(1024*1024*1024*1024)) div_by 
+FROM dual 
+),
+t1 AS (
+SELECT 
+j.job_id, 
+cj.cmv_job_id_ext, --Simpana Job ID
+cj.cmv_primary_backup_copy_id,
+0 vm_cmv_client_id_ext,
+j.client_id, 
+j.client_name, 
+h2.display_name cv_server,
+j.server_name,
+&#039;Physical&#039; client_type,
+h.display_name client,
+id.idataagent_name,
+cbp.cmv_backup_policy_id,
+cbp.backup_policy_name,
+cbc.copy_name,
+j.job_type_name,
+j.summary_status,
+DECODE(j.summary_status,0,&#039;green&#039;,1,&#039;yellow&#039;,&#039;red&#039;) status_dot,
+cj.job_status cj_status_code,
+DECODE(cj.job_status,1,&#039;Success&#039;,2,&#039;Failed&#039;,3,&#039;Partial Success&#039;,4,&#039;Killed&#039;,5,&#039;Stopped&#039;,6,&#039;Interrupted&#039;,7,&#039;Unknown&#039;,8,&#039;Failed to Start&#039;,cj.job_status) cv_status,
+nvl(cr.description,&#039;N/A&#039;) reason,
+j.start_date, --For physical hosts this is our normal job start/end  
+j.finish_date,
+j.duration,
+cj.nbr_of_streams,
+j.kilobytes/div_by job_size,
+DECODE(cj.nbr_of_other_skipped_files,0,NULL,cj.nbr_of_other_skipped_files) skipped_files,
+DECODE(j.kilobytes,0,NULL,j.mbytes_sec) throughput
+FROM var, apt_v_job j, 
+apt_v_cmv_job cj, 
+apt_v_cmv_reason cr,
+apt_v_cmv_idataagent id,
+apt_v_cmv_backup_policy cbp,
+apt_v_server h,
+apt_v_server h2,
+apt_v_cmv_backup_copy cbc
+WHERE 
+j.job_id = cj.job_id
+AND h2.server_id = j.server_id
+AND cj.job_failed_reason_id=cr.cmv_reason_id (+)
+AND cj.cmv_idataagent_id = id.cmv_idataagent_id
+AND cj.cmv_backup_policy_id = cbp.cmv_backup_policy_id
+AND cj.client_id = h.server_id
+AND cj.cmv_primary_backup_copy_id = cbc.cmv_backup_copy_id
+AND h.server_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate} 
+AND j.vendor_state = 2
+UNION
+SELECT 
+j.job_id,
+cj.cmv_job_id_ext, -- Simpana Job ID
+cj.cmv_primary_backup_copy_id,
+cjv.vm_cmv_client_id_ext,
+j.client_id, 
+j.client_name, 
+j.server_name,
+h2.display_name cv_server,
+&#039;Virtual&#039; client_type,
+nvl(cjv.vm_name,h.display_name) client,
+id.idataagent_name,
+cbp.cmv_backup_policy_id,
+cbp.backup_policy_name,
+cbc.copy_name,
+j.job_type_name,
+j.summary_status,
+DECODE(cj.job_status,1,&#039;green&#039;,2,&#039;red&#039;,3,&#039;yellow&#039;,4,&#039;red&#039;,5,&#039;red&#039;,6,&#039;red&#039;,7,&#039;white&#039;,8,&#039;red&#039;,cj.job_status) status_dot,
+cj.job_status cj_status_code,
+DECODE(cj.job_status,1,&#039;Success&#039;,2,&#039;Failed&#039;,3,&#039;Partial Success&#039;,4,&#039;Killed&#039;,5,&#039;Stopped&#039;,6,&#039;Interrupted&#039;,7,&#039;Unknown&#039;,8,&#039;Failed to Start&#039;,cj.job_status) cv_status,
+nvl(cr.description,&#039;N/A&#039;) reason,
+cjv.vm_start_date start_date, --For VM&#039;s the parent job start/end not needed each guest has its own start/end
+cjv.vm_finish_date finish_date,
+rtd.secsToHoursMinSecs((cjv.vm_finish_date-cjv.vm_start_date)*24*60*60) duration,
+1 nbr_of_streams,
+cjv.vm_used_space_kb/div_by job_size,
+DECODE(cj.nbr_of_other_skipped_files,0,NULL,cj.nbr_of_other_skipped_files) skipped_files,
+DECODE((cjv.vm_used_space_kb/1024)/((cjv.vm_finish_date-cjv.vm_start_date)*24*60*60),0,NULL) throughput
+FROM var, apt_v_job j, 
+apt_v_cmv_job cj, 
+apt_v_cmv_job_vm cjv,
+apt_v_cmv_reason cr,
+apt_v_cmv_idataagent id,
+apt_v_cmv_backup_policy cbp,
+apt_v_server h,
+apt_v_server h2,
+apt_v_cmv_backup_copy cbc
+WHERE cj.job_id = cjv.job_id
+AND j.job_id = cj.job_id
+AND cjv.vm_failed_reason_id=cr.cmv_reason_id (+)
+AND cj.cmv_idataagent_id = id.cmv_idataagent_id
+AND cj.cmv_backup_policy_id = cbp.cmv_backup_policy_id
+AND cjv.vm_client_id = h.server_id
+AND j.server_id = h2.server_id
+AND cj.cmv_primary_backup_copy_id = cbc.cmv_backup_copy_id
+AND h.server_id IN (${hosts})
+AND j.start_date BETWEEN ${startDate} AND ${endDate} 
+AND j.vendor_state = 2
+ORDER BY 1,2
+),
+t2 AS (
+SELECT
+TRUNC(start_date) the_date,
+client_type||&#039; - &#039;||client client,
+COUNT(job_id) nbr_of_jobs,
+SUM(job_size) job_size,
+SUM(skipped_files) skipped_files,
+MIN(summary_status) min_status,
+SUM(DECODE(cj_status_code,1,1,0)) Success,
+SUM(DECODE(cj_status_code,2,1,0)) Failed,
+SUM(DECODE(cj_status_code,3,1,0)) Partial_Success,
+SUM(DECODE(cj_status_code,4,1,0)) Killed,
+SUM(DECODE(cj_status_code,5,1,0)) Stopped,
+SUM(DECODE(cj_status_code,6,1,0)) Interrupted,
+SUM(DECODE(cj_status_code,7,1,0)) Unknown,
+SUM(DECODE(cj_status_code,8,1,0)) Failed_to_Start
+FROM t1
+WHERE start_date IS NOT NULL
+AND client_type LIKE DECODE(&#039;${freeCombo2}&#039;,&#039;All&#039;,&#039;%&#039;,&#039;${freeCombo2}&#039;)
+GROUP BY
+TRUNC(start_date),
+client_type||&#039; - &#039;||client
+)
+SELECT
+TO_CHAR(the_date,&#039;MM/DD/YY&#039;) the_date,
+TO_CHAR(the_date,&#039;YYYYMMDD&#039;) sort_order,
+client,
+CASE 
+WHEN min_status = 0 THEN &#039;green&#039;
+WHEN min_status = 1 THEN &#039;yellow&#039;
+WHEN min_status = 2 THEN &#039;red&#039;
+END status_dot,
+nbr_of_jobs,
+ROUND(job_size,2) job_size,
+NVL(skipped_files,0) skipped_files,
+NVL(success,0) success,
+NVL(failed,0) failed,
+NVL(failed_to_Start,0) failed_to_Start,
+NVL(partial_Success,0) partial_Success,
+NVL(killed,0) killed,
+NVL(stopped,0) stopped,
+NVL(interrupted,0) interrupted,
+NVL(unknown,0) unknown,
+var.unit
+FROM t2, var
+ORDER BY 2 DESC,3
+</string>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>MB,GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>All,Physical,Virtual</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Report on:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>0f503bbd-5b7f-4d72-b02f-e4e0abd8139e</string>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>10/02/2015</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Reporting on: ${freeCombo2} hosts</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>CV Mission Control by Physical &amp; VM Clients</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>Date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM d, yyyy h:mm:ss a</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <caption>Client</caption>
+                    <name>client</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <aggregationResult>0</aggregationResult>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption>Client</caption>
+                    <name>client</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>Status</caption>
+                    <name>status_dot</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>center</align>
+                    <formatter>StatusIconFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <additionalDetail>Jobs: ${row[&#039;nbr_of_jobs&#039;].data}, Job Size: ${row[&#039;job_size&#039;].data}(${row[&#039;unit&#039;].data}), Skipped Files: ${row[&#039;skipped_files&#039;].data}, Success: ${row[&#039;success&#039;].data}, Failed: ${row[&#039;failed&#039;].data}, Failed to Start: ${row[&#039;failed_to_start&#039;].data}, Partial: ${row[&#039;partial_success&#039;].data}, killed: ${row[&#039;killed&#039;].data}, Stopped: ${row[&#039;stopped&#039;].data}, Interrupted: ${row[&#039;interrupted&#039;].data}, Unknown: ${row[&#039;unknown&#039;].data}</additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>nbr_of_jobs</caption>
+                    <name>nbr_of_jobs</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>job_size</caption>
+                    <name>job_size</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>skipped_files</caption>
+                    <name>skipped_files</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>success</caption>
+                    <name>success</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>failed</caption>
+                    <name>failed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>failed_to_start</caption>
+                    <name>failed_to_start</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>partial_success</caption>
+                    <name>partial_success</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>killed</caption>
+                    <name>killed</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>stopped</caption>
+                    <name>stopped</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>interrupted</caption>
+                    <name>interrupted</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>unknown</caption>
+                    <name>unknown</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>unit</caption>
+                    <name>unit</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_date&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;MMM d, yyyy h:mm:ss a&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;sort_order&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;client&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Client&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;status_dot&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Status&quot;,&quot;formatter&quot;:&quot;StatusIconFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;center&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;Jobs: ${row[&#039;nbr_of_jobs&#039;].data}, Job Size: ${row[&#039;job_size&#039;].data}(${row[&#039;unit&#039;].data}), Skipped Files: ${row[&#039;skipped_files&#039;].data}, Success: ${row[&#039;success&#039;].data}, Failed: ${row[&#039;failed&#039;].data}, Failed to Start: ${row[&#039;failed_to_start&#039;].data}, Partial: ${row[&#039;partial_success&#039;].data}, killed: ${row[&#039;killed&#039;].data}, Stopped: ${row[&#039;stopped&#039;].data}, Interrupted: ${row[&#039;interrupted&#039;].data}, Unknown: ${row[&#039;unknown&#039;].data}&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;nbr_of_jobs&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;nbr_of_jobs&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;job_size&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;job_size&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;skipped_files&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;skipped_files&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;success&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;success&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;failed&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;failed&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;failed_to_start&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;failed_to_start&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;partial_success&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;partial_success&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;killed&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;killed&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;stopped&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;stopped&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;interrupted&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;interrupted&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;unknown&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;unknown&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;unit&quot;,&quot;typeName&quot;:&quot;char&quot;,&quot;label&quot;:&quot;unit&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>CV Mission Control by Physical </string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

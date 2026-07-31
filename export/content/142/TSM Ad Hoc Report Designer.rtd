@@ -1,0 +1,363 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Updated: 09/22/2011
+--Report On: Job Size(GB),Client Count,File Count,Job Count,Successful Jobs,Partial Jobs,Failed Jobs,MB/sec,Duration(Min),Data Transfer(Min),Media Wait(Min),Idle(Min),Failed Objects,Examined Objects
+--by: TSM Instance,TSM Server,Client,Node,Backup Type,Media type,Domain, Schedule,Storage Pool,Storage Pool Type,Device Class
+--per: Day,Week,Month,Quarter,Year
+--
+--
+WITH t1 AS (
+SELECT trunc(tj.start_date,DECODE(&#039;${freeCombo3}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;)) the_date, 
+DECODE(&#039;${freeCombo2}&#039;,
+&#039;TSM Instance&#039;, tj.instance_name,
+&#039;TSM Server&#039;, tj.server_name,
+&#039;Client&#039;, tj.client_name,
+&#039;Node&#039;, tj.node_name,
+&#039;Backup Type&#039;, tj.job_type_name,
+&#039;Media type&#039;, tj.media_type,
+&#039;Domain&#039;, tj.domain_name,
+&#039;Schedule&#039;, tj.schedule_name,
+&#039;Storage Pool&#039;, sp.storage_pool_name,
+&#039;Storage Pool Type&#039;, sp.storage_pool_type,
+&#039;Device Class&#039;, sp.storage_pool_name) unit,  
+trunc(sum(tj.kilobytes/1024/1024)) job_size_gb,
+count(DISTINCT tj.client_id) client_count,
+sum(tj.nbr_of_files) file_count,
+count(DISTINCT tj.job_id) job_count,
+sum(DECODE(tj.summary_status,0,1)) successful_jobs,
+sum(DECODE(tj.summary_status,1,1)) partial_jobs,
+sum(DECODE(tj.summary_status,2,1)) failed_jobs,
+avg(tj.mbytes_sec) mbytes_sec,
+sum(tj.duration_secs/60) duration_min,
+sum(tj.data_transfer_secs/60) data_transfer_min,
+sum(tj.media_wait_secs/60) media_wait_min, 
+sum(tj.idle_secs/60) idle_min, 
+sum(tj.nbr_failed_objects) nbr_failed_objects, 
+sum(tj.nbr_examined_objects) nbr_examined_objects
+FROM apt_v_tsm_job tj, apt_v_tsm_storage_pool sp
+WHERE tj.start_date BETWEEN ${startDate} AND ${endDate}
+AND tj.client_id IN (${hosts})
+AND tj.storage_pool_id = sp.storage_pool_id (+)
+GROUP BY trunc(tj.start_date,DECODE(&#039;${freeCombo3}&#039;,&#039;Day&#039;,&#039;DD&#039;,&#039;Week&#039;,&#039;WW&#039;,&#039;Month&#039;,&#039;MM&#039;,&#039;Quarter&#039;,&#039;Q&#039;,&#039;Year&#039;)),
+DECODE(&#039;${freeCombo2}&#039;,
+&#039;TSM Instance&#039;, tj.instance_name,
+&#039;TSM Server&#039;, tj.server_name,
+&#039;Client&#039;, tj.client_name,
+&#039;Node&#039;, tj.node_name,
+&#039;Backup Type&#039;,tj.job_type_name,
+&#039;Media type&#039;, tj.media_type,
+&#039;Domain&#039;,tj.domain_name,
+&#039;Schedule&#039;,tj.schedule_name,
+&#039;Storage Pool&#039;,sp.storage_pool_name,
+&#039;Storage Pool Type&#039;,sp.storage_pool_type,
+&#039;Device Class&#039;,sp.storage_pool_name)
+) 
+SELECT to_char(the_date,&#039;MM/DD/YY&#039;) the_date,
+nvl(unit,&#039;Unknown&#039;) unit,
+DECODE(&#039;${freeCombo1}&#039;,
+&#039;Job Size(GB)&#039;, job_size_gb,
+&#039;Client Count&#039;, client_count,
+&#039;File Count&#039;, file_count,
+&#039;Job Count&#039;, job_count,
+&#039;Successful Jobs&#039;, successful_jobs,
+&#039;Partial Jobs&#039;, partial_jobs,
+&#039;Failed Jobs&#039;, failed_jobs,
+&#039;MB/sec&#039;, mbytes_sec,
+&#039;Duration(Min)&#039;, duration_min,
+&#039;Data Transfer(Min)&#039;, data_transfer_min,
+&#039;Media Wait(Min)&#039;, media_wait_min, 
+&#039;Idle(Min)&#039;, idle_min, 
+&#039;Failed Objects&#039;, nbr_failed_objects, 
+&#039;Examined Objects&#039;, nbr_examined_objects) the_metric
+FROM t1 
+ORDER BY 1</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>TSM Ad Hoc Report Designer</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>Job Size(GB),Client Count,File Count,Job Count,Successful Jobs,Partial Jobs,Failed Jobs,MB/sec,Duration(Min),Data Transfer(Min),Media Wait(Min),Idle(Min),Failed Objects,Examined Objects</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>TSM Instance,TSM Server,Client,Node,Backup Type,Media type,Domain, Schedule,Storage Pool,Storage Pool Type,Device Class</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>Day,Week,Month,Quarter,Year</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Report on:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>per:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>by:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>*Reporting on: ${freeCombo1} by: ${freeCombo2} per: ${freeCombo3}</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>*Reporting on: ${freeCombo1} by: ${freeCombo2} per: ${freeCombo3}</string>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>TSM Ad Hoc Report Designer</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>the_date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern>MMM dd, yyyy hh:mm:ssa</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <name>unit</name>
+                    <fieldIndex>0</fieldIndex>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption></caption>
+                    <name>unit</name>
+                    <fieldIndex>0</fieldIndex>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>Metric</caption>
+                    <name>the_metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>#,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;MMM dd, yyyy hh:mm:ssa&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;label&quot;:&quot;the_date&quot;,&quot;name&quot;:&quot;the_date&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;&quot;,&quot;name&quot;:&quot;unit&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;#,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Metric&quot;,&quot;name&quot;:&quot;the_metric&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;}]</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>TSM Ad Hoc Report Designer</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

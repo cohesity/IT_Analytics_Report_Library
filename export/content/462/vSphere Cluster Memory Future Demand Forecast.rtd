@@ -1,0 +1,832 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <string>More to come</string>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>0010082c-513c-43ab-b39c-c57978426021</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*03/31/2020 Forecasting Framework III </string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>vSphere Cluster Memory Future Demand Forecast</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>defaultTimePeriod</string>
+                    <string>1365</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading2</string>
+                    <string>Group by:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues2</string>
+                    <string>Days,Weeks,Months,Quarters,Years</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading3</string>
+                    <string>Periods to Forecast:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues3</string>
+                    <string>4,8,12,24,36,48</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>TB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue3</string>
+                    <string>8</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue2</string>
+                    <string>Months</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>queryComboDefaultValue1</string>
+                    <string>70%</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboDefaultValue2</string>
+                    <string>80%</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT &apos;60%&apos; the_key,&apos;60%&apos; the_value FROM dual UNION SELECT &apos;65%&apos; the_key,&apos;65%&apos; the_value FROM dual UNION SELECT &apos;70%&apos; the_key,&apos;70%&apos; the_value FROM dual UNION SELECT &apos;75%&apos; the_key,&apos;75%&apos; the_value FROM dual UNION SELECT &apos;80%&apos; the_key,&apos;80%&apos; the_value FROM dual UNION SELECT &apos;85%&apos; the_key,&apos;85%&apos; the_value FROM dual UNION SELECT &apos;90%&apos; the_key,&apos;90%&apos; the_value FROM dual UNION SELECT &apos;95%&apos; the_key,&apos;95%&apos; the_value FROM dual</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues2</string>
+                    <string>SELECT &apos;60%&apos; the_key,&apos;60%&apos; the_value FROM dual UNION SELECT &apos;65%&apos; the_key,&apos;65%&apos; the_value FROM dual UNION SELECT &apos;70%&apos; the_key,&apos;70%&apos; the_value FROM dual UNION SELECT &apos;75%&apos; the_key,&apos;75%&apos; the_value FROM dual UNION SELECT &apos;80%&apos; the_key,&apos;80%&apos; the_value FROM dual UNION SELECT &apos;85%&apos; the_key,&apos;85%&apos; the_value FROM dual UNION SELECT &apos;90%&apos; the_key,&apos;90%&apos; the_value FROM dual UNION SELECT &apos;95%&apos; the_key,&apos;95%&apos; the_value FROM dual</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboValues3</string>
+                    <string>SELECT DISTINCT vs.data_center_name||&apos; - &apos;||vc.cluster_name the_key, vs.data_center_name||&apos; - &apos;||vc.cluster_name the_value FROM apt_v_vmw_cluster vc, apt_v_virtual_system vs WHERE vc.vmw_cluster_id = vs.vmw_cluster_id ORDER BY 1</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading3</string>
+                    <string>Cluster:</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading2</string>
+                    <string>Order New:</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Stop Allocating:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>vSphere Cluster Memory Future Demand Forecast</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 03/31/2020
+WITH 
+var AS (
+SELECT 
+  DECODE(&apos;${queryCombo1}&apos;,&apos;95%&apos;,.95,&apos;90%&apos;,.90,&apos;85%&apos;,.85,&apos;80%&apos;,.80,&apos;75%&apos;,.75,&apos;70%&apos;,.70) pct_1,
+  DECODE(&apos;${queryCombo2}&apos;,&apos;95%&apos;,.95,&apos;90%&apos;,.90,&apos;85%&apos;,.85,&apos;80%&apos;,.80,&apos;75%&apos;,.75,&apos;70%&apos;,.70) pct_2,
+  DECODE(&apos;${freeCombo1}&apos;,&apos;GB&apos;,1,&apos;TB&apos;,1024,&apos;PB&apos;,1024*1024) div_by,
+  DECODE(&apos;${freeCombo2}&apos;,&apos;Days&apos;,1,&apos;Weeks&apos;,7,&apos;Months&apos;,31,&apos;Quarters&apos;,93,&apos;Years&apos;,365.25) day_multiplier,
+  TO_NUMBER(&apos;${freeCombo3}&apos;) forecast_periods
+FROM dual
+),
+/***********************************************/
+l1 AS (--First get 1 entry per period
+SELECT DISTINCT
+  TRUNC(log_date,DECODE(&apos;${freeCombo2}&apos;,&apos;Days&apos;,&apos;DD&apos;,&apos;Weeks&apos;,&apos;WW&apos;,&apos;Months&apos;,&apos;MM&apos;,&apos;Quarters&apos;,&apos;Q&apos;,&apos;Years&apos;,&apos;YY&apos;)) log_date,
+  vs.vmw_cluster_id,
+  l.virtual_system_id,
+  l.partition_id,
+  l.partition_type,
+  MAX(l.nbr_cpu) nbr_cpu,
+  MAX(l.host_memory_usage_kb) host_memory_usage_kb,
+  MAX(l.guest_memory_usage_kb) guest_memory_usage_kb,
+  MAX(l.memory_size_kb) memory_size_kb,
+  MAX(l.overall_cpu_usage) overall_cpu_usage
+FROM 
+  apt_v_vmw_partition_stats_log l, apt_v_virtual_system vs, apt_v_vmw_cluster vc
+WHERE
+  vc.vmw_cluster_id = vs.vmw_cluster_id
+  AND vs.virtual_system_id = l.virtual_system_id
+  AND l.log_date BETWEEN ${startDate} AND ${endDate}
+  AND vs.data_center_name||&apos; - &apos;||vc.cluster_name LIKE &apos;${queryCombo3}&apos;
+GROUP BY 
+  TRUNC(log_date,DECODE(&apos;${freeCombo2}&apos;,&apos;Days&apos;,&apos;DD&apos;,&apos;Weeks&apos;,&apos;WW&apos;,&apos;Months&apos;,&apos;MM&apos;,&apos;Quarters&apos;,&apos;Q&apos;,&apos;Years&apos;,&apos;YY&apos;)),
+  vs.vmw_cluster_id,
+  l.virtual_system_id,
+  l.partition_id,
+  l.partition_type
+),
+l2 AS (
+SELECT
+  l1.log_date,
+  vs.vmw_cluster_id,
+  l1.virtual_system_id,
+  SUM(DECODE(l1.partition_type,&apos;VM&apos;,1,0)) nbr_vms,
+  SUM(DECODE(l1.partition_type,&apos;HOST&apos;,nbr_cpu,0)) nbr_hcpu,
+  SUM(DECODE(l1.partition_type,&apos;VM&apos;,nbr_cpu,0)) nbr_vcpu,
+  ROUND(SUM(host_memory_usage_kb/1024/1024),2) host_mem_used,
+  ROUND(SUM(guest_memory_usage_kb/1024/1024),2) guest_mem_used,
+  ROUND(SUM(DECODE(l1.partition_type,&apos;HOST&apos;,memory_size_kb/1024/1024,0)),2) host_mem_size,
+  ROUND(SUM(DECODE(l1.partition_type,&apos;VM&apos;,memory_size_kb/1024/1024,0)),2) guest_mem_size,
+  SUM(DECODE(l1.partition_type,&apos;HOST&apos;,overall_cpu_usage,0)) host_cpu_usage,
+  SUM(DECODE(l1.partition_type,&apos;VM&apos;,overall_cpu_usage,0)) vm_cpu_usage
+FROM 
+  l1, apt_v_virtual_system vs
+WHERE
+  l1.virtual_system_id = vs.virtual_system_id
+GROUP BY 
+  l1.log_date,
+  vs.vmw_cluster_id,
+  l1.virtual_system_id
+ORDER BY 2,3,1	
+),
+t1 AS (
+SELECT
+  ROW_NUMBER() OVER (ORDER BY log_date ASC) the_period,
+  log_date the_date,
+  COUNT(DISTINCT vmw_cluster_id) nbr_vmw_clusters,
+  COUNT(DISTINCT virtual_system_id) nbr_virtual_systems,
+  TRUNC(SUM(nbr_hcpu)) nbr_hcpu,
+  TRUNC(SUM(host_mem_used)) the_value,
+  TRUNC(SUM(host_mem_size)) the_capacity,
+  ROUND(SUM(host_mem_used) / NULLIF(SUM(host_mem_size),0) * 100,2) host_mem_pct_used,
+  TRUNC(SUM(host_cpu_usage)) host_cpu_usage,
+  TRUNC(SUM(nbr_vms)) nbr_vms,
+  TRUNC(SUM(nbr_vcpu)) nbr_vcpu,
+  TRUNC(SUM(guest_mem_used)) guest_mem_used,
+  TRUNC(SUM(guest_mem_size)) guest_mem_size,
+  ROUND(SUM(guest_mem_used) / NULLIF(SUM(guest_mem_size),0) * 100,2) guest_mem_pct_used,
+  TRUNC(SUM(vm_cpu_usage)) vm_cpu_usage
+FROM 
+  l2
+GROUP BY
+  log_date
+ORDER BY 
+  log_date
+),
+f0 AS (--Gather the forecasting variables - This will return 1 row
+SELECT DISTINCT
+  COUNT(*) OVER () nbr_of_periods,
+  MAX(the_capacity) OVER () max_the_capacity,
+  MAX(the_value) OVER () max_of_the_value,
+  FIRST_VALUE(the_date) OVER (ORDER BY the_date ASC) first_date,
+  FIRST_VALUE(the_date) OVER (ORDER BY the_date DESC) last_date,
+  FIRST_VALUE(the_value) OVER (ORDER BY the_date ASC) first_value, 
+  FIRST_VALUE(the_value) OVER (ORDER BY the_date DESC) last_value,
+  REGR_INTERCEPT(the_value, the_period) OVER () lin_y_intercept,
+  REGR_SLOPE(the_value, the_period) OVER () lin_slope,
+  REGR_R2(the_value, the_period) OVER () r2_value,
+  REGR_COUNT(the_value, the_period) OVER () r_count,
+  (FIRST_VALUE(the_value) OVER (ORDER BY the_date DESC) - 
+  FIRST_VALUE(the_value) OVER (ORDER BY the_date ASC)) /
+  NULLIF(COUNT(*) OVER (),0) pop_slope,
+  (FIRST_VALUE(the_value) OVER (ORDER BY the_date DESC) -
+  (((FIRST_VALUE(the_value) OVER (ORDER BY the_date DESC) - 
+  FIRST_VALUE(the_value) OVER (ORDER BY the_date ASC)) /
+  NULLIF(COUNT(*) OVER (),0))) * (COUNT(*) OVER ())) pop_y_intercept
+FROM 
+  t1
+),
+d0 AS (--Future Dates
+SELECT 
+f0.nbr_of_periods + ROW_NUMBER() OVER (ORDER BY the_date ASC) the_period, 
+ROW_NUMBER() OVER (ORDER BY the_date ASC) the_future_period, --Will start as 1 in the future 
+the_date the_date
+FROM var, f0, TABLE(rtd.APTlistOfDates(f0.last_date+var.day_multiplier,f0.last_date+(var.forecast_periods*var.day_multiplier),DECODE(&apos;${freeCombo2}&apos;,&apos;Days&apos;,11,&apos;Weeks&apos;,12,&apos;Months&apos;,13,&apos;Quarters&apos;,14,&apos;Years&apos;,15))) the_dates
+)
+SELECT
+&apos;Past&apos; the_tense,
+t1.the_period,
+TO_CHAR(t1.the_date,&apos;YYYY/MM/DD&apos;) AS the_date,
+f0.max_the_capacity,
+ROUND(t1.the_value,2) the_past_value,
+0 the_future_value,
+(f0.max_the_capacity - t1.the_value)  available_capacity,
+f0.max_the_capacity*pct_1 stop_allocating,
+f0.max_the_capacity*pct_2 order_new,
+f0.nbr_of_periods,
+f0.max_of_the_value,
+f0.first_date,
+f0.last_date,
+f0.first_value, 
+f0.last_value,
+f0.lin_slope,
+f0.lin_y_intercept,
+ROUND((t1.the_period * f0.lin_slope) + f0.lin_y_intercept,2) lin_trend_line, 
+f0.pop_slope,
+f0.pop_y_intercept,
+ROUND((t1.the_period * f0.pop_slope) + f0.pop_y_intercept,2) pop_trend_line 
+FROM f0, t1, var
+UNION
+SELECT
+&apos;Future&apos; the_tense,
+d0.the_period,
+TO_CHAR(d0.the_date,&apos;YYYY/MM/DD&apos;) AS the_date,
+f0.max_the_capacity,
+0 the_past_value,
+ROUND(f0.last_value + (f0.lin_slope * d0.the_future_period),2) the_future_value,
+f0.max_the_capacity - (f0.last_value + (f0.lin_slope * d0.the_future_period)) available_capacity,
+f0.max_the_capacity*pct_1 stop_allocating,
+f0.max_the_capacity*pct_2 order_new,
+f0.nbr_of_periods,
+f0.max_of_the_value,
+f0.first_date,
+f0.last_date,
+f0.first_value, 
+f0.last_value,
+f0.lin_slope,
+f0.lin_y_intercept,
+ROUND((d0.the_period * f0.lin_slope) + f0.lin_y_intercept,2) lin_trend_line, 
+f0.pop_slope,
+f0.pop_y_intercept,
+ROUND((d0.the_period * f0.pop_slope) + f0.pop_y_intercept,2) pop_trend_line 
+FROM d0, f0, var
+ORDER BY the_date</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100230</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>104781</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>Reporting on: ${queryCombo3}</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;the_tense&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;the_tense&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;the_period&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;the_period&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_date&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;caption&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;max_the_capacity&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Total Memory&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#C7C7C9&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_past_value&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Past&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#0096B1&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;the_future_value&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Future&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#7FB2D0&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;available_capacity&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Available&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#C7C7C9&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;stop_allocating&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Stop Allocating&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#EBCD01&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;order_new&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Order New&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#AA000A&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;nbr_of_periods&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;nbr_of_periods&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;max_of_the_value&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;max_of_the_value&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;first_date&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;label&quot;:&quot;first_date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;last_date&quot;,&quot;typeName&quot;:&quot;date&quot;,&quot;label&quot;:&quot;last_date&quot;,&quot;formatter&quot;:&quot;DateFormatter&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;first_value&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;first_value&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;last_value&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;last_value&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;lin_slope&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;lin_slope&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;lin_y_intercept&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;lin_y_intercept&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;lin_trend_line&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Linear Trend&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#000000&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;pop_slope&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;pop_slope&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:false,&quot;name&quot;:&quot;pop_y_intercept&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;pop_y_intercept&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;pop_trend_line&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;Period Over Period Trend&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;line&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;#652478&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>vSphere Cluster Memory Future Demand Forecast</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>stackedBarChart</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>the_tense</caption>
+                    <name>the_tense</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>the_period</caption>
+                    <name>the_period</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>caption</type>
+                    <caption>Date</caption>
+                    <name>the_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatter>DateFormatter</formatter>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Total Memory</caption>
+                    <name>max_the_capacity</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#C7C7C9</color>
+                    <secondaryColor>#C7C7C9</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Past</caption>
+                    <name>the_past_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#0096B1</color>
+                    <secondaryColor>#0096B1</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Future</caption>
+                    <name>the_future_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#7FB2D0</color>
+                    <secondaryColor>#7FB2D0</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>bar</type>
+                    <caption>Available</caption>
+                    <name>available_capacity</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#C7C7C9</color>
+                    <secondaryColor>#C7C7C9</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Stop Allocating</caption>
+                    <name>stop_allocating</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#EBCD01</color>
+                    <secondaryColor>#EBCD01</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Order New</caption>
+                    <name>order_new</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#AA000A</color>
+                    <secondaryColor>#AA000A</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>nbr_of_periods</caption>
+                    <name>nbr_of_periods</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>max_of_the_value</caption>
+                    <name>max_of_the_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>first_date</caption>
+                    <name>first_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>last_date</caption>
+                    <name>last_date</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <formatPattern></formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>first_value</caption>
+                    <name>first_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>last_value</caption>
+                    <name>last_value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>lin_slope</caption>
+                    <name>lin_slope</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>lin_y_intercept</caption>
+                    <name>lin_y_intercept</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Linear Trend</caption>
+                    <name>lin_trend_line</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#000000</color>
+                    <secondaryColor>#000000</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>pop_slope</caption>
+                    <name>pop_slope</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>pop_y_intercept</caption>
+                    <name>pop_y_intercept</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>line</type>
+                    <caption>Period Over Period Trend</caption>
+                    <name>pop_trend_line</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color>#652478</color>
+                    <secondaryColor>#652478</secondaryColor>
+                    <align>right</align>
+                    <formatter>CustomNumberFormatter</formatter>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <shape>noShape</shape>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Values in: ${freeCombo1} Group by: ${freeCombo2} Forecasting out ${freeCombo3} ${freeCombo2}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

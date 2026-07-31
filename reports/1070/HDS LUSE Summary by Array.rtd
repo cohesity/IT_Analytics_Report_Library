@@ -1,0 +1,407 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>3b85cdca-05e7-4a02-94cd-9479d9987d5b</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>HDS LUSE Summary by Array</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>HDS LUSE Summary by Array</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeQueryCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>queryComboValues1</string>
+                    <string>SELECT DISTINCT array_name, array_name FROM aps_v_hds_logical_unit UNION ALL SELECT  &apos; All&apos;, &apos; All&apos; from apt_v_dual order by 1</string>
+                  </entry>
+                  <entry>
+                    <string>queryComboHeading1</string>
+                    <string>Array:</string>
+                  </entry>
+                  <entry>
+                    <string>sql</string>
+                    <string>SELECT DISTINCT array_name, array_name FROM aps_v_hds_logical_unit UNION ALL SELECT  &apos; All&apos;, &apos; All&apos; from apt_v_dual order by 1</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>HDS LUSE Summary by Array</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author:paul.hogan@aptare.com
+--Last Updated: 10/4/2012
+--This will list all LDEV&apos;s that make up a LUSE
+WITH t1 AS
+  (SELECT a.logical_unit_id,
+    a.logical_unit_name,
+    a.storage_array_id,
+    c.device_nbr,
+    c.array_name,
+    c.capacity_gb ldev_capacity_gb,
+    c.raid_type,
+    c.array_group_name,
+    a.dp_type,
+    a.dp_pool_id,
+    CASE
+      WHEN a.logical_unit_name=SUBSTR(logical_unit_name,0,3)
+        ||regexp_replace(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),-2,1)
+        ||NVL(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),           -1,1),&apos;0&apos;),&apos; &apos;,&apos;0&apos;)
+      THEN b.luse_capacity_gb
+      ELSE NULL
+    END luse_capacity_gb,
+    CASE
+      WHEN a.logical_unit_name=SUBSTR(logical_unit_name,0,3)
+        ||regexp_replace(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),-2,1)
+        ||NVL(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),           -1,1),&apos;0&apos;),&apos; &apos;,&apos;0&apos;)
+      THEN c.path_exists
+      ELSE NULL
+    END allocated,
+    --c.path_exists allocated,
+    CASE
+      WHEN a.logical_unit_name=SUBSTR(logical_unit_name,0,3)
+        ||regexp_replace(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),-2,1)
+        ||NVL(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),           -1,1),&apos;0&apos;),&apos; &apos;,&apos;0&apos;)
+      THEN logical_unit_name
+      ELSE NULL
+    END luse_head,
+    CASE
+      WHEN a.logical_unit_name&lt;&gt;SUBSTR(logical_unit_name,0,3)
+        ||regexp_replace(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),-2,1)
+        ||NVL(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),           -1,1),&apos;0&apos;),&apos; &apos;,&apos;0&apos;)
+      THEN logical_unit_name
+      ELSE NULL
+    END luse_sub,
+    SUBSTR(logical_unit_name,0,3)
+    ||regexp_replace(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),-2,1)
+    ||NVL(SUBSTR(TO_CHAR(c.device_nbr,&apos;XXXX&apos;),           -1,1),&apos;0&apos;),&apos; &apos;,&apos;0&apos;) ldev
+  FROM
+    (SELECT *
+    FROM aps_v_hds_ldev
+    WHERE logical_unit_id IN
+      (SELECT logical_unit_id
+      FROM aps_v_hds_ldev
+      GROUP BY logical_unit_id
+      HAVING (COUNT(logical_unit_id ) &gt; 1)
+      )
+    ) c,
+    (SELECT SUM(c.capacity_gb) luse_capacity_gb,
+      a.logical_unit_id
+    FROM
+      (SELECT *
+      FROM aps_v_hds_ldev
+      WHERE logical_unit_id IN
+        (SELECT logical_unit_id
+        FROM aps_v_hds_ldev
+        GROUP BY logical_unit_id
+        HAVING (COUNT(logical_unit_id ) &gt; 1)
+        )
+      ) c,
+      aps_v_hds_logical_unit a
+    WHERE c.logical_unit_id=a.logical_unit_id
+    GROUP BY a.logical_unit_id
+    ) b,
+    aps_v_hds_logical_unit a
+  WHERE c.logical_unit_id=a.logical_unit_id
+  AND c.logical_unit_id  =b.logical_unit_id
+  )
+SELECT array_name,
+  logical_unit_name,
+  SUM(ldev_capacity_gb) luse_capacity_gb,
+  REPLACE(aptStringConcat(DISTINCT ldev),&apos;+&apos;,&apos;,&apos;) ldev_list
+FROM t1
+WHERE array_name = DECODE(&apos;${queryCombo1}&apos;,&apos; All&apos;,array_name,&apos;${queryCombo1}&apos;)
+GROUP BY array_name,
+  logical_unit_name</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>101140</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>heatMapMinColor</string>
+            <string>#ffffff</string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:true,&quot;name&quot;:&quot;array_name&quot;,&quot;label&quot;:&quot;Array&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;logical_unit_name&quot;,&quot;label&quot;:&quot;LUN&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;luse_capacity_gb&quot;,&quot;label&quot;:&quot;Capacity&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0.00 &apos;GB&apos;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;sum&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;ldev_list&quot;,&quot;label&quot;:&quot;LDEVs&quot;,&quot;description&quot;:&quot;&quot;,&quot;type&quot;:0,&quot;typeOverride&quot;:&quot;&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;pieType&quot;:&quot;pie&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>HDS LUSE Summary by Array</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Array</caption>
+                    <name>array_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>LUN</caption>
+                    <name>logical_unit_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Capacity</caption>
+                    <name>luse_capacity_gb</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###,##0.00 &apos;GB&apos;</formatPattern>
+                    <aggregation>sum</aggregation>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>LDEVs</caption>
+                    <name>ldev_list</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>heatMapMaxColor</string>
+            <string>#b71008</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>.UJAGKrTCBM6wHiDm7dGfsXEbYeS7NWldvWG8PUEVQIU=

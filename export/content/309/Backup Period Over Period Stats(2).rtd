@@ -1,0 +1,488 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 10/01/2013
+-- Compares the Period over Period values 
+WITH
+var AS (
+SELECT
+DECODE(&#039;${freeCombo1}&#039;,
+&#039;KB&#039;,1,&#039;MB&#039;,1024,&#039;GB&#039;,(1024*1024),&#039;TB&#039;,(1024*1024*1024),&#039;PB&#039;,(1024*1024*1024*1024)) div_by 
+FROM dual
+),
+d0 AS ( --Decode the date ranges
+SELECT 
+(TRUNC(${endDate}) - TRUNC(${startDate}))+1 day_num
+FROM dual
+),
+d1 as (
+SELECT
+day_num,
+TRUNC(sysdate - (day_num * 2)) prior_start_date,
+TRUNC((sysdate - day_num))  prior_end_date,
+TRUNC((sysdate - day_num)) current_start_date,
+TRUNC(sysdate) current_end_date
+FROM d0
+),
+j1 AS ( --Prior period client stats
+SELECT 
+j.client_id, 
+SUM(kilobytes/div_by) job_volume_tot,
+COUNT(job_id) job_count
+FROM d1, apt_v_job j, var
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN prior_start_date AND prior_end_date
+AND j.summary_status IN (0,1)
+GROUP BY j.client_id
+),
+p1 AS ( --Prior period totals
+SELECT 
+SUM(job_volume_tot) job_volume_tot,
+COUNT(job_count) job_count,
+COUNT(client_id) client_count
+FROM j1
+),
+j2 AS ( --Current period stats
+SELECT 
+j.client_id, 
+SUM(kilobytes/div_by) job_volume_tot,
+COUNT(job_id) job_count
+FROM d1, apt_v_job j, var
+WHERE j.client_id IN (${hosts})
+AND j.start_date BETWEEN current_start_date AND current_end_date
+AND j.summary_status IN (0,1)
+GROUP BY j.client_id
+),
+p2 AS ( --Prior period totals
+SELECT 
+SUM(job_volume_tot) job_volume_tot,
+COUNT(job_count) job_count,
+COUNT(client_id) client_count
+FROM j2
+),
+c0 AS ( --Clients who stayed exactly the same
+SELECT
+j1.client_id,
+j2.job_volume_tot-j1.job_volume_tot vol_change,
+(j2.job_volume_tot-j1.job_volume_tot)/DECODE(j2.job_volume_tot,0,null,j2.job_volume_tot)*100 pct_change
+FROM j1,j2
+WHERE j1.client_id = j2.client_id
+AND (j2.job_volume_tot-j1.job_volume_tot) = 0
+),
+c1 AS ( --Clients who increased
+SELECT
+j1.client_id,
+j2.job_volume_tot-j1.job_volume_tot vol_change,
+(j2.job_volume_tot-j1.job_volume_tot)/DECODE(j2.job_volume_tot,0,null,j2.job_volume_tot)*100 pct_change
+FROM j1,j2
+WHERE j1.client_id = j2.client_id
+AND (j2.job_volume_tot-j1.job_volume_tot) &gt; 0
+),
+c2 AS ( --Clients who decreased
+SELECT
+j1.client_id,
+j2.job_volume_tot-j1.job_volume_tot vol_change,
+(j2.job_volume_tot-j1.job_volume_tot)/DECODE(j2.job_volume_tot,0,null,j2.job_volume_tot)*100 pct_change
+FROM j1,j2
+WHERE j1.client_id = j2.client_id
+AND (j2.job_volume_tot-j1.job_volume_tot) &lt; 0
+)
+SELECT 
+0 sort_order,
+&#039;Clients Current Period: &#039;||TO_CHAR(current_start_date,&#039;MM/DD/YYYY&#039;)||&#039; - &#039;||TO_CHAR(current_end_date,&#039;MM/DD/YYYY&#039;) metric,
+p2.client_count the_count, 
+p2.job_volume_tot the_volume,
+NULL the_pct
+FROM d1, p2
+UNION
+SELECT 
+1 sort_order,
+&#039;Clients Prior Period: &#039;||TO_CHAR(prior_start_date,&#039;MM/DD/YYYY&#039;)||&#039; - &#039;||TO_CHAR(prior_end_date,&#039;MM/DD/YYYY&#039;) metric,
+p1.client_count the_count, 
+p1.job_volume_tot the_volume,
+NULL the_pct
+FROM d1, p1
+UNION
+SELECT 
+2 sort_order,
+&#039;&lt;b&gt;&#039;||day_num||&#039; Day Delta:&lt;/b&gt;&#039; metric,
+p2.client_count - p1.client_count the_count, 
+p2.job_volume_tot-p1.job_volume_tot the_volume,
+(p2.job_volume_tot-p1.job_volume_tot)/p2.job_volume_tot*100 the_pct
+FROM p1, p2, d0
+UNION
+SELECT 
+3 sort_order,
+&#039;Retired Clients&#039; metric,
+COUNT(j1.client_id) the_count,
+SUM(j1.job_volume_tot)*-1 the_volume,--Show this as a negative number so bottom line will add up
+SUM(j1.job_volume_tot)/MAX(p2.job_volume_tot)*100 the_pct
+FROM j1, p2
+WHERE j1.client_id NOT IN (SELECT j2.client_id FROM j2)
+UNION
+SELECT 
+4 sort_order,
+&#039;New Clients&#039; metric,
+COUNT(j2.client_id) the_count,
+SUM(j2.job_volume_tot) the_volume,
+SUM(j2.job_volume_tot)/MAX(p2.job_volume_tot)*100 the_pct
+FROM j2, p2
+WHERE j2.client_id NOT IN (SELECT j1.client_id FROM j1)
+UNION
+SELECT 
+5 sort_order,
+&#039;Clients who decreased&#039; metric,
+COUNT(c2.client_id) the_count,
+SUM(c2.vol_change) the_volume,
+SUM(c2.vol_change)/MAX(p2.job_volume_tot)*100 the_pct
+FROM c2, p2
+UNION
+SELECT 
+6 sort_order,
+&#039;Clients who stayed the same&#039; metric,
+COUNT(c0.client_id) the_count,
+SUM(c0.vol_change) the_volume,
+SUM(c0.vol_change)/MAX(p2.job_volume_tot)*100 the_pct
+FROM c0, p2
+UNION
+SELECT 
+6 sort_order,
+&#039;Clients with 1% to 20% increase&#039; metric,
+COUNT(c1.client_id) the_count,
+SUM(c1.vol_change) the_volume,
+SUM(c1.vol_change)/MAX(p2.job_volume_tot)*100 the_pct
+FROM c1, p2
+WHERE c1.pct_change &lt; 20 
+UNION
+SELECT 
+7 sort_order,
+&#039;Clients with 20% to 50% increase&#039; metric,
+COUNT(c1.client_id) the_count,
+SUM(c1.vol_change) the_volume,
+SUM(c1.vol_change)/MAX(p2.job_volume_tot)*100 the_pct
+FROM c1, p2
+WHERE c1.pct_change BETWEEN 20 AND 50
+UNION
+SELECT 
+8 sort_order,
+&#039;Clients with 50% to 100% increase&#039; metric,
+COUNT(c1.client_id) the_count,
+SUM(c1.vol_change) the_volume,
+SUM(c1.vol_change)/MAX(p2.job_volume_tot)*100 the_pct
+FROM c1, p2
+WHERE c1.pct_change BETWEEN 50 AND 100
+UNION
+SELECT 
+9 sort_order,
+&#039;Clients with over 100% increase&#039; metric,
+COUNT(c1.client_id) the_count,
+SUM(c1.vol_change) the_volume,
+SUM(c1.vol_change)/MAX(p2.job_volume_tot)*100 the_pct
+FROM c1, p2
+WHERE c1.pct_change &gt; 100</string>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Backup Period Over Period Stats</string>
+          </entry>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>timePeriod</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>SERVERS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>KB,MB,GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100545</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>-1</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>table</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Backup Period Over Period Stats</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Metric</caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Count</caption>
+                    <name>the_count</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>Volume</caption>
+                    <name>the_volume</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <caption>%</caption>
+                    <name>the_pct</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatter>NumberFormatter</formatter>
+                    <formatPattern>###,###.00&#039;%&#039;</formatPattern>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;name&quot;:&quot;sort_order&quot;,&quot;selected&quot;:false,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;label&quot;:&quot;Metric&quot;,&quot;name&quot;:&quot;metric&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Count&quot;,&quot;name&quot;:&quot;the_count&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;Volume&quot;,&quot;name&quot;:&quot;the_volume&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;additionalDetail&quot;:&quot;&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;###,###.00&#039;%&#039;&quot;,&quot;formatter&quot;:&quot;NumberFormatter&quot;,&quot;label&quot;:&quot;%&quot;,&quot;name&quot;:&quot;the_pct&quot;,&quot;selected&quot;:true,&quot;typeName&quot;:&quot;number&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Values in: ${freeCombo1}</string>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string>NOTE: Comparisons are based the time frame selected EXAMPLE: Selecting Last 7 days will compare to 7 days prior.</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <string></string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Backup Period Over Period Stats</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

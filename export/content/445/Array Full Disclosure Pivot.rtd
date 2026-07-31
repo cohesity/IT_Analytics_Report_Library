@@ -1,0 +1,480 @@
+<com.aptare.sc.dal.versioning.ObjectMap>
+  <version>2</version>
+  <className>com.aptare.sc.domain.reportTemplateDesigner.RtdTemplate</className>
+  <data>
+    <entry>
+      <string>longDescription</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>reportVersion</string>
+      <string>1.0</string>
+    </entry>
+    <entry>
+      <string>isCloudTemplate</string>
+      <boolean>false</boolean>
+    </entry>
+    <entry>
+      <string>inventoryType</string>
+      <list>
+        <long>0</long>
+      </list>
+    </entry>
+    <entry>
+      <string>reportGuid</string>
+      <string>5eb58ace-c7a2-4724-b663-724870ecb39a</string>
+    </entry>
+    <entry>
+      <string>inventoryCategory</string>
+      <long>0</long>
+    </entry>
+    <entry>
+      <string>description</string>
+      <string>*11/06/2018</string>
+    </entry>
+    <entry>
+      <string>exportName</string>
+      <string>Array Full Disclosure Pivot</string>
+    </entry>
+    <entry>
+      <string>version</string>
+      <double>0.0</double>
+    </entry>
+    <entry>
+      <string>products</string>
+      <list/>
+    </entry>
+    <entry>
+      <string>reportDefinition</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>1</version>
+        <className>com.aptare.sc.domain.report.ReportDefinition</className>
+        <data>
+          <entry>
+            <string>drilldown</string>
+            <boolean>false</boolean>
+          </entry>
+          <entry>
+            <string>designerComponents</string>
+            <list>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>scope</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>nodes</string>
+                    <string>ARRAYS</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+              <com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+                <name>freeCombo</name>
+                <componentScript>
+                  <before/>
+                  <after/>
+                </componentScript>
+                <configuration>
+                  <entry>
+                    <string>freeComboHeading1</string>
+                    <string>Values in:</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboValues1</string>
+                    <string>GB,TB,PB</string>
+                  </entry>
+                  <entry>
+                    <string>freeComboDefaultValue1</string>
+                    <string>TB</string>
+                  </entry>
+                </configuration>
+                <referenceData/>
+              </com.aptare.sc.domain.reportDesigner.ReportDesignerComponent>
+            </list>
+          </entry>
+          <entry>
+            <string>descriptiveName</string>
+            <string>Array Full Disclosure Pivot</string>
+          </entry>
+          <entry>
+            <string>encodedDataSource</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>productsSupported</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>supportsPagenation</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>specalisedReportBuilder</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>advancedComponents</string>
+            <list/>
+          </entry>
+          <entry>
+            <string>systemName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>composedReports</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>postReportInterceptor</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>designerScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>dataSource</string>
+            <string>--Author: rich.rose@aptare.com
+--Last Modified: 11/06/2018
+WITH 
+VAR AS (
+SELECT
+&#039;${freeCombo1}&#039; unit,
+DECODE(&#039;${freeCombo1}&#039;, &#039;GB&#039;,1024*1024,&#039;TB&#039;,1024*1024*1024,&#039;PB&#039;,(1024*1024*1024*1024)) div_by
+FROM dual
+),
+t1 AS (
+SELECT
+storage_array_id,
+vendor_name,
+array_name,
+array_family,
+array_type,
+domain_id,
+domain_name,
+root_group_id,
+object_id,
+product_name,
+serial_nbr,
+device_manager_id,
+ip_address,
+agent_version,
+controller_version,
+cache_kb/div_by cache,
+is_active,
+is_rm_enabled,
+creation_date,
+last_updated,
+nbr_allocated_luns,
+nbr_of_luns,
+nbr_array_ports,
+nbr_hosts,
+nbr_of_fc_ports,
+nbr_of_iscsi_ports,
+nbr_of_ethernet_ports,
+nbr_of_physical_disks,
+nbr_of_array_groups,
+nbr_of_storage_pools,
+nbr_of_thin_pools,
+thin_pool_subscribed_pct,
+raw_capacity_kb/div_by raw_capacity,
+raw_allocated_kb/div_by raw_allocated,
+raw_available_kb/div_by raw_available,
+capacity_kb/div_by capacity,
+allocated_kb/div_by allocated,
+other_allocated_kb/div_by other_allocated,
+available_kb/div_by available,
+largest_free_space_kb/div_by largest_free_space,
+array_group_capacity_kb/div_by array_group_capacity,
+array_group_allocated_kb/div_by array_group_allocated,
+array_group_available_kb/div_by array_group_available,
+pool_capacity_kb/div_by pool_capacity,
+pool_allocated_kb/div_by pool_allocated,
+pool_available_kb/div_by pool_available,
+thin_pool_capacity_kb/div_by thin_pool_capacity,
+thin_pool_allocated_kb/div_by thin_pool_allocated,
+thin_pool_available_kb/div_by thin_pool_available,
+thin_pool_subscribed_kb/div_by thin_pool_subscribed,
+(NVL(usable_internal_capacity_kb,0) + NVL(usable_external_capacity_kb,0))/div_by usable_total_capacity,
+usable_internal_capacity_kb/div_by usable_internal_capacity,
+usable_external_capacity_kb/div_by usable_external_capacity,
+usable_used_capacity_kb/div_by usable_used_capacity,
+usable_free_capacity_kb/div_by usable_free_capacity,
+virtualized_capacity_kb/div_by virtualized_capacity,
+virtualized_capacity_thin_kb/div_by virtualized_capacity_thin,
+replication_capacity_kb/div_by replication_capacity,
+estimated_used_kb/div_by estimated_used,
+lun_allocated_kb/div_by lun_allocated,
+lun_capacity_kb/div_by lun_capacity 
+FROM aps_v_storage_array sa, var
+WHERE storage_array_id IN (${arrays})
+)
+SELECT 100 sort_order, array_name, &#039;APTARE Unique ID&#039; metric,TO_CHAR(storage_array_id) value FROM t1 UNION
+SELECT 101 sort_order, array_name, &#039;Vendor&#039; metric, vendor_name value FROM t1 UNION
+SELECT 102 sort_order, array_name, &#039;Name&#039; metric, array_name value FROM t1 UNION
+SELECT 103 sort_order, array_name, &#039;Family&#039; metric, array_family value FROM t1 UNION
+SELECT 104 sort_order, array_name, &#039;Type&#039; metric, array_type value FROM t1 UNION
+SELECT 105 sort_order, array_name, &#039;Domain&#039; metric, domain_name value FROM t1 UNION
+SELECT 106 sort_order, array_name, &#039;Root Group ID&#039; metric, TO_CHAR(root_group_id,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 107 sort_order, array_name, &#039;Object ID&#039; metric, SUBSTR(object_id,1,30) value FROM t1 UNION
+SELECT 108 sort_order, array_name, &#039;Product&#039; metric, product_name value FROM t1 UNION
+SELECT 109 sort_order, array_name, &#039;Serial#&#039; metric, serial_nbr value FROM t1 UNION
+SELECT 110 sort_order, array_name, &#039;Device Manager ID&#039; metric, TO_CHAR(device_manager_id,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 111 sort_order, array_name, &#039;IP Address&#039; metric, SUBSTR(ip_address,1,30) value FROM t1 UNION
+SELECT 112 sort_order, array_name, &#039;Agent Version&#039; metric, agent_version value FROM t1 UNION
+SELECT 113 sort_order, array_name, &#039;Controller Version&#039; metric, controller_version value FROM t1 UNION
+SELECT 114 sort_order, array_name, &#039;Cache&#039; metric, TO_CHAR(cache,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 115 sort_order, array_name, &#039;Is Active&#039; metric, is_active value FROM t1 UNION
+SELECT 116 sort_order, array_name, &#039;Is RM Enabled&#039; metric, is_rm_enabled value FROM t1 UNION
+SELECT 117 sort_order, array_name, &#039;Creation Date&#039; metric, TO_CHAR(creation_date,&#039;MM/DD/YYYY HH:MI:SS AM&#039;) value FROM t1 UNION
+SELECT 118 sort_order, array_name, &#039;Last Updated&#039; metric, TO_CHAR(last_updated,&#039;MM/DD/YYYY HH:MI:SS AM&#039;) value FROM t1 UNION
+SELECT 119 sort_order, array_name, &#039;#LUNs&#039; metric, TO_CHAR(nbr_of_luns,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 120 sort_order, array_name, &#039;#Allocated LUNs&#039; metric, TO_CHAR(nbr_allocated_luns,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 121 sort_order, array_name, &#039;#Array Ports&#039; metric, TO_CHAR(nbr_array_ports,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 122 sort_order, array_name, &#039;#FC Ports&#039; metric, TO_CHAR(nbr_of_fc_ports,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 123 sort_order, array_name, &#039;#iSCSI Ports&#039; metric, TO_CHAR(nbr_of_iscsi_ports,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 124 sort_order, array_name, &#039;#Ethernet Ports&#039; metric, TO_CHAR(nbr_of_ethernet_ports,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 125 sort_order, array_name, &#039;#Physical Disks&#039; metric, TO_CHAR(nbr_of_physical_disks,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 126 sort_order, array_name, &#039;#Array Groups&#039; metric, TO_CHAR(nbr_of_array_groups,&#039;&#039;) value FROM t1 UNION
+SELECT 127 sort_order, array_name, &#039;#Storage Pools&#039; metric, TO_CHAR(nbr_of_storage_pools,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 128 sort_order, array_name, &#039;#Thin Pools&#039; metric, TO_CHAR(nbr_of_thin_pools,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 129 sort_order, array_name, &#039;#Hosts&#039; metric, TO_CHAR(nbr_hosts,&#039;9999999999&#039;) value FROM t1 UNION
+SELECT 129 sort_order, array_name, &#039;Thin Pool Subscribed%&#039; metric, TO_CHAR(thin_pool_subscribed_pct,&#039;9999.99&#039;)||&#039;%&#039; value FROM t1 UNION
+SELECT 130 sort_order, array_name, &#039;Raw Capacity&#039; metric, TO_CHAR(raw_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 131 sort_order, array_name, &#039;Raw Allocated&#039; metric, TO_CHAR(raw_allocated,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 132 sort_order, array_name, &#039;Raw Available&#039; metric, TO_CHAR(raw_available,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 133 sort_order, array_name, &#039;Capacity&#039; metric, TO_CHAR(capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 134 sort_order, array_name, &#039;Allocated&#039; metric, TO_CHAR(allocated,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 135 sort_order, array_name, &#039;Other Allocated&#039; metric, TO_CHAR(other_allocated,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 136 sort_order, array_name, &#039;Available&#039; metric, TO_CHAR(available,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 137 sort_order, array_name, &#039;Largest Free Space&#039; metric, TO_CHAR(largest_free_space,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 138 sort_order, array_name, &#039;Array Group Capacity&#039; metric, TO_CHAR(array_group_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 139 sort_order, array_name, &#039;Array Group Allocated&#039; metric, TO_CHAR(array_group_allocated,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 140 sort_order, array_name, &#039;Array Group Available&#039; metric, TO_CHAR(array_group_available,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 141 sort_order, array_name, &#039;Pool Capacity&#039; metric, TO_CHAR(pool_capacity ,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 142 sort_order, array_name, &#039;Pool Allocated&#039; metric, TO_CHAR(pool_allocated ,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 143 sort_order, array_name, &#039;Pool Available&#039; metric, TO_CHAR(pool_available ,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 144 sort_order, array_name, &#039;Thin Pool Capacity&#039; metric, TO_CHAR(thin_pool_capacity ,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 145 sort_order, array_name, &#039;Thin Pool Allocated&#039; metric, TO_CHAR(thin_pool_allocated ,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 146 sort_order, array_name, &#039;Thin Pool Available&#039; metric, TO_CHAR(thin_pool_available ,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 147 sort_order, array_name, &#039;Thin Pool Subscribed&#039; metric, TO_CHAR(thin_pool_subscribed ,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 148 sort_order, array_name, &#039;Usable Total Capacity*&#039; metric, TO_CHAR(usable_total_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 149 sort_order, array_name, &#039;Usable Internal Capacity&#039; metric, TO_CHAR(usable_internal_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 150 sort_order, array_name, &#039;Usable External Capacity&#039; metric, TO_CHAR(usable_external_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 151 sort_order, array_name, &#039;Usable Used Capacity&#039; metric, TO_CHAR(usable_used_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 152 sort_order, array_name, &#039;Usable Free Capacity&#039; metric, TO_CHAR(usable_free_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 153 sort_order, array_name, &#039;Virtualized Capacity &#039; metric, TO_CHAR(virtualized_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 154 sort_order, array_name, &#039;Virtualized Capacity Thin&#039; metric, TO_CHAR(virtualized_capacity_thin,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 155 sort_order, array_name, &#039;Replication Capacity&#039; metric, TO_CHAR(replication_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 156 sort_order, array_name, &#039;LUN Capacity&#039; metric, TO_CHAR(lun_capacity,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 157 sort_order, array_name, &#039;LUN Allocated&#039; metric, TO_CHAR(lun_allocated,&#039;999,999,999.99&#039;) value FROM t1 UNION
+SELECT 158 sort_order, array_name, &#039;Estimated Used&#039; metric, TO_CHAR(estimated_used,&#039;999,999,999.99&#039;) value FROM t1
+</string>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+    <entry>
+      <string>authorUserId</string>
+      <long>100000</long>
+    </entry>
+    <entry>
+      <string>templateName</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>id</string>
+      <long>100297</long>
+    </entry>
+    <entry>
+      <string>reportDecorator</string>
+      <com.aptare.sc.dal.versioning.ObjectMap>
+        <version>2</version>
+        <className>com.aptare.sc.domain.report.Decorator</className>
+        <data>
+          <entry>
+            <string>excludes</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>eventNotFoundComment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>footer</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>sqlReportData</string>
+            <string>[{&quot;selected&quot;:false,&quot;name&quot;:&quot;sort_order&quot;,&quot;typeName&quot;:&quot;number&quot;,&quot;label&quot;:&quot;sort_order&quot;,&quot;formatter&quot;:&quot;CustomNumberFormatter&quot;,&quot;formatPattern&quot;:&quot;###,###,##0&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;array_name&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Array&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;metric&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Metric&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;},{&quot;selected&quot;:true,&quot;name&quot;:&quot;value&quot;,&quot;typeName&quot;:&quot;varchar2&quot;,&quot;label&quot;:&quot;Value&quot;,&quot;formatter&quot;:&quot;&quot;,&quot;formatPattern&quot;:&quot;&quot;,&quot;alignment&quot;:&quot;right&quot;,&quot;barType&quot;:&quot;bar&quot;,&quot;aggregation&quot;:&quot;&quot;,&quot;colour&quot;:&quot;&quot;,&quot;drilldown&quot;:&quot;&quot;,&quot;additionalDetail&quot;:&quot;&quot;,&quot;typeOverride&quot;:&quot;&quot;}]</string>
+          </entry>
+          <entry>
+            <string>groupBy</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>title</string>
+            <string>Array Full Disclosure Pivot</string>
+          </entry>
+          <entry>
+            <string>chartHeight</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>inputUnit</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>groupBySuppressHeaders</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>entityName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>leftYAxisRangeName</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>renderType</string>
+            <com.aptare.sc.domain.report.enumerations.RenderType>pivotTable</com.aptare.sc.domain.report.enumerations.RenderType>
+          </entry>
+          <entry>
+            <string>reportDataConverter</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>inherits</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonText</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>displayScope</string>
+            <boolean>true</boolean>
+          </entry>
+          <entry>
+            <string>leftTitle</string>
+            <string></string>
+          </entry>
+          <entry>
+            <string>groups</string>
+            <list>
+              <com.aptare.sc.domain.report.GroupDecorator>
+                <fields>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>hidden</type>
+                    <caption>sort_order</caption>
+                    <name>sort_order</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <formatPattern>###,###,##0</formatPattern>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotX</type>
+                    <caption>Array</caption>
+                    <name>array_name</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotYId</type>
+                    <caption>Metric</caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <aggregationResult>0</aggregationResult>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>pivotY</type>
+                    <caption>Metric</caption>
+                    <name>metric</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                  <com.aptare.sc.domain.report.FieldDecorator>
+                    <type>tableColumn</type>
+                    <caption>Value</caption>
+                    <name>value</name>
+                    <fieldIndex>0</fieldIndex>
+                    <color></color>
+                    <secondaryColor></secondaryColor>
+                    <align>right</align>
+                    <wrap>Y</wrap>
+                    <additionalDetail></additionalDetail>
+                    <drillDown></drillDown>
+                    <rowCount>0</rowCount>
+                    <targets/>
+                  </com.aptare.sc.domain.report.FieldDecorator>
+                </fields>
+              </com.aptare.sc.domain.report.GroupDecorator>
+            </list>
+          </entry>
+          <entry>
+            <string>chartWidth</string>
+            <int>0</int>
+          </entry>
+          <entry>
+            <string>cacheDataFields</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>legendAlignment</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>rightTitle</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>buttonScript</string>
+            <null/>
+          </entry>
+          <entry>
+            <string>header</string>
+            <string>Values in: ${freeCombo1}</string>
+          </entry>
+          <entry>
+            <string>legendTitle</string>
+            <null/>
+          </entry>
+        </data>
+      </com.aptare.sc.dal.versioning.ObjectMap>
+    </entry>
+  </data>
+</com.aptare.sc.dal.versioning.ObjectMap>

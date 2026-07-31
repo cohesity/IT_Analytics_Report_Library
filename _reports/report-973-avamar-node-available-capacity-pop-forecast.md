@@ -1,0 +1,21 @@
+---
+title: "Avamar Node Available Capacity POP Forecast"
+report_id: 973
+rtd_name: "Avamar Node Available Capacity POP Forecast.rtd"
+description: "Avamar Node Available Capacity POP Forecast"
+problem_statement: "I need to be able to see when I will run out of capacity on my Avarmar nodes by using a Period Over Period algorithm."
+author: "rich.rose@aptare.com\n"
+modified_date: "2023-07-14"
+download_count: 0
+has_video: false
+video_url: ""
+thumbnail: true
+has_sample: true
+has_sql: true
+sql_query: "--Author: rich.rose@aptare.com\n--Last Modified: 12/07/2012\n--Computes the future capacity of an Avamar Grid Node based on \n--a Period over Period forecasting method\nWITH \nd0 AS (--Convert the human readable date selection to numeric values\nSELECT\nDECODE('${freeCombo1}','Day',1,'Week',7,'Month',31,'Quarter',93,'Year',365.24) nbr_of_days,\nto_number('${freeCombo2}') forecast_periods\nFROM apt_v_dual\n),\na0 AS (--Get all the capacity merics for each period\nSELECT \nmaster_server_id,\nnode_id,\nTRUNC(log_date,DECODE('${freeCombo1}','Day','DD','Week','WW','Month','MM','Quarter','Q','Year','YY')) log_date,\nROW_NUMBER() OVER (PARTITION BY master_server_id,  node_id ORDER BY master_server_id,  node_id) row_number,\nROUND(MAX((capacity_mb - used_mb)/1024),2) available\nFROM apt_v_avm_node_space_log ansl, apt_v_server s \nWHERE log_date BETWEEN ${startDate} AND ${endDate}\nAND master_server_id = s.server_id\nAND s.hostname||' - '||node_id = '${queryCombo1}'\nGROUP BY master_server_id,node_id,trunc(log_date,DECODE('${freeCombo1}','Day','DD','Week','WW','Month','MM','Quarter','Q','Year','YY'))\n),\np0 AS (--Get the first and last period number for each array & pool \nSELECT\nmaster_server_id,\nnode_id,\nMIN(row_number) first_period_number, --First period will always be 1\nMAX(row_number) last_period_number, --Last period is the current period or last time data was collected\nmin(log_date) first_period_date,\nMAX(log_date) last_period_date,\nCOUNT(log_date) period_count\nFROM a0\nGROUP BY \nmaster_server_id,\nnode_id\n),\npop1 AS (--Get the first and last period metrics based on the row number of the periods\nSELECT\na0.master_server_id, a0.node_id,\nMAX(last_period_number) nbr_of_periods,\nSUM(DECODE(a0.row_number,first_period_number,a0.available,0)) first_available,\nSUM(DECODE(a0.row_number,last_period_number,a0.available,0)) last_available\nFROM a0,p0\nWHERE a0.master_server_id = p0.master_server_id\nAND a0.node_id = p0.node_id\nGROUP BY a0.master_server_id, a0.node_id\n),\npop2 AS (--Calculate the Period Over Period Changes\nSELECT\nmaster_server_id, \nnode_id,\nfirst_available,\nlast_available,\nROUND((last_available - first_available),2) pop_available_delta,\nROUND((last_available - first_available) / DECODE(nbr_of_periods,0,null,nbr_of_periods),2) pop_available_trend\nFROM pop1\n) \nSELECT --Plot the prior history\na0.log_date, \na0.available,\n0 future_available,\npop2.last_available - (pop2.pop_available_trend*(period_count-ROWNUM)) available_trend_line\nFROM a0, p0, pop2\nWHERE a0.master_server_id = pop2.master_server_id\nAND a0.node_id = pop2.node_id\nAND a0.master_server_id = p0.master_server_id\nAND a0.node_id = p0.node_id\nUNION ALL --Future values\nSELECT \ntrunc(the_date,DECODE('${freeCombo1}','Day','DD','Week','WW','Month','MM','Quarter','Q','Year','YY')) log_date,\n0 available,\npop2.last_available + (pop2.pop_available_trend * ROWNUM) future_available,\npop2.last_available + (pop2.pop_available_trend * ROWNUM) available_trend_line\nFROM a0, pop2, d0, p0, TABLE(rtd.APTlistOfDates(p0.last_period_date + d0.nbr_of_days,p0.last_period_date + (d0.forecast_periods*d0.nbr_of_days),DECODE('${freeCombo1}','Day',11,'Week',12,'Month',13,'Quarter',14,'Year',15))) the_dates\nWHERE a0.master_server_id = pop2.master_server_id\nAND a0.node_id = pop2.node_id\nAND a0.master_server_id = p0.master_server_id\nAND a0.node_id = p0.node_id\nAND a0.row_number = p0.period_count --Only need the last row\nORDER BY 1"
+has_explanation: false
+products: [{"slug": "backup-manager-emc-avamar", "name": "EMC Avamar"}]
+categories: []
+product_slugs: ["backup-manager-emc-avamar"]
+category_slugs: []
+---
