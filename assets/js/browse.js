@@ -6,8 +6,18 @@
   var sqlInput = document.getElementById('filter-sql');
   if (!form || !results) return;
 
+  // GitHub Pages project sites are served under /<repo-name>/, not the
+  // domain root, so every absolute path (the index fetch, and each
+  // result's href, which comes from the index's own baseurl-less "url"
+  // field) needs this prefix - read from <body data-baseurl="..."> rather
+  // than hardcoded, so it's correct in both local dev (empty) and
+  // production (the repo name). Without this, the index fetch 404s and
+  // `index` stays null forever, which is why every facet (SQL, Categories,
+  // Products) silently does nothing - render() bails out immediately below.
+  var baseurl = document.body.dataset.baseurl || '';
+
   var index = null;
-  fetch('/assets/search-index.json')
+  fetch(baseurl + '/assets/search-index.json')
     .then(function (r) { return r.json(); })
     .then(function (data) { index = data; render(); });
 
@@ -63,7 +73,7 @@
     results.innerHTML = matches.map(function (r) {
       var snippet = sqlMatcher ? sqlSnippet(r.sql_query || '', sqlMatcher) : '';
       var snippetHtml = snippet ? '<div class="sql-snippet"><code>' + escapeHtml(snippet) + '</code></div>' : '';
-      return '<li><a href="' + r.url + '">' + r.title + '</a>' + snippetHtml + '</li>';
+      return '<li><a href="' + baseurl + r.url + '">' + r.title + '</a>' + snippetHtml + '</li>';
     }).join('');
   }
 

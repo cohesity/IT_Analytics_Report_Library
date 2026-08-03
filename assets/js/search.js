@@ -3,8 +3,16 @@
   var results = document.getElementById('search-results');
   if (!input || !results) return;
 
+  // GitHub Pages project sites are served under /<repo-name>/, not the
+  // domain root, so every absolute path (the index fetch, and each
+  // result's href, which comes from the index's own baseurl-less "url"
+  // field) needs this prefix - read from <body data-baseurl="..."> rather
+  // than hardcoded, so it's correct in both local dev (empty) and
+  // production (the repo name).
+  var baseurl = document.body.dataset.baseurl || '';
+
   var index = null;
-  fetch(input.dataset.indexUrl || '/assets/search-index.json')
+  fetch(input.dataset.indexUrl || baseurl + '/assets/search-index.json')
     .then(function (r) { return r.json(); })
     .then(function (data) { index = data; });
 
@@ -15,7 +23,7 @@
       return;
     }
     results.innerHTML = matches.slice(0, 20).map(function (r) {
-      return '<a href="' + r.url + '"><strong>' + r.title + '</strong>' +
+      return '<a href="' + baseurl + r.url + '"><strong>' + r.title + '</strong>' +
         '<div class="meta">' + (r.products || []).concat(r.categories || []).join(' · ') + '</div></a>';
     }).join('');
     results.classList.add('open');
