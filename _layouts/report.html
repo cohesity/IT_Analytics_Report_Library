@@ -4,20 +4,40 @@ layout: default
 <article class="report">
   <h1>{{ page.title }}</h1>
 
+  {% if page.cohesity_supported %}
+  <p class="support-badge support-badge-supported">Cohesity-supported</p>
+  {% else %}
+  <p class="support-badge support-badge-unsupported">Community template — not officially supported by Cohesity</p>
+  {% endif %}
+
   <div class="report-tags">
     {% for c in page.categories %}<a class="tag tag-category" href="{{ '/categories/' | append: c.slug | append: '/' | relative_url }}">{{ c.name }}</a>{% endfor %}
     {% for p in page.products %}<a class="tag tag-product" href="{{ '/products/' | append: p.slug | append: '/' | relative_url }}">{{ p.name }}</a>{% endfor %}
   </div>
 
   <div class="report-actions">
+    {% if page.cohesity_supported %}
     <a class="btn btn-primary" href="{{ '/reports/' | append: page.report_id | append: '/' | append: page.rtd_name | relative_url }}" download>Download Template (.rtd)</a>
+    {% else %}
+    <a class="btn btn-primary" id="download-link" href="{{ '/reports/' | append: page.report_id | append: '/' | append: page.rtd_name | relative_url }}" download>Download Template (.rtd)</a>
+    {% endif %}
     {% if page.has_sample %}
     <a class="btn" href="{{ '/reports/' | append: page.report_id | append: '/sample.html' | relative_url }}" target="_blank" rel="noopener">View Sample Output ↗</a>
     {% endif %}
-    {% if page.has_video and page.video_url %}
+    {% if page.has_video and page.video_url != "" %}
     <a class="btn" href="{{ page.video_url }}" target="_blank" rel="noopener">Watch Video ↗</a>
     {% endif %}
   </div>
+
+  {% unless page.cohesity_supported %}
+  <dialog id="download-ack-dialog" class="ack-dialog">
+    <p>This report template is provided <strong>as-is</strong> by the community and is <strong>not officially supported by Cohesity</strong>. By downloading it, you acknowledge you should not contact Cohesity Support with issues related to it.</p>
+    <div class="ack-actions">
+      <button type="button" class="btn" id="download-ack-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="download-ack-confirm">I Acknowledge, Download</button>
+    </div>
+  </dialog>
+  {% endunless %}
 
   {% if page.has_sample %}
   <h3>Report Preview</h3>
@@ -40,16 +60,17 @@ layout: default
   <img class="report-thumb" src="{{ '/reports/' | append: page.report_id | append: '/thumbnail.png' | relative_url }}" alt="Report designer / scoping screen">
   {% endif %}
 
-  {% if page.description %}<p class="report-desc">{{ page.description }}</p>{% endif %}
-  {% if page.problem_statement %}<h3>Problem this solves</h3><p>{{ page.problem_statement }}</p>{% endif %}
+  {% if page.description != "" %}<p class="report-desc">{{ page.description }}</p>{% endif %}
+  {% if page.problem_statement != "" %}<h3>Problem this solves</h3><p>{{ page.problem_statement }}</p>{% endif %}
   {% if page.has_explanation %}
   <h3>How this report works</h3>
   {{ content }}
   {% endif %}
 
   <dl class="report-meta">
-    {% if page.author %}<dt>Author</dt><dd>{{ page.author }}</dd>{% endif %}
-    {% if page.modified_date %}<dt>Last updated</dt><dd>{{ page.modified_date }}</dd>{% endif %}
+    {% if page.author != "" %}<dt>Author</dt><dd>{{ page.author }}</dd>{% endif %}
+    {% if page.ita_versions != "" %}<dt>IT Analytics Version(s)</dt><dd>{{ page.ita_versions }}</dd>{% endif %}
+    {% if page.modified_date != "" %}<dt>Last updated</dt><dd>{{ page.modified_date }}</dd>{% endif %}
     <dt>Downloads</dt><dd>{{ page.download_count | default: 0 }}</dd>
   </dl>
 </article>

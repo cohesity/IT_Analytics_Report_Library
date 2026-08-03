@@ -244,6 +244,20 @@ def load_reports():
     return reports
 
 
+def load_overrides():
+    """export/overrides.json: a single dict keyed by report_id (string),
+    holding only reports that deviate from the defaults (cohesity_supported
+    = false, ita_versions = unset) - e.g. {"1234": {"cohesity_supported":
+    true}}. One small file rather than a directory of mostly-empty
+    per-report files, since only a minority of reports will ever need an
+    entry."""
+    path = os.path.join(EXPORT_DIR, "overrides.json")
+    if not os.path.isfile(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
 NO_SQL_SENTINEL = "No SQL, this is for documentation Purposes only."
 RTD_ROOT_CLOSE_TAG = "</com.aptare.sc.dal.versioning.ObjectMap>"
 
@@ -317,6 +331,7 @@ def dedupe_reports(reports):
 
 def build_reports(product_lookup, category_lookup):
     reports = dedupe_reports(load_reports())
+    overrides = load_overrides()
 
     reports_out = os.path.join(ROOT, "_reports")
     downloads_out = os.path.join(ROOT, "reports")
@@ -360,6 +375,10 @@ def build_reports(product_lookup, category_lookup):
             if rtd_files:
                 sql_query, has_sql = extract_sql(rtd_files[0])
 
+        override = overrides.get(str(report_id), {})
+        cohesity_supported = bool(override.get("cohesity_supported", False))
+        ita_versions = override.get("ita_versions") or ""
+
         desc_path = os.path.join(DESCRIPTIONS_DIR, f"{report_id}.md")
         explanation_body = ""
         if os.path.isfile(desc_path):
@@ -382,6 +401,8 @@ def build_reports(product_lookup, category_lookup):
             "download_count": r.get("rtd_download_count") or 0,
             "has_video": bool(r.get("has_video")),
             "video_url": r.get("video_url") or "",
+            "cohesity_supported": cohesity_supported,
+            "ita_versions": ita_versions,
             "thumbnail": thumbnail,
             "has_sample": has_sample,
             "has_sql": has_sql,

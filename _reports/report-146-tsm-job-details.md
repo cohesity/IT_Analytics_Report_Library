@@ -9,6 +9,8 @@ modified_date: "2011-08-25"
 download_count: 79
 has_video: false
 video_url: ""
+cohesity_supported: false
+ita_versions: ""
 thumbnail: true
 has_sample: true
 has_sql: true

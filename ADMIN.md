@@ -69,7 +69,16 @@ this machine.
 3. To edit the detailed "How this report works" explanation: edit
    `descriptions/{report_id}.md` directly — plain markdown, no front
    matter, no special syntax.
-4. Run `python scripts/build_site_content.py`, then preview locally
+4. To mark a report as officially Cohesity-supported, or set its "IT
+   Analytics version(s) applicable": add or edit its entry in
+   `export/overrides.json` — a small JSON object keyed by `report_id`, e.g.
+   `{"1294": {"cohesity_supported": true, "ita_versions": "10.6+"}}`. Only
+   reports that need something other than the default (not supported,
+   versions unset) need an entry at all. Reports without an entry show as
+   "not officially supported by Cohesity" and prompt an acknowledgment
+   before download — this is the default for almost every report in the
+   library.
+5. Run `python scripts/build_site_content.py`, then preview locally
    (see README) before committing.
 
 ## Adding a new report

@@ -9,6 +9,8 @@ modified_date: "2024-05-28"
 download_count: 0
 has_video: false
 video_url: ""
+cohesity_supported: false
+ita_versions: ""
 thumbnail: true
 has_sample: true
 has_sql: true

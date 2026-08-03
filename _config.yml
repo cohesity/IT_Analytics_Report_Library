@@ -5,6 +5,7 @@ description: >-
   report's output, and download the template to import into your portal.
 baseurl: "/report-library-site"
 url: "https://ebergan-cohesity.github.io"
+github_repo: "ebergan-cohesity/report-library-site"
 
 collections:
   reports:
