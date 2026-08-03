@@ -9,7 +9,7 @@ modified_date: "2024-07-15"
 download_count: 0
 has_video: false
 video_url: ""
-cohesity_supported: false
+cohesity_supported: true
 ita_versions: ""
 thumbnail: true
 has_sample: true
