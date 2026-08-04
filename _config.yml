@@ -3,9 +3,9 @@ description: >-
   Community-contributed report templates for Veritas/Cohesity IT Analytics
   (formerly APTARE). Browse by product or category, view a sample of each
   report's output, and download the template to import into your portal.
-baseurl: "/IT_Analytics_Report_Templates"
+baseurl: "/IT_Analytics_Report_Library"
 url: "https://cohesity.github.io"
-github_repo: "cohesity/IT_Analytics_Report_Templates"
+github_repo: "cohesity/IT_Analytics_Report_Library"
 
 collections:
   reports:
